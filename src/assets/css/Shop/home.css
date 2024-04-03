@@ -1,0 +1,172 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.slide-banner {
+    position: relative;
+    overflow: hidden;
+}
+
+.home-collection {
+    max-width: 1200px;
+    padding: 80px 0px 40px 0px;
+}
+.home-collection .collection-item img {
+    width: 100%;
+    overflow: hidden;
+}
+.collection-item .content-collection {
+    margin-top: 30px;
+}
+
+.collection-item .content-collection a {
+    color: #000;
+}
+.collection-item .content-collection .description {
+    font-size: 16px;
+    line-height: 1.5em;
+}
+
+.home-category-buy {
+    max-width: 1200px;
+    padding: 80px 0px 40px 0px;
+}
+
+.home-category-buy .title {
+    font-size: 30px;
+    color: #000;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.home-category-buy .item {
+    position: relative;
+}
+.home-category-buy .item .item-background {
+    position: relative;
+}
+.home-category-buy .item .black-background {
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.home-category-buy .item img {
+    display: block;
+    width: 100%;
+    vertical-align: middle;
+}
+.home-category-buy .item .item-group {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    width: 90%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.home-category-buy .item a {
+    color: #fff;
+    font-weight: 700;
+    transition: all 0.2s linear;
+}
+.home-category-buy .item a.title {
+    font-size: 23px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+.home-category-buy .item a.sub {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+.home-category-buy .item a:hover {
+    color: #f15e2c;
+}
+.home-banner-2 {
+    margin: 40px auto;
+    max-width: 1920px;
+}
+.home-banner-2 img {
+    width: 100%;
+}
+
+.home-instagram {
+    max-width: 1200px;
+    padding: 40px 0 80px 0;
+}
+
+.home-instagram .title {
+    font-size: 30px;
+    color: #000;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.home-instagram .news-list {
+    max-width: 1200px;
+}
+
+.home-instagram .post-item {
+    overflow: hidden;
+    margin-bottom: 20px;
+    padding: 0px 10px;
+}
+.home-instagram .post-item a {
+    display: block;
+}
+.home-instagram .post-item img {
+    width: 100%;
+    height: 155px;
+    object-fit: cover;
+}
+
+.home-instagram .news-list .post-title {
+    margin-top: 20px;
+    font-size: 23px;
+}
+.home-instagram .news-list .post-item a {
+    color: #000;
+    transition: all 0.2s linear;
+}
+.home-instagram .news-list .post-title:hover a {
+    color: #f15e2c;
+}
+
+.home-instagram .news-list .post-des {
+    margin-top: 15px;
+    margin-bottom: 0px;
+    font-size: 16px;
+    color: #000;
+    display: block;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow: hidden;
+    max-height: 5.6em;
+    line-height: 1.4em;
+    font-weight: 400;
+    text-align: justify;
+}
+.home-instagram .news-list .post-detail a {
+    font-size: 16px;
+    color: #f15e2c;
+    font-weight: 400;
+
+    line-height: 1.4em;
+    font-style: italic;
+}
+
+.home-instagram .row {
+    justify-content: center;
+}
+.home-instagram .btn {
+    border-radius: 0px;
+    background-color: #303030;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    padding: 6px 30px;
+    width: 200px;
+}

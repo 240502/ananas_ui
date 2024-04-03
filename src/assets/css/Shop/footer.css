@@ -1,0 +1,81 @@
+footer > .footer {
+    background-color: #4c4c4c;
+    padding: 60px 0px 60px 0px;
+    overflow: hidden;
+}
+
+.footer .sec-search .row {
+    padding: 0 0 20px 0;
+}
+.footer .btn-search-shop {
+    border-radius: 0px;
+    background-color: #f15e2c;
+    border: #f15e2c 1px solid;
+    color: #fff;
+    font-family: GeometricExtraBold;
+    font-size: 20px;
+    width: 279px;
+    height: 40px;
+    text-transform: uppercase;
+    line-height: 20px;
+    font-weight: 700;
+}
+
+.footer h4 {
+    color: #fff;
+    font-size: 23px;
+    padding-bottom: 9px;
+    line-height: 1.6em;
+}
+.footer ul {
+    padding: 0;
+    list-style: none;
+}
+.footer li {
+    padding-bottom: 3px;
+}
+.footer h4 {
+    text-align: left;
+    text-transform: uppercase;
+}
+.footer li a {
+    color: #ccc;
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+}
+.footer li:hover a {
+    color: #f15e2c;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.input-email {
+    width: 195px;
+    height: 39px;
+    display: inline-block;
+    border-radius: 0px;
+}
+.btn-register {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    width: 58px;
+    height: 39px;
+    margin-left: 5px;
+    padding: 8px 0px;
+}
+.btn-register i {
+    font-size: 20px;
+}
+.icon-bct {
+    margin-top: 40px;
+    margin-left: -3px;
+}
+.copyright {
+    margin-top: 65px;
+    font-family: NunitoSanRegular;
+    font-size: 16px;
+    letter-spacing: 1px;
+    color: #808080;
+}
