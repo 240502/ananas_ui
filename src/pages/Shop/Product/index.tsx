@@ -1,4 +1,5 @@
-import '../../../assets/css/Shop/product.css'
+import '../../../assets/css/Shop/product.css';
+import {toggleNav,activeItemTree} from '../../../utils/product';
 function Product() {
     return (
         <main>
@@ -21,212 +22,76 @@ function Product() {
                             </ul>
                         </div>
                         <div className="left-divider"></div>
-                        <div className=" row left-type-item">
-                            <div className="tab-content">
-                                <ul>
-                                    <li>
-                                        <a href="#">Accessories | Phụ kiện</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Footwear | Lên chân</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Top | Nửa trên</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="left-divider"></div>
+
                         <div className="left-tree">
                             <ul className="nav" style={{ display: 'block' }}>
                                 <li className="first-lv1 open">
-                                    <button type="button" className="tree-title">
-                                        Trạng thái
-                                        <i className="fa-solid fa-angle-down" />
-                                    </button>
-                                    <ul className=" tree">
-                                        <li>
-                                            <a href="#">Limited Edition</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Online Only</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Sale off</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">New Arrival</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li className="nav-divider" />
-                                <li className="first-lv1 open">
-                                    <button type="button" className="tree-title">
+                                    <button type="button" className="tree-title" onClick={() => toggleNav()}>
                                         Kiểu dáng <i className="fa-solid fa-angle-down" />
                                     </button>
                                     <ul className=" tree">
-                                        <li>
+                                        <li onClick={() => activeItemTree()} >
                                             <a href="#">Low Top</a>
                                         </li>
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">High Top</a>
                                         </li>
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">Slip-on</a>
                                         </li>
-                                        <li>
+                                        <li onClick={() => activeItemTree()}> 
                                             <a href="#">Mid Top</a>
                                         </li>
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">Mule</a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li className="nav-divider" />
                                 <li className="first-lv1 open">
-                                    <button type="button" className="tree-title">
+                                    <button type="button" className="tree-title"  onClick={() => toggleNav()}>
                                         Dòng sản phẩm
                                         <i className="fa-solid fa-angle-down" />
                                     </button>
                                     <ul className=" tree">
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">Basas</a>
                                         </li>
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">Vintas</a>
                                         </li>
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">Urbas</a>
                                         </li>
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">Pattas</a>
                                         </li>
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">Track 6</a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li className="nav-divider" />
                                 <li className="first-lv1 open">
-                                    <button type="button" className="tree-title">
+                                    <button type="button" className="tree-title"  onClick={() => toggleNav()}>
                                         Giá
                                         <i className="fa-solid fa-angle-down" />
                                     </button>
                                     <ul className=" tree">
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">500k - 599k</a>
                                         </li>
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">&gt; 600k</a>
                                         </li>
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">400k - 499k</a>
                                         </li>
-                                        <li>
+                                        <li onClick={() => activeItemTree()}>
                                             <a href="#">300k - 399k</a>
                                         </li>
                                     </ul>
                                 </li>
-                                <li className="nav-divider" />
-                                <li className="first-lv1 open">
-                                    <button type="button" className="tree-title">
-                                        Bộ sưu tập
-                                        <i className="fa-solid fa-angle-down" />
-                                    </button>
-                                    <ul className=" tree">
-                                        <li>
-                                            <a href="#">Public 2000s</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Vivu</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Nauda</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Tomo</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">2.Blues</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Jazico</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">I.S.E.E</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Soda Pop</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Landforms</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">SC</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Workaday</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Everygreen</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">RAW</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Polka Dots</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Living Journey</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Retrospective</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Aunter</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Monoguso</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Ruler</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Flannel</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Class E</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li className="nav-divider" />
-                                <li className="first-lv1 open">
-                                    <button type="button" className="tree-title">
-                                        Chất liệu
-                                        <i className="fa-solid fa-angle-down" />
-                                    </button>
-                                    <ul className=" tree">
-                                        <li>
-                                            <a href="#">Canvas</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li className="nav-divider" />
-                                <li className="first-lv1 open">
-                                    <button type="button" className="tree-title">
-                                        Màu sắc
-                                        <i className="fa-solid fa-angle-down" />
-                                    </button>
-                                    <ul className=" tree">
-                                        <li className="cb-color">
-                                            <label htmlFor="">
-                                                <span className="bg-color" style={{ backgroundColor: 'red' }} />
-                                                <input type="checkbox" name="cbColor" hidden />
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li className="nav-divider" />
                             </ul>
                         </div>
                     </div>

@@ -90,6 +90,10 @@ main .left {
 .nav .tree li:hover {
     background-color: #eee;
 }
+.tree li.active{
+    background-color: #eee;
+
+}
 .left-tree {
     margin: 0px 0px 15px 0px;
 }
