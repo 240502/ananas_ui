@@ -74,8 +74,8 @@ main .left {
     color: #000;
     border: #000 dashed 1px;
 }
-.tab-content ul li a,
-.nav ul li a {
+
+.tab-content ul li a {
     display: block;
     width: 100%;
     border-radius: 0px;
@@ -89,6 +89,22 @@ main .left {
 .tab-content ul li:hover,
 .nav .tree li:hover {
     background-color: #eee;
+}
+.tree input{
+    outline: none;
+    border: none;
+    display: block;
+    width: 100%;
+    border-radius: 0px;
+    padding: 6px 15px 4px 20px;
+    font-size: 16px;
+    color: #000;
+    font-weight: 400;
+    text-align: left;
+    text-transform: none;
+    background-color: transparent ;
+    cursor: pointer;
+    text-transform: capitalize;
 }
 .tree li.active{
     background-color: #eee;
@@ -260,6 +276,7 @@ main .left {
     font-size: 16px;
     color: #ff5f17;
     margin-bottom: 15px;
+    text-transform: capitalize;
     font-weight: 400;
 }
 .right .divider {
@@ -273,12 +290,17 @@ main .left {
 
 .right .name {
     font-size: 16px;
-    color: #000;
     margin-bottom: 10px;
     font-weight: 700;
     transition: all 0.3s linear;
+    text-transform: capitalize;
 }
-.right .name:hover {
+.right .name a{
+    text-decoration: none;
+    color: #000;
+
+}
+.right .name:hover a {
     color: #f15e2c;
     cursor: pointer;
 }
@@ -287,10 +309,40 @@ main .left {
     color: #000;
     margin-bottom: 10px;
     font-weight: 400;
+    text-transform: capitalize;
 }
 .right .price {
     font-size: 16px;
     color: #000;
     margin-bottom: 10px;
     font-weight: 700;
+}
+
+.page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}
+.page select{
+    width: 50px;
+}
+
+.page ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+}
+.page ul li{
+    padding: 10px;
+    width: 40px;
+    text-align: center;
+    border-radius: 4px;
+}
+.page ul li.selected{
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
 }

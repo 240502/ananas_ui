@@ -1,12 +1,27 @@
-
-
-
 import SlickSlideProductDetail from '../../../components/Layout/SlickSlide/SlickSlideProductDetail';
 import SlickSlideProductRef from '../../../components/Layout/SlickSlide/SlickSlideProductRef';
 import { toggleInfo } from '../../../utils/product-detail';
 import SlickSlideProductViewed from '../../../components/Layout/SlickSlide/SlickSlideProductViewed';
 import '../../../assets/css/Shop/product_detail.css';
+import { Link,useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getProductById } from '../../../services/product-detail.service';
+import ProductPrice from './ProductPrice';
+import ProductColor from '../Product/ProductColor';
+import ProductImage from './ProductImage';
+type DataParams = {
+    id: string;
+};
 function ProductDetail() {
+    const { id } = useParams<DataParams>();
+    const [product, setProduct] = useState({ id: null, pro_name: null ,color_id:null});
+    useEffect(() => {
+        async function getProduct(id: any) {
+            const product = await getProductById(id);
+            setProduct(product);
+        }
+        getProduct(id);
+    }, [id]);
     return (
         <main>
             <div className="container product-detail">
@@ -15,7 +30,7 @@ function ProductDetail() {
                         <nav aria-label="breadcrumb">
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item">
-                                    <a href="/product">Home</a>
+                                    <Link to="/product-list">Home</Link>
                                 </li>
                                 <li className="breadcrumb-item">
                                     <a href="#">Library</a>
@@ -29,10 +44,7 @@ function ProductDetail() {
                     <div className="col-xs-12 col-sm-12 col-md-7 col-lg-7">
                         <div className="wrapper-slide">
                             <div className="prd-detail-main-img">
-                                <img
-                                    src="https://ananas.vn/wp-content/uploads/Pro_AV00207_1.jpg"
-                                    className="main-img"
-                                />
+                                <ProductImage proId={id}/>
                             </div>
                             <div className="prd-detail-slide">
                                 <SlickSlideProductDetail />
@@ -40,17 +52,17 @@ function ProductDetail() {
                         </div>
                     </div>
                     <div className="col-xs-12 col-sm-12 col-md-5 col-lg-5 prd-detail-right">
-                        <h4 className="pro-name">Vintas Public 2000s - Low Top - Insignia Blue</h4>
+                        <h4 className="pro-name">{product.pro_name} - Low Top - {<ProductColor id={product.color_id}/>} </h4>
                         <div className="detail">
                             <span className="pull-left col">
-                                Mã sản phẩm:<strong> AV00207</strong>
+                                Mã sản phẩm:<strong> {id}</strong>
                             </span>
                             <span className="pull-right col">
                                 Tình trạng: <strong>New Arrival</strong>
                             </span>
                         </div>
                         <div className="detail">
-                            <span className="saleprice">620.000 VND</span>
+                            <ProductPrice proId={id} />
                         </div>
                         <div className="divider" />
                         <div className="color">

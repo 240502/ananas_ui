@@ -81,11 +81,12 @@
 .prd-detail-slide .slick-arrow:hover {
     opacity: 1;
 }
-.prd-detail-right .pro-name {
+.prd-detail-right .pro-name ,
+.prd-detail-right .pro-name span{
     text-transform: uppercase;
     font-weight: 700;
     line-height: 42px;
-    font-size: 30px;
+    font-size: 24px;
 }
 .prd-detail-right .detail {
     display: flex;
@@ -94,7 +95,7 @@
     overflow: hidden;
     margin: 30px 0px 30px 0px;
 }
-.prd-detail-right .detail .saleprice {
+.prd-detail-right .detail .price {
     color: #f15e2c;
     font-size: 23px;
     margin-top: 10px;

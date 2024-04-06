@@ -51,9 +51,9 @@ footer > .footer {
     margin-bottom: 15px;
 }
 .input-email {
-    width: 195px;
-    height: 39px;
-    display: inline-block;
+    width: 195px !important;
+    height: 39px !important;
+    display: inline-block !important;
     border-radius: 0px;
 }
 .btn-register {

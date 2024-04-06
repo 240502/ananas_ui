@@ -65,9 +65,9 @@ function Header() {
                     <div className="navbar center">
                         <div className="navbar-header">
                             <div className="navbar-brand">
-                                <a href="/">
-                                    <img src=" img/Logo_Ananas_Header.svg" alt="" />
-                                </a>
+                                <Link to="/">
+                                    <img src="img/Logo_Ananas_Header.svg" alt="" />
+                                </Link>
                             </div>
                         </div>
                         <div className="navs">
@@ -93,8 +93,8 @@ function Header() {
                                         const jsx = (
                                             <>
                                                 {' '}
-                                                <li className="drop-down">
-                                                    <Link to="/product">
+                                                <li className="drop-down" key={menu.id}>
+                                                    <Link to="/product-list">
                                                         <span>{menu.menu_name}</span>
                                                         <i className="fa-solid fa-chevron-down" />
                                                     </Link>
@@ -172,7 +172,7 @@ function Header() {
                                         );
                                         const html = (
                                             <>
-                                                <li className="drop-down">
+                                                <li className="drop-down" key={menu.id}>
                                                     <Link to="/product">
                                                         <span>{menu.menu_name}</span>
                                                         <i className="fa-solid fa-chevron-down" />
@@ -195,7 +195,7 @@ function Header() {
                                     if (menu.id >= 4) {
                                         return (
                                             <>
-                                                <li className="drop-down">
+                                                <li className="drop-down" key={menu}>
                                                     <a href="#">
                                                         <span>{menu.menu_name}</span>
                                                     </a>
@@ -235,4 +235,4 @@ function Header() {
     );
 }
 
-export default memo(Header);
+export default Header;
