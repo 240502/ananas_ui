@@ -1,11 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import '../../../../assets/css/Shop/header.css';
-import { useRecoilState } from 'recoil';
-import { cartState } from '../../../../store/cart.atom';
-
+import '../../../../assets/css/Shop/slick-slide.css';
 function Header() {
-    const token = JSON.parse(localStorage.getItem('token') || '');
-    const [cart, setCart] = useRecoilState(cartState);
     return (
         <header>
             <div className="container-fluid header hidden-sm hidden-xs">
@@ -30,23 +26,27 @@ function Header() {
                             </a>
                         </li>
                         <li>
-                            <Link to={token !== '' ? '/dashboard' : '/login'}>
+                            <a href="/login">
                                 <i className="fa-solid fa-user" />
-                                <span>{token !== '' ? 'Tài khoản' : 'Đăng nhập'}</span>
-                            </Link>
+                                <span>Đăng nhập</span>
+                            </a>
                         </li>
                         <li>
-                            <Link to="/your-cart">
+                            <Link to="your-cart">
                                 <i className="fa-solid fa-cart-shopping" />
-                                <span>
-                                    Giỏ hàng{' '}
-                                    <span style={{ display: `${cart.length == 0 ? 'none' : 'inline-block'}` }}>
-                                        ({cart.length})
-                                    </span>
-                                </span>
+                                <span>Giỏ hàng</span>
                             </Link>
                         </li>
                     </ul>
+                </div>
+                <div className="row">
+                    <div className="navbar center">
+                        <div className="navbar-brand">
+                            <Link to="/">
+                                <img src="img/Logo_Ananas_Header.svg" alt="" />
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>

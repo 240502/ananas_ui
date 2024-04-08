@@ -4,11 +4,15 @@ import { Outlet, Link } from 'react-router-dom';
 import { getMenus, getGroupSubMenu, getTitleSubMenu, getCategory } from '../../../../services/header.services';
 import '../../../../assets/css/Shop/header.css';
 import '../../../../assets/css/Shop/slick-slide.css';
+import { useRecoilState } from 'recoil';
+import { cartState } from '../../../../store/cart.atom';
 function Header() {
     const [menus, setMenus] = useState([]);
     const [groupsubmenus, setGroup] = useState([]);
     const [titles, setTitles] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [cart, setCart] = useRecoilState(cartState);
+
     console.log('re-render');
     useEffect(() => {
         async function loadData() {
@@ -24,6 +28,8 @@ function Header() {
         loadData();
     }, []);
 
+    const token = JSON.parse(localStorage.getItem('token') || '');
+    console.log(token);
     return (
         <header>
             <div className="container-fluid header hidden-sm hidden-xs">
@@ -48,15 +54,20 @@ function Header() {
                             </a>
                         </li>
                         <li>
-                            <a href="/login">
+                            <Link to={token !=='' ? '/dashboard' : '/login'}>
                                 <i className="fa-solid fa-user" />
-                                <span>Đăng nhập</span>
-                            </a>
+                                <span>{token !=='' ? 'Tài khoản':'Đăng nhập'}</span>
+                            </Link>
                         </li>
                         <li>
-                            <Link to="your-cart">
+                            <Link to="/your-cart">
                                 <i className="fa-solid fa-cart-shopping" />
-                                <span>Giỏ hàng</span>
+                                <span>
+                                    Giỏ hàng{' '}
+                                    <span style={{ display: `${cart.length == 0 ? 'none' : 'inline-block'}` }}>
+                                        ({cart.length})
+                                    </span>
+                                </span>
                             </Link>
                         </li>
                     </ul>

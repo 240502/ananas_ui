@@ -17,7 +17,7 @@ function Product() {
     const [cateId, setCateId] = useState(null);
     const [styleId, setstyleId] = useState(null);
     const [gender, setGender] = useState(null);
-    const [color, setColor] = useState({});
+
     useEffect(() => {
         async function loadData(cateId: any, styleId: any, gender: any) {
             let items = await getList({
@@ -29,6 +29,7 @@ function Product() {
         }
         loadData(cateId, styleId, gender);
     }, [page, pageSize, cateId, styleId, gender]);
+   
     const handlePageClick = (event: any) => {
         setPage(event.selected + 1);
     };
@@ -46,7 +47,9 @@ function Product() {
                     </div>
                     <div className="button">
                         <button type="button" className="btn btn-addtocart">
+                        <Link to={'/product-detail/' + product['id']}>
                             Mua ngay
+                            </Link>
                         </button>
                         <button type="button" className="btn btn-like">
                             <i className="fa-regular fa-heart" />

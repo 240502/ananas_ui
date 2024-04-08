@@ -1,15 +1,47 @@
 import SildeCart from '../../../components/Layout/SlickSlide/SlideCart';
-import CartCSS from '../../../assets/css/Shop/Cart.module.css';
+import '../../../assets/css/Shop/cart.css';
+import { useEffect, useState } from 'react';
 function Cart() {
+    const [cart, setCart] = useState([]);
+    let totalPrice: number = 0;
+
+    useEffect(() => {
+        const list = JSON.parse(localStorage.getItem('cart') || '[]');
+        setCart(list);
+    }, []);
+    function handleReduce(proId: any) {
+        let newCart = cart.map((item: any): any => {
+            if (item['id'] == proId) {
+                if (item['numberPro'] > 1) {
+                    item['numberPro'] = item['numberPro'] - 1;
+                    item['totalPrice'] = item['totalPrice'] - item['pro_price'];
+                }
+            }
+            return item;
+        });
+        localStorage.setItem('cart', JSON.stringify(newCart));
+        const list = JSON.parse(localStorage.getItem('cart') || '[]');
+        setCart(list);
+    }
+    function handleIncrease(proId: any) {
+        let newCart = cart.map((item: any): any => {
+            if (item['id'] == proId) {
+                item['numberPro'] = item['numberPro'] + 1;
+                item['totalPrice'] = item['totalPrice'] + item['pro_price'];
+            }
+            return item;
+        });
+        localStorage.setItem('cart', JSON.stringify(newCart));
+        const list = JSON.parse(localStorage.getItem('cart') || '[]');
+        setCart(list);
+    }
     return (
         <main>
-            <div className={`${CartCSS.main_cart} container`}>
+            <div className="main-cart container">
                 <div className="row">
-                    <div className={`col-xs-12 col-sm-12 col-md-8 col-lg-8 ${CartCSS.main__cart__left}`}>
+                    <div className="col-xs-12 col-sm-12 col-md-8 col-lg-8 main-cart-left">
                         <div className="row">
-                            <div className={`col-xs-12 col-sm-12 col-md-12 col-lg-12 ${CartCSS.title}`}>
-                                Bạn có cần thêm ?
-                            </div>
+                            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 title">Bạn có cần thêm ?</div>
                             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div className="cart-slide">
                                     <SildeCart />
@@ -17,110 +49,147 @@ function Cart() {
                             </div>
                         </div>
                         <div className="row">
-                            <div
-                                className={` col-xs-12 col-sm-12 col-md-12 col-lg-12 ${CartCSS.title_1}`}
-                                style={{ marginTop: '20px' }}
-                            >
-                                giỏ hàng
-                            </div>
-                            <div className="row" style={{ padding: 0 }}>
-                                <div className={CartCSS.product_info}>
-                                    <div className={CartCSS.pro_img}>
-                                        <a href="#">
-                                            <img src="https://ananas.vn/wp-content/uploads/Pro_AV00207_1-500x500.jpg" />
-                                        </a>
-                                    </div>
-                                    <div className={CartCSS.pro_detail}>
-                                        <h3 className={CartCSS.pro_name}>
-                                            <a href="#">Vintas Public 2000s - Low Top - Insignia Blue</a>
-                                        </h3>
-                                        <p className={CartCSS.pro_price}>
-                                            <strong>Giá:</strong> 1000.000đ
-                                        </p>
-                                        <div className={`row ${CartCSS.bottom}`}>
-                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                                <h5>Size</h5>
-                                                <select className="btn" name="#" id="#">
-                                                    <option value={1}>1</option>
-                                                </select>
+                            <div className=" col-xs-12 col-sm-12 col-md-12 col-lg-12 title-1">giỏ hàng</div>
+                            <div className="row">
+                                {cart.map((item): any => {
+                                    // renderListSizePro(
+                                    //     item['listSize'],
+                                    //     item['pro_number'],
+                                    //     item['pro_size'],
+                                    //     item['numberPro'],
+                                    // );
+                                    totalPrice += Number(item['totalPrice']);
+                                    return (
+                                        <div className="product-info" key={item['id']}>
+                                            <div className="pro-img">
+                                                <a href="#">
+                                                    <img src={item['img']['img_src']} />
+                                                </a>
                                             </div>
-                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                                <h5>Số lượng</h5>
-                                                <select className="btn" name="#" id="#">
-                                                    <option value={1}>1</option>
-                                                </select>
+                                            <div className="pro-detail">
+                                                <h3 className="pro-name">
+                                                    <a href="#">
+                                                        <span style={{ textTransform: 'capitalize' }}>
+                                                            {item['pro_name']}
+                                                        </span>{' '}
+                                                        -{' '}
+                                                        <span style={{ textTransform: 'capitalize' }}>
+                                                            {item['pro_style_name']}
+                                                        </span>{' '}
+                                                        -{' '}
+                                                        <span style={{ textTransform: 'capitalize' }}>
+                                                            {item['pro_color_name']}
+                                                        </span>
+                                                    </a>
+                                                </h3>
+                                                <p className="pro-price">
+                                                    <strong>Giá:</strong>{' '}
+                                                    {Number(item['pro_price']).toLocaleString(undefined)} VNĐ
+                                                </p>
+                                                <div className="row bottom">
+                                                    <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                        <h5>Size</h5>
+                                                        <input
+                                                            name=""
+                                                            id="size"
+                                                            className="form-control"
+                                                            readOnly={true}
+                                                            value={item['pro_size']}
+                                                        ></input>
+                                                    </div>
+                                                    <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                        <h5 className="text-center">Số lượng</h5>
+                                                        <div className="form-group form-quantity">
+                                                            <button
+                                                                type="button"
+                                                                className="reduce"
+                                                                onClick={() => handleReduce(item['id'])}
+                                                            >
+                                                                -
+                                                            </button>
+                                                            <input
+                                                                name=""
+                                                                id="quantity"
+                                                                className="form-control"
+                                                                readOnly={true}
+                                                                value={item['numberPro']}
+                                                            ></input>
+                                                            <button
+                                                                type="button"
+                                                                className="increase"
+                                                                onClick={() => handleIncrease(item['id'])}
+                                                            >
+                                                                +
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="product-info-right">
+                                                <div className="price">
+                                                    {Number(item['totalPrice']).toLocaleString(undefined)} VND
+                                                </div>
+                                                <div className="status">Còn hàng</div>
+                                                <div className="group-btn">
+                                                    <div className="button-heart">
+                                                        <button className="btn">
+                                                            <i className="fa-regular fa-heart" />
+                                                        </button>
+                                                    </div>
+                                                    <div className="button-delete">
+                                                        <button className="btn">
+                                                            <i className="fa-solid fa-trash-can" />
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className={CartCSS.product_info_right}>
-                                        <div className={CartCSS.price}>620.000 VND</div>
-                                        <div className={CartCSS.status}>Còn hàng</div>
-                                        <div className={CartCSS.group_btn}>
-                                            <div className={CartCSS.button_heart}>
-                                                <button className={`btn ${CartCSS.button}`}>
-                                                    <i className="fa-regular fa-heart" />
-                                                </button>
-                                            </div>
-                                            <div className={CartCSS.button_delete}>
-                                                <button className={`btn ${CartCSS.button}  ${CartCSS.delete}`}>
-                                                    <i className="fa-solid fa-trash-can" />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={CartCSS.line} style={{ marginTop: '40px' }}></div>
-                                <div className={CartCSS.group_btn_bottom}>
+                                    );
+                                })}
+
+                                <div className="line"></div>
+                                <div className="group-btn-bottom">
                                     <div className="delete-all col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
-                                        <button className={`${CartCSS.btn} ${CartCSS.btn_clearAll}`}>Xóa hết</button>
+                                        <button className="btn btn-clearAll">Xóa hết</button>
                                     </div>
-                                    <div className={`col-xs-6 col-sm-6 col-md-6 col-lg-6 ${CartCSS.return_home}`}>
-                                        <button className={`${CartCSS.btn_returnHome} ${CartCSS.btn}`}>
-                                            Quay lại mua hàng
-                                        </button>
+                                    <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 return-home">
+                                        <button className="btn btn-returnHome">Quay lại mua hàng</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className={`col-xs-12 col-sm-12 col-md-4 col-lg-4 ${CartCSS.main_cart_right}`}>
-                        <ul className={CartCSS.list_group}>
-                            <li className={` ${CartCSS.list_group_item} ${CartCSS.title}  ${CartCSS.first}`}>
-                                Đơn hàng
-                            </li>
-                            <li className={` ${CartCSS.list_group_item} ${CartCSS.divider} `} />
-                            <li className={` ${CartCSS.list_group_item} ${CartCSS.title_1}`}>NHẬP MÃ KHUYẾN MÃI</li>
-                            <li className={CartCSS.list_group_item}>
-                                <div className={CartCSS.input_group}>
-                                    <div className={CartCSS.input}>
-                                        <input
-                                            type="text"
-                                            className={`${CartCSS.form_item} form-control  text-uppercase`}
-                                        />
+                    <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4 main-cart-right">
+                        <ul className="list-group">
+                            <li className="list-group-item title">Đơn hàng</li>
+                            <li className="list-group-item divider" />
+                            <li className="list-group-item title-1">NHẬP MÃ KHUYẾN MÃI</li>
+                            <li className="list-group-item">
+                                <div className="input-group">
+                                    <div className="input">
+                                        <input type="text" className="form-control text-uppercase" />
                                     </div>
-                                    <div className={CartCSS.input_group_btn}>
-                                        <button className={` ${CartCSS.btn_apply} btn`}>ÁP DỤNG</button>
+                                    <div className="input-group-btn">
+                                        <button className="btn btn-apply">ÁP DỤNG</button>
                                     </div>
                                 </div>
                             </li>
-                            <li className={` ${CartCSS.list_group_item} ${CartCSS.divider_1}`} />
-                            <li className={` ${CartCSS.list_group_item} ${CartCSS.text_1}`}>
+                            <li className="list-group-item divider-1" />
+                            <li className="list-group-item text-1">
                                 <span>Đơn hàng</span>
-                                <span>620.000 VND</span>
+                                <span>{totalPrice.toLocaleString(undefined)} VND</span>
                             </li>
-                            <li className={` ${CartCSS.list_group_item} ${CartCSS.text_2}`}>
-                                <span className={CartCSS.first}>Giảm</span>
+                            <li className="list-group-item text-2">
+                                <span>Giảm</span>
                                 <span> 0 VND</span>
                             </li>
-                            <li className={` ${CartCSS.list_group_item} ${CartCSS.divider_1}`} />
-                            <li className={` ${CartCSS.list_group_item} ${CartCSS.totalPrice}`}>
-                                <span>Tạm tính</span>
-                                <span> 620.000 VND</span>
+                            <li className="list-group-item divider-1" />
+                            <li className="list-group-item totalPrice">
+                                <span>Tạm tính </span>
+                                <span> {totalPrice.toLocaleString(undefined)} VND</span>
                             </li>
-                            <li className={CartCSS.list_group_item}>
-                                <button className={` btn ${CartCSS.btn_cart} to-checkout}`}>
-                                    Tiếp tục thanh toán{' '}
-                                </button>
+                            <li className="list-group-item">
+                                <button className="btn btn-cart to-checkout">Tiếp tục thanh toán </button>
                             </li>
                         </ul>
                     </div>

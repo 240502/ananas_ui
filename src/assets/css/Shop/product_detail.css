@@ -12,6 +12,9 @@
     margin-bottom: 30px;
     font-size: 16px;
 }
+.breadcrumb-item span{
+    text-transform: capitalize;
+}
 .breadcrumb .breadcrumb-item:not(.active) a {
     color: #000;
     font-weight: 400;
@@ -226,8 +229,12 @@
 .panel.open .panel-heading {
     color: #f15e2c;
 }
+.panel .panel-heading i{
+    margin-left: 10px;
+}
 .panel.open .panel-heading i {
     transform: rotate(-180deg);
+
 }
 .panel.open .panel-body {
     display: block !important;
