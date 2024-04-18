@@ -1,8 +1,10 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
 export const productState = atom({
-    key: "productState",
-    default:{
-        
-    }
-})
+    key: 'productState',
+    default: {},
+});
+export const indexGender = atom({
+    key: 'indexGender',
+    default: 0,
+});

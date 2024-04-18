@@ -33,6 +33,9 @@ main .left {
     border: 1px solid transparent;
     border-radius: 4px 4px 0 0;
 }
+.left .left-type .active a {
+    color: #000;
+}
 .left-type .nav > li:not(.type-divider) {
     flex-grow: 1;
     text-align: center;
@@ -90,7 +93,7 @@ main .left {
 .nav .tree li:hover {
     background-color: #eee;
 }
-.tree input{
+.tree input {
     outline: none;
     border: none;
     display: block;
@@ -102,13 +105,12 @@ main .left {
     font-weight: 400;
     text-align: left;
     text-transform: none;
-    background-color: transparent ;
+    background-color: transparent;
     cursor: pointer;
     text-transform: capitalize;
 }
-.tree li.active{
+.tree li.active {
     background-color: #eee;
-
 }
 .left-tree {
     margin: 0px 0px 15px 0px;
@@ -235,7 +237,7 @@ main .left {
     border-radius: 0;
     transition: all 0.3s linear;
 }
-.right .thumbnail .button .btn-addtocart a{
+.right .thumbnail .button .btn-addtocart a {
     color: #fff;
 }
 .right .thumbnail .button .btn-like {
@@ -298,10 +300,9 @@ main .left {
     transition: all 0.3s linear;
     text-transform: capitalize;
 }
-.right .name a{
+.right .name a {
     text-decoration: none;
     color: #000;
-
 }
 .right .name:hover a {
     color: #f15e2c;
@@ -328,25 +329,36 @@ main .left {
     justify-content: center;
     margin-top: 50px;
 }
-.page select{
+.page select {
     width: 50px;
+    text-align: center;
+}
+.page select option {
+    padding: 10px 10px;
+}
+.page select option:hover {
+    background-color: #0d6efd;
 }
 
-.page ul{
+.page ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
     list-style: none;
     margin: 0;
 }
-.page ul li{
+.page ul li {
     padding: 10px;
     width: 40px;
     text-align: center;
     border-radius: 4px;
 }
-.page ul li.selected{
+.page ul li.selected {
     color: #fff;
     background-color: #0d6efd;
     border-color: #0d6efd;
+}
+.page .previous a,
+.page .next a {
+    color: #000;
 }

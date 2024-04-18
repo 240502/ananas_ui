@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { getImageFeature } from '../../../services/product.servies';
 
-const ProductImage = ({ proId }: any) => {
+const ProductImage = ({ proId, gender }: any) => {
     const [img_src, setUrl] = useState('');
     useEffect(() => {
         async function getProductDetail(proId: any) {
@@ -11,6 +11,6 @@ const ProductImage = ({ proId }: any) => {
         getProductDetail(proId);
     }, [proId]);
 
-    return <img src={img_src} />;
+    return <img src={'http://localhost:3000/' + img_src} />;
 };
 export default memo(ProductImage);

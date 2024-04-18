@@ -1,35 +1,33 @@
 import { useEffect, useState, memo } from 'react';
 import SlideHotNews from '../../SlickSlide/SlideHotNews';
 import { Outlet, Link } from 'react-router-dom';
-import { getMenus, getGroupSubMenu, getTitleSubMenu, getCategory } from '../../../../services/header.services';
+import { getMenus } from '../../../../services/header.services';
 import '../../../../assets/css/Shop/header.css';
 import '../../../../assets/css/Shop/slick-slide.css';
 import { useRecoilState } from 'recoil';
 import { cartState } from '../../../../store/cart.atom';
+import { indexGender } from '../../../../store/product.atom';
+
 function Header() {
     const [menus, setMenus] = useState([]);
-    const [groupsubmenus, setGroup] = useState([]);
-    const [titles, setTitles] = useState([]);
-    const [categories, setCategories] = useState([]);
     const [cart, setCart] = useRecoilState(cartState);
+    const [token, setToken] = useState('');
+    const [index, setIndexGender] = useRecoilState(indexGender);
 
-    console.log('re-render');
     useEffect(() => {
         async function loadData() {
             let data = await getMenus();
-            let groups = await getGroupSubMenu();
-            let titles = await getTitleSubMenu();
-            let cate = await getCategory();
             setMenus(data);
-            setGroup(groups);
-            setTitles(titles);
-            setCategories(cate);
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            setCart(cart);
+            const token = JSON.parse(localStorage.getItem('token') || '');
+            setToken(token);
+            const indexLocal = JSON.parse(localStorage.getItem('indexGender') || '0');
+            setIndexGender(indexLocal);
         }
         loadData();
     }, []);
 
-    const token = JSON.parse(localStorage.getItem('token') || '');
-    console.log(token);
     return (
         <header>
             <div className="container-fluid header hidden-sm hidden-xs">
@@ -54,9 +52,9 @@ function Header() {
                             </a>
                         </li>
                         <li>
-                            <Link to={token !=='' ? '/dashboard' : '/login'}>
+                            <Link to={token !== '' ? '/dashboard' : '/login'}>
                                 <i className="fa-solid fa-user" />
-                                <span>{token !=='' ? 'Tài khoản':'Đăng nhập'}</span>
+                                <span>{token !== '' ? 'Tài khoản' : 'Đăng nhập'}</span>
                             </Link>
                         </li>
                         <li>
@@ -76,8 +74,14 @@ function Header() {
                     <div className="navbar center">
                         <div className="navbar-header">
                             <div className="navbar-brand">
-                                <Link to="/">
-                                    <img src="img/Logo_Ananas_Header.svg" alt="" />
+                                <Link
+                                    to="/"
+                                    onClick={() => {
+                                        setIndexGender(0);
+                                        localStorage.setItem('indexGender', JSON.stringify(0));
+                                    }}
+                                >
+                                    <img src="http://localhost:3000/img/Logo_Ananas_Header.svg" alt="" />
                                 </Link>
                             </div>
                         </div>
@@ -86,128 +90,175 @@ function Header() {
                                 {menus.map((menu: any) => {
                                     // nếu menu là sản phẩm
                                     if (menu.id == 1) {
-                                        const submenu = groupsubmenus.map((group: any): any => {
-                                            if (group.menu_show == 0) {
-                                                return (
-                                                    <li className="col" key={group.id}>
-                                                        <a href="#">
-                                                            {' '}
-                                                            <img src={group.img_show} alt="" />
-                                                        </a>
-                                                        <a href="#" className="dropdown-menu-title">
-                                                            {group.group_name}
-                                                        </a>
-                                                    </li>
-                                                );
-                                            }
-                                        });
-                                        const jsx = (
-                                            <>
-                                                {' '}
-                                                <li className="drop-down" key={menu.id}>
-                                                    <Link to="/product-list">
-                                                        <span>{menu.menu_name}</span>
-                                                        <i className="fa-solid fa-chevron-down" />
-                                                    </Link>
-                                                    <ul className="dropdown-menu style1">{submenu}</ul>
-                                                </li>
-                                                <li className="line"></li>
-                                            </>
-                                        );
-                                        return jsx;
-                                    }
-                                    // nếu menu là nam và nữ
-                                    if (menu.id > 1 && menu.id < 4) {
-                                        let groupleft = <div></div>;
-                                        let groupright = <div></div>;
-                                        const submenu = groupsubmenus.map((group: any) => {
-                                            if (group.menu_show == 1) {
-                                                if (group.id == 1) {
-                                                    groupleft = (
-                                                        <div className="col-4 left">
-                                                            <h3 className="title "> {group.group_name}</h3>
-                                                            <div className="item ">
-                                                                <a href="#" className="text-left">
-                                                                    Best seller
-                                                                </a>
-                                                                <a href="#" className="text-left">
-                                                                    New arrival
-                                                                </a>
-                                                                <a href="#" className="text-left">
-                                                                    Sale off
-                                                                </a>
-                                                            </div>
-
-                                                            <div className="item">
-                                                                <h3 className="item-title">Collaboration</h3>
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                } else {
-                                                    let colItem = titles.map((title: any) => {
-                                                        const subcateitemjsx = categories.map((cate: any) => {
-                                                            if (cate.title_menu_id == title.id)
-                                                                return (
-                                                                    <a href="#" className="text-left">
-                                                                        {cate.cate_name}
-                                                                    </a>
-                                                                );
-                                                        });
-                                                        if (title.group_id === group.id) {
-                                                            return (
-                                                                <div className="item ">
-                                                                    <h3 className="item-title">{title.title}</h3>
-                                                                    {subcateitemjsx}
-                                                                </div>
-                                                            );
-                                                        }
-                                                    });
-                                                    return (groupright = (
-                                                        <div className="col" key={group.id} data-id={group.id}>
-                                                            <h3 className="title "> {group.group_name} </h3>
-                                                            {colItem}
-                                                        </div>
-                                                    ));
-                                                }
-                                            }
-                                        });
-                                        const subbottom = (
-                                            <div className="style2-des">
-                                                <a href="#">
-                                                    MỌI NGƯỜI THƯỜNG GỌI CHÚNG TÔI LÀ
-                                                    <span className="highlight" style={{ color: '#fff' }}>
-                                                        DƯA !
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        );
-                                        const html = (
+                                        return (
                                             <>
                                                 <li className="drop-down" key={menu.id}>
-                                                    <Link to="/product">
+                                                    <Link
+                                                        to={menu.url}
+                                                        onClick={() => {
+                                                            setIndexGender(0);
+                                                            localStorage.setItem('indexGender', JSON.stringify(0));
+                                                        }}
+                                                    >
                                                         <span>{menu.menu_name}</span>
-                                                        <i className="fa-solid fa-chevron-down" />
+                                                        <i className="fa-solid fa-chevron-down"></i>
                                                     </Link>
-                                                    <ul className="dropdown-menu style2">
-                                                        <div className="list-item">
-                                                            {groupleft}
-                                                            <div className="style2-divider" />
-                                                            <div className="col-8 right">{submenu}</div>
-                                                        </div>
-                                                        {subbottom}
+                                                    <ul className="dropdown-menu style1">
+                                                        <li className="col">
+                                                            <a href="#">
+                                                                {' '}
+                                                                <img src="http://localhost:3000/img/menu_nam.jpg" />
+                                                            </a>
+                                                            <a href="#" className="dropdown-menu-title">
+                                                                Cho nam
+                                                            </a>
+                                                        </li>
+                                                        <li className="col">
+                                                            <a href="#">
+                                                                {' '}
+                                                                <img src="http://localhost:3000/img/Menu_Nu.jpg" />
+                                                            </a>
+                                                            <a href="#" className="dropdown-menu-title">
+                                                                Cho nữ
+                                                            </a>
+                                                        </li>
+                                                        <li className="col">
+                                                            <a href="#">
+                                                                {' '}
+                                                                <img src="http://localhost:3000/img/Menu_Sale-off.jpg" />
+                                                            </a>
+                                                            <a href="#" className="dropdown-menu-title">
+                                                                outlet sale
+                                                            </a>
+                                                        </li>
+                                                        <li className="col">
+                                                            <a href="#">
+                                                                {' '}
+                                                                <img src="http://localhost:3000/img/Menu_Phu-kien.jpg" />
+                                                            </a>
+                                                            <a href="#" className="dropdown-menu-title">
+                                                                Thời trang &amp; phụ kiện
+                                                            </a>
+                                                        </li>
                                                     </ul>
                                                 </li>
                                                 <li className="line"></li>
                                             </>
                                         );
-                                        return html;
+                                    }
+                                    // nếu menu là nam và nữ
+                                    if (menu.id > 1 && menu.id < 4) {
+                                        return (
+                                            <>
+                                                <li className="drop-down " key={menu.id}>
+                                                    <Link
+                                                        to={menu.url}
+                                                        onClick={() => {
+                                                            localStorage.setItem(
+                                                                'indexGender',
+                                                                JSON.stringify(menu.id == 2 ? 1 : 2),
+                                                            );
+                                                            setIndexGender(menu.id == 2 ? 1 : 2);
+                                                        }}
+                                                    >
+                                                        <span>{menu.menu_name}</span>
+                                                        <i className="fa-solid fa-chevron-down" />
+                                                    </Link>
+                                                    <div className="dropdown-menu style2">
+                                                        <div className="list-item">
+                                                            <div className="col-4 left">
+                                                                <h3 className="title ">Nổi bật</h3>
+                                                                <div className="item ">
+                                                                    <a href="#" className="text-left">
+                                                                        Best seller
+                                                                    </a>
+                                                                    <a href="#" className="text-left">
+                                                                        New arrival
+                                                                    </a>
+                                                                    <a href="#" className="text-left">
+                                                                        Sale off
+                                                                    </a>
+                                                                </div>
+                                                                <div className="item">
+                                                                    <h3 className="item-title">Bộ sản phẩm</h3>
+                                                                    <a href="#">Pattas Living Journey</a>
+                                                                    <a href="#">Pattas Polka Dots</a>
+                                                                    <a href="#">Basas Evergreen</a>
+                                                                    <a href="#">Urbas Ruler</a>
+                                                                    <a href="#">Track 6 Class E</a>
+                                                                </div>
+                                                                <div className="item">
+                                                                    <h3 className="item-title">Collaboration</h3>
+                                                                </div>
+                                                            </div>
+                                                            <div className="style2-divider" />
+                                                            <div className="col-8 right">
+                                                                <div className="col">
+                                                                    <h3 className="title "> Giày </h3>
+                                                                    <div className="item ">
+                                                                        <h3 className="item-title">Dòng sản phẩm</h3>
+                                                                        <a href="#">Basas</a>
+                                                                        <a href="#">Vintas</a>
+                                                                        <a href="#">Urbas</a>
+                                                                        <a href="#">Pattas</a>
+                                                                        <a href="#">Creas</a>
+                                                                        <a href="#">Track 6</a>
+                                                                    </div>
+                                                                    <div className="item ">
+                                                                        <h3 className="item-title">Style</h3>
+                                                                        <a href="#">High Top</a>
+                                                                        <a href="#">Low Top</a>
+                                                                        <a href="#">Slip-on</a>
+                                                                    </div>
+                                                                    <div className="item ">
+                                                                        <h3 className="item-title">Tất cả giày</h3>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col">
+                                                                    <h3 className="title ">
+                                                                        {' '}
+                                                                        Thời trang &amp; phụ kiện{' '}
+                                                                    </h3>
+                                                                    <div className="item ">
+                                                                        <h3 className="item-title">Nửa trên</h3>
+                                                                        <a href="#">Basic Tee</a>
+                                                                        <a href="#">Graphic Tee</a>
+                                                                        <a href="#">Sweatshirt</a>
+                                                                        <a href="#">Hoodie</a>
+                                                                    </div>
+                                                                    <div className="item ">
+                                                                        <h3 className="item-title">Phụ kiện</h3>
+                                                                        <a href="#">Nón</a>
+                                                                        <a href="#">Dây giày</a>
+                                                                        <a href="#">Vớ</a>
+                                                                        <a href="#">Túi Tote</a>
+                                                                    </div>
+                                                                    <div className="item ">
+                                                                        <h3 className="item-title">Xem tất cả</h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="style2-des">
+                                                            <a href="#">
+                                                                MỌI NGƯỜI THƯỜNG GỌI CHÚNG TÔI LÀ
+                                                                <span className="highlight" style={{ color: '#fff' }}>
+                                                                    DƯA !
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li className="line" />
+                                            </>
+                                        );
                                     }
                                     //nếu menu là sale off
                                     if (menu.id >= 4) {
                                         return (
                                             <>
-                                                <li className="drop-down" key={menu}>
-                                                    <a href="#">
+                                                <li className="drop-down" key={menu.id}>
+                                                    <a href={menu.url}>
                                                         <span>{menu.menu_name}</span>
                                                     </a>
                                                 </li>

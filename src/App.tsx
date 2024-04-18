@@ -6,7 +6,7 @@ import PrivateRoutes from './utils/PrivateRoute';
 
 import { AdminLayout, DefaultLayout } from './components/Layout';
 import './assets/fontawesome/css/all.min.css';
-import './assets/boostrap/css/bootstrap.min.css'
+import './assets/bootstrap-5.0.2-dist/css/bootstrap.min.css'
 function App() {
     return (
         <Router>

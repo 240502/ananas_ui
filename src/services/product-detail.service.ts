@@ -34,3 +34,7 @@ export const getColor = async (id: any): Promise<any> => {
     const res = await apiClient.get(`/api-customer/Color/getById?id=${id}`);
     return res?.data;
 };
+export const getRelatedProduct = async(data:any): Promise<any> => {
+    const res = await apiClient.post(`/api-customer/Product/getRelatedProduct`,data);
+    return res?.data;
+};

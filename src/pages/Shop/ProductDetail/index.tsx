@@ -12,6 +12,7 @@ import {
     getProductStatus,
     getStyleById,
     getProDetailByProIdAndSize,
+    getRelatedProduct,
 } from '../../../services/product-detail.service';
 import { getProductPrice } from '../../../services/product.servies';
 import ProductImage from './ProductImage';
@@ -34,6 +35,7 @@ function ProductDetail() {
     const [img, setImage] = useState({ id: 0, img_src: '' });
     const [quantity, setNumberPro] = useState(0);
     const [cart, setCart] = useRecoilState(cartState);
+    const [relatedProducts, setRelatedProducts] = useState([]);
     const [product, setProduct] = useState({
         id: 0,
         pro_name: '',
@@ -44,6 +46,7 @@ function ProductDetail() {
         out_sole: '',
         gender: '',
         material_id: 0,
+        collection_id: 0,
     });
     const handleChangeSize = (event: any) => {
         setSize(event.target.value);
@@ -94,6 +97,20 @@ function ProductDetail() {
         getProductDetail(id);
         getSize(id);
     }, [id]);
+    useEffect(() => {
+        async function getRelated(cateId: any, styleId: any, collectionId: any, gender: any) {
+            if (product.id > 0) {
+                let items = await getRelatedProduct({
+                    cateId: cateId,
+                    styleId: styleId,
+                    collectionId: collectionId,
+                    gender: gender,
+                    id:product.id
+                });
+                setRelatedProducts(items);
+            }
+        }getRelated(product.cate_id,product.style_id,product.collection_id,product.gender)
+    }, [product.id]);
     useEffect(() => {
         async function getColorById(id: any) {
             if (id !== 0) {
@@ -333,7 +350,7 @@ function ProductDetail() {
                     <div className="container">
                         <h3 className="heading ">Sản phẩm liên quan</h3>
                         <div className="pro-list">
-                            <SlickSlideProductRef />
+                            <SlickSlideProductRef data = {relatedProducts} />
                         </div>
                     </div>
                 </div>

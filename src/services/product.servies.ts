@@ -8,7 +8,7 @@ export const getProductPrice = async (proId: any): Promise<any> => {
     return res?.data;
 };
 export const getImageFeature = async (proId: any): Promise<any> => {
-    const res = await apiClient.get(`/api-customer/ImageGallary/getImageFeatureByProId?proId=` + proId);
+    const res = await apiClient.get(`/api-customer/ImageGallery/getImageFeatureByProId?proId=` + proId);
     return res?.data;
 };
 export const getProductStatus = async (id: number): Promise<any> => {
@@ -18,5 +18,10 @@ export const getProductStatus = async (id: number): Promise<any> => {
 
 export const getColor = async (id: number): Promise<any> => {
     const res = await apiClient.get(`/api-customer/Color/getById?id=${id}`);
+    return res?.data;
+};
+
+export const getCategories = async (): Promise<any> => {
+    const res = await apiClient.get(`/api-customer/ProductCategory/getList`);
     return res?.data;
 };

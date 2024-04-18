@@ -32,10 +32,10 @@ const ProductImage = ({ proId, setImage, image }: any) => {
     return (
         <div className="wrapper-slide">
             <div className="prd-detail-main-img">
-                <img className="main-img" src={'/' + img_src} />
+                <img className="main-img" src={'http://localhost:3000/' + img_src} />
             </div>
             <div className="prd-detail-slide">
-                <Slider {...settings}>
+                {/* <Slider {...settings}>
                     <div className="thumbnail">
                         <div className="cont-item">
                             <img src={'/' + img_src} />
@@ -71,7 +71,7 @@ const ProductImage = ({ proId, setImage, image }: any) => {
                             <img src={'/' + img_src} />
                         </div>
                     </div>
-                </Slider>
+                </Slider> */}
             </div>
         </div>
     );

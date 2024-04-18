@@ -2,10 +2,16 @@ import { Link } from 'react-router-dom';
 import '../../../../assets/css/Shop/header.css';
 import { useRecoilState } from 'recoil';
 import { cartState } from '../../../../store/cart.atom';
+import { useEffect } from 'react';
 
 function Header() {
     const token = JSON.parse(localStorage.getItem('token') || '');
+    
     const [cart, setCart] = useRecoilState(cartState);
+    useEffect(()=>{
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        setCart(cart);
+    },[])
     return (
         <header>
             <div className="container-fluid header hidden-sm hidden-xs">

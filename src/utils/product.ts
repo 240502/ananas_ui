@@ -13,15 +13,16 @@ export function toggleNav(): void {
     });
 }
 
-export function activeItemTree () :void {
-    const list_tree_item = document.querySelectorAll(".tree li");
+export function activeItemTree(setCateId: any, id: any): void {
+    const list_tree_item = document.querySelectorAll('.tree li');
     list_tree_item.forEach((item) => {
         item.addEventListener('click', function (e) {
-           
             if (item.classList.contains('active')) {
                 item.classList.remove('active');
+                setCateId(0);
             } else {
                 item.classList.add('active');
+                setCateId(id);
             }
         });
     });
