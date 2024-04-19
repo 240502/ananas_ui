@@ -35,43 +35,43 @@ const ProductImage = ({ proId, setImage, image }: any) => {
                 <img className="main-img" src={'http://localhost:3000/' + img_src} />
             </div>
             <div className="prd-detail-slide">
-                {/* <Slider {...settings}>
+                <Slider {...settings}>
                     <div className="thumbnail">
                         <div className="cont-item">
-                            <img src={'/' + img_src} />
+                            <img src={'http://localhost:3000/' + img_src} />
                         </div>
                     </div>
                     <div className="thumbnail">
                         <div className="cont-item">
-                            <img src={'/' + img_src} />
+                            <img src={'http://localhost:3000/' + img_src} />
                         </div>
                     </div>
                     <div className="thumbnail">
                         <div className="cont-item">
-                            <img src={'/' + img_src} />
+                            <img src={'http://localhost:3000/' + img_src} />
                         </div>
                     </div>
                     <div className="thumbnail">
                         <div className="cont-item">
-                            <img src={'/' + img_src} />
+                            <img src={'http://localhost:3000/' + img_src} />
                         </div>
                     </div>
                     <div className="thumbnail">
                         <div className="cont-item">
-                            <img src={'/' + img_src} />
+                            <img src={'http://localhost:3000/' + img_src} />
                         </div>
                     </div>
                     <div className="thumbnail">
                         <div className="cont-item">
-                            <img src={'/' + img_src} />
+                            <img src={'http://localhost:3000/' + img_src} />
                         </div>
                     </div>
                     <div className="thumbnail">
                         <div className="cont-item">
-                            <img src={'/' + img_src} />
+                            <img src={'http://localhost:3000/' + img_src} />
                         </div>
                     </div>
-                </Slider> */}
+                </Slider>
             </div>
         </div>
     );

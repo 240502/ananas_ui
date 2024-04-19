@@ -1,61 +1,86 @@
-import { useRecoilState } from 'recoil';
-import { json } from 'stream/consumers';
-import { cartState } from '../store/cart.atom';
-
-export const addToCart = (
-    id: number,
-    pro_name: string,
-    pro_style_name: string,
-    pro_color_name: string,
-    pro_price: number,
-    pro_size: any,
-    pro_number: number,
-    numberPro: number,
-    img: any,
-    listSize: any,
-) => {
-    const totalPrice = numberPro * pro_price
+import { CartItemType } from '../store/cart.atom';
+export const addToCart = (cartItem: CartItemType, listCart: CartItemType[], setCarts: any) => {
     const product = {
-        id: id,
-        pro_name,
-        pro_style_name,
-        pro_color_name,
-        pro_price,
-        pro_size,
-        pro_number,
-        numberPro,
-        img,
-        listSize,
-        totalPrice
+        id: cartItem.id,
+        name: cartItem.name,
+        qty: cartItem.qty,
+        size: cartItem.size,
+        thumbnail: cartItem.thumbnail,
+        color: cartItem.color,
+        price: cartItem.price,
+        style: cartItem.style,
     };
-
-    let list;
-  
-    if (numberPro === 0 || pro_size === 0) {
+    let newCarts;
+    if (cartItem.qty === 0 || cartItem.size === 0) {
         alert('Không được để trống số lượng sản phẩm hoặc size!');
     } else {
-        if (localStorage.getItem('cart') === null) {
-            list = [product];
+        if (listCart.length > 0) {
+            const currentCartItem = listCart.find((item: CartItemType) => item.id === product.id);
+            if (currentCartItem) {
+                newCarts = listCart.map((item: CartItemType) => {
+                    if (
+                        item.id === product.id &&
+                        item.color === product.color &&
+                        item.size === product.size &&
+                        item.style === product.style
+                    ) {
+                        return { ...item, qty: item.qty + product.qty };
+                    } else {
+                        return item;
+                    }
+                });
+                setCarts(newCarts);
+            } else {
+                newCarts = [...listCart, product];
+                setCarts(newCarts);
+            }
         } else {
-            list = JSON.parse(localStorage.getItem('cart') || '[]');
-            let state = true;
-            for (let i = 0; i < list.length; i++) {
-                if (
-                    product.id === list[i].id &&
-                    product.pro_style_name === list[i].pro_style_name &&
-                    product.pro_color_name === list[i].pro_color_name &&
-                    product.pro_size === list[i].pro_size
-                ) {
-                    list[i]['numberPro'] += product.numberPro;
-                    state = false;
-                    break;
-                }
-            }
-            if (state) {
-                list.push(product);
-            }
+            newCarts = [product];
+            setCarts(newCarts);
         }
         alert('Đã thêm giỏ hàng thành công!');
-        localStorage.setItem('cart', JSON.stringify(list));
+        localStorage.setItem('cart', JSON.stringify(newCarts));
     }
+};
+export const reduceQty = (id: number, setCarts: any, listCart: CartItemType[]) => {
+    console.log('reduceQty =>', id);
+    const cartItem = listCart.find((item: CartItemType) => item.id === id);
+    if (cartItem) {
+        if (cartItem.qty === 1) {
+            alert('Sản phẩm đã đạt số lượng nhỏ nhất để có thể đặt hàng !');
+            return;
+        } else {
+            const newCarts: CartItemType[] = listCart.map((item: CartItemType) => {
+                if (item.id === id) {
+                    return { ...item, qty: item.qty - 1 };
+                } else return item;
+            });
+            localStorage.setItem('cart', JSON.stringify(newCarts));
+            setCarts(newCarts);
+        }
+    }
+};
+export const increaseQty = (id: number, setCarts: any, listCart: CartItemType[]) => {
+    console.log('increaseQty =>', id);
+    const cartItem = listCart.find((item: CartItemType) => item.id === id);
+    if (cartItem) {
+        const newCarts: CartItemType[] = listCart.map((item: CartItemType) => {
+            if (item.id === id) {
+                return { ...item, qty: item.qty + 1 };
+            } else return item;
+        });
+        localStorage.setItem('cart', JSON.stringify(newCarts));
+        setCarts(newCarts);
+    }
+};
+export const removeCartItem = (id: number, listCart: CartItemType[], setCarts: any) => {
+    const newCarts = listCart.filter((item) => item.id !== id);
+    localStorage.setItem('cart', JSON.stringify(newCarts));
+
+    setCarts(newCarts);
+};
+export const clearCart = (setCarts: any) => {
+    localStorage.setItem('cart', JSON.stringify([]));
+
+    setCarts([]);
 };

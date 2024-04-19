@@ -37,6 +37,7 @@ footer > .footer {
 .footer h4 {
     text-align: left;
     text-transform: uppercase;
+    font-weight: 700;
 }
 .footer li a {
     color: #ccc;

@@ -17,8 +17,8 @@ import {
 import { getProductPrice } from '../../../services/product.servies';
 import ProductImage from './ProductImage';
 import { BreadCrumb } from './BreadCrumb';
-import { useRecoilState } from 'recoil';
-import { cartState, sizeState } from '../../../store/cart.atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { CartItemType, cartState, infoValue, sizeState } from '../../../store/cart.atom';
 import { addToCart } from '../../../utils/cart';
 type DataParams = {
     id: string;
@@ -34,8 +34,11 @@ function ProductDetail() {
     const [detail, setDetail] = useState({ id: 0, quantity: 1 });
     const [img, setImage] = useState({ id: 0, img_src: '' });
     const [quantity, setNumberPro] = useState(0);
-    const [cart, setCart] = useRecoilState(cartState);
+    const [cart, setCarts] = useRecoilState(cartState);
     const [relatedProducts, setRelatedProducts] = useState([]);
+    const info = useRecoilValue(infoValue);
+
+    let cartItem: CartItemType;
     const [product, setProduct] = useState({
         id: 0,
         pro_name: '',
@@ -105,17 +108,18 @@ function ProductDetail() {
                     styleId: styleId,
                     collectionId: collectionId,
                     gender: gender,
-                    id:product.id
+                    id: product.id,
                 });
                 setRelatedProducts(items);
             }
-        }getRelated(product.cate_id,product.style_id,product.collection_id,product.gender)
+        }
+        getRelated(product.cate_id, product.style_id, product.collection_id, product.gender);
     }, [product.id]);
     useEffect(() => {
         async function getColorById(id: any) {
             if (id !== 0) {
-                const res = await getColor(id);
                 try {
+                    const res = await getColor(id);
                     setColor(res);
                 } catch (err) {
                     console.log(err);
@@ -125,8 +129,8 @@ function ProductDetail() {
 
         async function getProductStatusById(id: any) {
             if (id != 0) {
-                const status = await getProductStatus(id);
                 try {
+                    const status = await getProductStatus(id);
                     setStatus(status);
                 } catch (err) {
                     console.log(err);
@@ -136,8 +140,8 @@ function ProductDetail() {
 
         async function getStyle(id: any) {
             if (id != 0) {
-                const style = await getStyleById(id);
                 try {
+                    const style = await getStyleById(id);
                     setStyle(style);
                 } catch (err) {
                     console.log(err);
@@ -170,7 +174,7 @@ function ProductDetail() {
                                 className="pull-right col"
                                 style={{ display: `${product.status_id != 0 ? 'block' : 'none'}` }}
                             >
-                                Tình trạng: {status.status_name}
+                                Tình trạng: <span style={{ fontWeight: '700' }}> {status.status_name}</span>
                             </span>
                         </div>
                         <div className="detail">
@@ -221,20 +225,17 @@ function ProductDetail() {
                                 type="button"
                                 className="  btn btn-addcart "
                                 onClick={() => {
-                                    addToCart(
-                                        product.id,
-                                        product.pro_name,
-                                        style.name_style,
-                                        color.color_name,
-                                        price.price,
-                                        Number(size),
-                                        detail.quantity,
-                                        Number(quantity),
-                                        img,
-                                        details,
-                                    );
-                                    let list = JSON.parse(localStorage.getItem('cart') || '[]');
-                                    setCart(list);
+                                    cartItem = {
+                                        id: product.id,
+                                        name: product.pro_name,
+                                        style: style.name_style,
+                                        color: color.color_name,
+                                        price: price.price,
+                                        qty: Number(quantity),
+                                        size: Number(size),
+                                        thumbnail: img.img_src,
+                                    };
+                                    addToCart(cartItem, info.carts, setCarts);
                                 }}
                             >
                                 Thêm vào giỏ hàng
@@ -350,7 +351,7 @@ function ProductDetail() {
                     <div className="container">
                         <h3 className="heading ">Sản phẩm liên quan</h3>
                         <div className="pro-list">
-                            <SlickSlideProductRef data = {relatedProducts} />
+                            <SlickSlideProductRef data={relatedProducts} />
                         </div>
                     </div>
                 </div>

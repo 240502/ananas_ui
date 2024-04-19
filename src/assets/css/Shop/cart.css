@@ -122,15 +122,16 @@
     font-size: 16px;
     padding-right: 25px;
 }
-#size,#quantity{
+#size,
+#quantity {
     width: 50px;
     text-align: center;
 }
-.form-quantity{
+.form-quantity {
     display: flex;
     justify-content: center;
 }
-.form-quantity button{
+.form-quantity button {
     border: 1px solid #eee;
     background: #fff;
     padding: 10px 20px;
@@ -153,13 +154,19 @@
     font-size: 16px;
     margin-bottom: 10px;
 }
+.product-info-right .group-btn {
+    display: block;
+}
+.product-info-right .group-btn .button-heart,
+.product-info-right .group-btn .button-delete {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: 50%;
+    margin-left: 50%;
+}
 .product-info-right .group-btn .btn {
     border: 1px solid #ccc;
     width: 80%;
-}
-.product-info-right .group-btn .button-heart {
-    margin-bottom: 10px;
-    margin-top: 10px;
 }
 .product-info-right .group-btn .button-delete .btn {
     background-color: #303030;
@@ -174,6 +181,10 @@
     display: flex;
     justify-content: space-between;
     padding: 0;
+}
+.group-btn-bottom .btn:hover {
+    background-color: #000;
+    color: #fff;
 }
 .group-btn-bottom .btn {
     border-radius: 0px;

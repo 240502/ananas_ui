@@ -23,18 +23,20 @@ function Product() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [cateId, setCateId] = useState(0);
-    const [price, setPrice] = useState(0);
+    const [startPrice, setStartPrice] = useState(0);
+    const [endPrice, setEndPrice] = useState(0);
     const { gender } = useParams<DataParams>();
     const [index, setIndexGender] = useRecoilState(indexGender);
     useEffect(() => {
-        async function loadData(cateId: any, price: any, gender: any) {
+        async function loadData(cateId: any, startPrice: any, endPrice: any, gender: any) {
             try {
                 let items = await getList({
                     pageIndex: page,
                     pageSize: pageSize,
                     gender: gender != undefined ? gender : '',
                     cate: cateId,
-                    price: price,
+                    startPrice: startPrice,
+                    endPrice: endPrice,
                 });
                 setProducts(items.data);
                 setPageCount(Math.ceil(items.totalItems / pageSize));
@@ -44,8 +46,8 @@ function Product() {
                 setProducts([]);
             }
         }
-        loadData(cateId, price, gender);
-    }, [page, pageSize, cateId, price, gender]);
+        loadData(cateId, startPrice, endPrice, gender);
+    }, [page, pageSize, cateId, startPrice, endPrice, gender]);
 
     const handlePageClick = (event: any) => {
         setPage(event.selected + 1);
@@ -103,7 +105,7 @@ function Product() {
                             <ul className="nav" style={{ display: 'block' }}>
                                 <ProductCategory setCateId={setCateId} />
                                 <li className="nav-divider" />
-                                <ProductPrice setPrice={setPrice} />
+                                <ProductPrice setStartPrice={setStartPrice} setEndPrice={setEndPrice} />
                             </ul>
                         </div>
                     </div>

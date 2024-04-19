@@ -8,7 +8,7 @@ const Footer = () => {
                 <div className="row">
                     <div className="col-md-3 sec-search">
                         <div className="row center">
-                            <img src="img/Store.svg" />
+                            <img src="http://localhost:3000/img/Store.svg" />
                         </div>
                         <div className="row">
                             <button type="button" className="btn btn-search-shop">
@@ -94,15 +94,15 @@ const Footer = () => {
                                 <h4>ANANAS SOCIAL</h4>
                                 <a href="#" style={{ marginRight: 3 }}>
                                     {' '}
-                                    <img src="img/icon_facebook.svg" />
+                                    <img src="http://localhost:3000/img/icon_facebook.svg" />
                                 </a>
                                 <a href="#" style={{ marginRight: 3 }}>
                                     {' '}
-                                    <img src="img/icon_instagram.svg" />
+                                    <img src="http://localhost:3000/img/icon_instagram.svg" />
                                 </a>
                                 <a href="#" style={{ marginRight: 3 }}>
                                     {' '}
-                                    <img src="img/icon_youtube.svg" />
+                                    <img src="http://localhost:3000/img/icon_youtube.svg" />
                                 </a>
                             </div>
                             <div className="col-md-3">
@@ -116,7 +116,7 @@ const Footer = () => {
                             </div>
                             <div className="col-md-6 logo-footer">
                                 <a href="#">
-                                    <img src="img/Logo_Ananas_Footer.svg" />
+                                    <img src="http://localhost:3000/img/Logo_Ananas_Footer.svg" />
                                 </a>
                             </div>
                         </div>
@@ -124,7 +124,7 @@ const Footer = () => {
                             <div className="col-md-3 icon-bct">
                                 <a href="#">
                                     {' '}
-                                    <img src="img/icon_bocongthuong.png" />
+                                    <img src="http://localhost:3000/img/icon_bocongthuong.png" />
                                 </a>
                             </div>
                             <div className="col-md-9 copyright">Copyright © 2022 Ananas. All rights reserved.</div>
@@ -136,4 +136,4 @@ const Footer = () => {
     );
 };
 
-export  default Footer;
+export default Footer;

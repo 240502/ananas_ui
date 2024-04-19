@@ -8,6 +8,9 @@ a {
     width: 100%;
     padding: 3px 60px 0px 0px;
 }
+.header .menu li:hover a span {
+    color: #f15e2c;
+}
 .header .menu > li > a {
     color: #fff;
     font-size: 12px;

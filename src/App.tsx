@@ -6,7 +6,7 @@ import PrivateRoutes from './utils/PrivateRoute';
 
 import { AdminLayout, DefaultLayout } from './components/Layout';
 import './assets/fontawesome/css/all.min.css';
-import './assets/bootstrap-5.0.2-dist/css/bootstrap.min.css'
+import './assets/bootstrap-5.0.2-dist/css/bootstrap.min.css';
 function App() {
     return (
         <Router>
@@ -16,11 +16,9 @@ function App() {
                         let Layout: any = DefaultLayout;
                         if (route.layout !== undefined) {
                             Layout = route.layout;
-                        }
-                        else if (route.layout === null) {
+                        } else if (route.layout === null) {
                             Layout = Fragment;
                         }
-                        console.log(Layout);
                         const Page = route.component;
                         return (
                             <Route

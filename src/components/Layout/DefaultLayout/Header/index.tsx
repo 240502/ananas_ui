@@ -4,22 +4,22 @@ import { Outlet, Link } from 'react-router-dom';
 import { getMenus } from '../../../../services/header.services';
 import '../../../../assets/css/Shop/header.css';
 import '../../../../assets/css/Shop/slick-slide.css';
-import { useRecoilState } from 'recoil';
-import { cartState } from '../../../../store/cart.atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { cartState, infoValue } from '../../../../store/cart.atom';
 import { indexGender } from '../../../../store/product.atom';
 
 function Header() {
     const [menus, setMenus] = useState([]);
-    const [cart, setCart] = useRecoilState(cartState);
+    const [carts, setCarts] = useRecoilState(cartState);
     const [token, setToken] = useState('');
     const [index, setIndexGender] = useRecoilState(indexGender);
-
+    const info = useRecoilValue(infoValue);
     useEffect(() => {
         async function loadData() {
             let data = await getMenus();
             setMenus(data);
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            setCart(cart);
+            setCarts(cart);
             const token = JSON.parse(localStorage.getItem('token') || '');
             setToken(token);
             const indexLocal = JSON.parse(localStorage.getItem('indexGender') || '0');
@@ -62,8 +62,8 @@ function Header() {
                                 <i className="fa-solid fa-cart-shopping" />
                                 <span>
                                     Giỏ hàng{' '}
-                                    <span style={{ display: `${cart.length == 0 ? 'none' : 'inline-block'}` }}>
-                                        ({cart.length})
+                                    <span style={{ display: `${info.total == 0 ? 'none' : 'inline-block'}` }}>
+                                        ({info.total})
                                     </span>
                                 </span>
                             </Link>

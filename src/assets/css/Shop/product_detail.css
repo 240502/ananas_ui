@@ -12,7 +12,7 @@
     margin-bottom: 30px;
     font-size: 16px;
 }
-.breadcrumb-item span{
+.breadcrumb-item span {
     text-transform: capitalize;
 }
 .breadcrumb .breadcrumb-item:not(.active) a {
@@ -84,8 +84,8 @@
 .prd-detail-slide .slick-arrow:hover {
     opacity: 1;
 }
-.prd-detail-right .pro-name ,
-.prd-detail-right .pro-name span{
+.prd-detail-right .pro-name,
+.prd-detail-right .pro-name span {
     text-transform: uppercase;
     font-weight: 700;
     line-height: 42px;
@@ -229,12 +229,11 @@
 .panel.open .panel-heading {
     color: #f15e2c;
 }
-.panel .panel-heading i{
+.panel .panel-heading i {
     margin-left: 10px;
 }
 .panel.open .panel-heading i {
     transform: rotate(-180deg);
-
 }
 .panel.open .panel-body {
     display: block !important;
@@ -246,6 +245,8 @@
     color: #000;
     text-align: center;
     margin-bottom: 40px;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
 .pro-list .thumbnail {
