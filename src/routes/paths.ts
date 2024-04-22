@@ -6,7 +6,6 @@ const LOGIN_PATH = '/login';
 const ADMIN_PATH = '/admin';
 const SHIPPING_INFORMATION_PATTH = '/shipping-information';
 const PRODUCT_GENDER_PATH = '/product-list/:gender';
-
 export {
     HOME_PATH,
     PRODUCT_PATH,

@@ -26,7 +26,6 @@ export const publicRoutes = [
     { path: DETAIL_PATH, component: ProductDetail, layout: undefined },
     { path: PRODUCT_GENDER_PATH, component: Product, layout: undefined },
     { path: SHIPPING_INFORMATION_PATTH, component: ShippingInformation, layout: undefined },
-
     { path: LOGIN_PATH, component: Login, layout: LoginLayout },
 ];
 

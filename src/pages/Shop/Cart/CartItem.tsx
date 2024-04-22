@@ -6,7 +6,6 @@ import { clearCart, increaseQty, reduceQty, removeCartItem } from '../../../util
 function CartItem() {
     const info = useRecoilValue(infoValue);
     const [carts, setCarts] = useRecoilState(cartState);
-    console.log(info.carts);
     return (
         <div className="row">
             {info.carts.map((cart): any => {

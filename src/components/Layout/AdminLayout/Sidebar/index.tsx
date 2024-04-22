@@ -1,12 +1,12 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 export const Sidebar = () => {
     return (
         <div className="form-us ">
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item">
-                        <a href="/">Trang chủ</a>
+                        <Link to="/">Trang chủ</Link>
                     </li>
                     <li className="line" />
                     <li className="breadcrumb-item active" aria-current="page">
@@ -15,7 +15,7 @@ export const Sidebar = () => {
                 </ol>
             </nav>
             <div className="content">
-                <div className="nav " >
+                <div className="nav ">
                     <ul className="list-nav">
                         <li className="nav-item">
                             <a style={{ color: '#000', textDecoration: 'none' }} href="#">

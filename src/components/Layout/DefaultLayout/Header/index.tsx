@@ -4,28 +4,37 @@ import { Outlet, Link } from 'react-router-dom';
 import { getMenus } from '../../../../services/header.services';
 import '../../../../assets/css/Shop/header.css';
 import '../../../../assets/css/Shop/slick-slide.css';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { cartState, infoValue } from '../../../../store/cart.atom';
 import { indexGender } from '../../../../store/product.atom';
+import { userState, userValue } from '../../../../store/user.atom';
 
 function Header() {
     const [menus, setMenus] = useState([]);
     const [carts, setCarts] = useRecoilState(cartState);
-    const [token, setToken] = useState('');
     const [index, setIndexGender] = useRecoilState(indexGender);
     const info = useRecoilValue(infoValue);
+    const userInfo = useRecoilValue(userValue);
+    const setUser = useSetRecoilState(userState);
     useEffect(() => {
         async function loadData() {
-            let data = await getMenus();
-            setMenus(data);
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            setCarts(cart);
-            const token = JSON.parse(localStorage.getItem('token') || '');
-            setToken(token);
-            const indexLocal = JSON.parse(localStorage.getItem('indexGender') || '0');
-            setIndexGender(indexLocal);
+            try {
+                let data = await getMenus();
+                setMenus(data);
+                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                setCarts(cart);
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                setUser(user);
+                console.log(user);
+
+                const indexLocal = JSON.parse(localStorage.getItem('indexGender') || '0');
+                setIndexGender(indexLocal);
+            } catch (error) {
+                console.log(error);
+            }
         }
         loadData();
+        console.log(userInfo.user);
     }, []);
 
     return (
@@ -34,27 +43,27 @@ function Header() {
                 <div className="row">
                     <ul className="menu">
                         <li>
-                            <a href="#">
+                            <Link to="#">
                                 <i className="fa-brands fa-dropbox" />
                                 <span>Tra cứu đơn hàng</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="#">
+                            <Link to="#">
                                 <i className="fa-solid fa-location-dot" />
                                 <span>Tìm cửa hàng</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="#">
+                            <Link to="#">
                                 <i className="fa-solid fa-heart" />
                                 <span>Yêu thích</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <Link to={token !== '' ? '/dashboard' : '/login'}>
+                            <Link to={userInfo.user.token !== undefined ? '/dashboard' : '/login'}>
                                 <i className="fa-solid fa-user" />
-                                <span>{token !== '' ? 'Tài khoản' : 'Đăng nhập'}</span>
+                                <span>{userInfo.user.token !== undefined ? 'Tài khoản' : 'Đăng nhập'}</span>
                             </Link>
                         </li>
                         <li>
@@ -62,7 +71,7 @@ function Header() {
                                 <i className="fa-solid fa-cart-shopping" />
                                 <span>
                                     Giỏ hàng{' '}
-                                    <span style={{ display: `${info.total == 0 ? 'none' : 'inline-block'}` }}>
+                                    <span style={{ display: `${carts.length == 0 ? 'none' : 'inline-block'}` }}>
                                         ({info.total})
                                     </span>
                                 </span>
@@ -92,7 +101,7 @@ function Header() {
                                     if (menu.id == 1) {
                                         return (
                                             <>
-                                                <li className="drop-down" key={menu.id}>
+                                                <li className="drop-down" key={menu.menu_name}>
                                                     <Link
                                                         to={menu.url}
                                                         onClick={() => {
@@ -150,7 +159,7 @@ function Header() {
                                     if (menu.id > 1 && menu.id < 4) {
                                         return (
                                             <>
-                                                <li className="drop-down " key={menu.id}>
+                                                <li className="drop-down " key={menu.menu_name}>
                                                     <Link
                                                         to={menu.url}
                                                         onClick={() => {

@@ -2,10 +2,13 @@ import SildeCart from '../../../components/Layout/SlickSlide/SlideCart';
 import '../../../assets/css/Shop/cart.css';
 import { useEffect, useState } from 'react';
 import CartItem from './CartItem';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { infoValue } from '../../../store/cart.atom';
+import { Link } from 'react-router-dom';
+import { userValue } from '../../../store/user.atom';
 function Cart() {
     const info = useRecoilValue(infoValue);
+    const userInfo = useRecoilValue(userValue);
     return (
         <main>
             <div className="main-cart container">
@@ -54,7 +57,16 @@ function Cart() {
                                 <span> {info.totalPrice.toLocaleString(undefined)} VND</span>
                             </li>
                             <li className="list-group-item">
-                                <button className="btn btn-cart to-checkout">Tiếp tục thanh toán </button>
+                                <Link
+                                    to={
+                                        userInfo.user && userInfo.user.token !== undefined
+                                            ? '/shipping-information'
+                                            : '/login'
+                                    }
+                                    className="btn btn-cart to-checkout"
+                                >
+                                    Tiếp tục thanh toán{' '}
+                                </Link>
                             </li>
                         </ul>
                     </div>

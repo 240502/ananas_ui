@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import '../../../assets/css/Shop/login.css';
 import { login } from '../../../services/login.servies';
-import { redirect ,Navigate } from 'react-router-dom';
+import { redirect, Navigate, useNavigate } from 'react-router-dom';
+import { userState } from '../../../store/user.atom';
+import { useRecoilState } from 'recoil';
 function Login() {
     const [usename, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    const [user, setUser] = useRecoilState(userState);
     async function handleLogin() {
-        const user = await login({UserName :usename,password:password});
-        if(user){
-            localStorage.setItem("token",JSON.stringify(user.token))
-            window.location.href = '/'
+        const res = await login({ UserName: usename, password: password });
+        if (res) {
+            setUser(res);
+            localStorage.setItem('user', JSON.stringify(res));
+            navigate('/');
         }
+        console.log(user);
     }
     return (
         <div className="frame">

@@ -9,7 +9,7 @@
     display: flex;
     justify-content: space-between;
 }
-input[type='checkbox'] {
+input[type='radio'] {
     margin-right: 20px;
     cursor: pointer;
 }
@@ -19,5 +19,117 @@ input[type='checkbox'] {
 .title-right {
     text-align: end;
     text-transform: uppercase;
+    font-weight: 700;
+}
+.main-cart-right .list-group-item .title-6,
+.main-cart-right .list-group-item .title-6-2 {
+    width: 60%;
+}
+
+.main-cart-right .list-group-item .title-6-3,
+.main-cart-right .list-group-item .title-6-4 {
+    width: 20%;
+    text-align: right;
+}
+
+.main-cart-right .list-group-item .title-6-3 {
+    text-align: left;
+}
+.main-cart-right .list-group-item .title-21,
+.main-cart-right .list-group-item .title-3,
+.main-cart-right .list-group-item .title-3-1,
+.main-cart-right .list-group-item .title-4,
+.main-cart-right .list-group-item .title-6 {
+    color: #808080;
+    font-family: NunitoSanExtraBold;
+    font-size: 18px;
+}
+.main-cart-right .list-group-item .title-21,
+.main-cart-right .list-group-item .title-3,
+.main-cart-right .list-group-item .title-4,
+.main-cart-right .list-group-item .title-5,
+.main-cart-right .list-group-item .title-6,
+.main-cart-right .list-group-item .title-6-2,
+.main-cart-right .list-group-item .title-6-3,
+.main-cart-right .list-group-item .title-6-4 {
+    float: left;
+}
+
+.main-cart-right .list-group-item .title-22,
+.main-cart-right .list-group-item .title-4-1,
+.main-cart-right .list-group-item .title-6-1,
+.main-cart-right .list-group-item .title-6-2,
+.main-cart-right .list-group-item .title-6-3,
+.main-cart-right .list-group-item .title-6-4 {
+    color: #808080;
+    font-family: NunitoSanRegular;
+    font-size: 18px;
+}
+
+.main-cart-right .list-group-item .title-21,
+.main-cart-right .list-group-item .title-3,
+.main-cart-right .list-group-item .title-3-1,
+.main-cart-right .list-group-item .title-4,
+.main-cart-right .list-group-item .title-6 {
+    color: #808080;
+    font-family: NunitoSanExtraBold;
+    font-size: 18px;
+}
+
+.main-cart-right .list-group-item .title-21,
+.main-cart-right .list-group-item .title-3,
+.main-cart-right .list-group-item .title-3-1,
+.main-cart-right .list-group-item .title-4,
+.main-cart-right .list-group-item .title-6 {
+    color: #808080;
+    font-family: NunitoSanExtraBold;
+    font-size: 18px;
+}
+.main-cart-right .list-group-item .title-22,
+.main-cart-right .list-group-item .title-3-1,
+.main-cart-right .list-group-item .title-4-1,
+.main-cart-right .list-group-item .title-5-1,
+.main-cart-right .list-group-item .title-5-2,
+.main-cart-right .list-group-item .title-6-1 {
+    float: right;
+}
+.shipping-fee-group .label,
+.payment-fee-input .label {
+    font-weight: 700;
+    color: #000 !important;
+}
+.shipping-fee-group .label ~ span,
+.payment-fee-input .label ~ span {
+    font-weight: 400;
+    color: #000 !important;
+    font-size: 16px !important;
+}
+.lb-discount {
+    font-weight: 700;
+}
+.pro-price {
+    font-weight: 400 !important;
+}
+.pro-info {
+    text-transform: capitalize;
+    font-weight: 700;
+}
+.main-cart-right .list-group-item.divider-1 {
+    background-color: #fff;
+    background: url(../../../../public/img/bg_divider.png) repeat-x 7px;
+    height: 2px;
+    margin: 5px 20px;
+}
+
+.lb-total-price {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 21px;
+}
+
+.total-price {
+    color: #f15e2c;
+    font-family: GeometricExtraBold;
+    font-size: 21px;
     font-weight: 700;
 }

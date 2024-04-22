@@ -1,6 +1,96 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../../assets/css/Shop/shippinginformation.css';
+import { useRecoilValue } from 'recoil';
+import { CartItemType, infoValue } from '../../../store/cart.atom';
+import { CartItem } from './CartItem';
+import {
+    getAllDistrict,
+    getAllProvinces,
+    getAllWard,
+    getListPaymentType,
+    getListShippingType,
+} from '../../../services/shipping-information.services';
+import { ShippingTypeItem } from './ShippingTypeItem';
+import { PaymentTypeItem } from './PaymentTypeItem';
+import { userValue } from '../../../store/user.atom';
+type ShippingType = {
+    id: number;
+    shippingType_name: string;
+    price: number;
+};
+
+type PaymentType = {
+    id: number;
+    paymentType_name: string;
+    price: number;
+    thumbnail: string;
+};
+type ProvinceType = {
+    id: number;
+    name: string;
+};
+type DistrictType = {
+    id: number;
+    name: string;
+};
+type WardType = {
+    id: number;
+    name: string;
+};
 export const ShippingInformation = () => {
+    const info = useRecoilValue(infoValue);
+    const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([]);
+    const [shippingTypes, setShippingTypes] = useState<ShippingType[]>([]);
+    const [provinces, setProvince] = useState('');
+    const [district, setDistrict] = useState('');
+    const [ward, setWard] = useState('');
+    const [village, setVillage] = useState('');
+    const [name, setName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [email, setEmail] = useState('');
+    const [paymentTypeId, setPaymentTypeId] = useState(0);
+    const [shippingTypeId, setShippingTypeId] = useState(0);
+
+    const userInfo = useRecoilValue(userValue);
+    useEffect(() => {
+        async function loadData() {
+            try {
+                const listPaymentTypes = await getListPaymentType();
+                setPaymentTypes(listPaymentTypes);
+                const listShippingTypes = await getListShippingType();
+                setShippingTypes(listShippingTypes);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadData();
+    }, []);
+
+    const createOrder = async () => {
+        const listdetail: any[] = [];
+        info.carts.forEach((cart: CartItemType) => {
+            listdetail.push({
+                product_id: cart.id,
+                quantity: cart.qty,
+                price: cart.price,
+                color_id: cart.color,
+                size_id: cart.size,
+                status: 0,
+            });
+        });
+        const data = {
+            receiving_address: `${village} - ${ward == '' ? userInfo.user.ward : ward} - ${
+                district == '' ? userInfo.user.district : district
+            } - ${provinces == '' ? userInfo.user.province : provinces}`,
+            phone_number: phoneNumber == '' ? userInfo.user.phoneNumber : phoneNumber,
+            status_id: 1,
+            user_id: userInfo.user.user_id,
+            shippingType_id: shippingTypeId,
+            paymentType_id: paymentTypeId,
+            orderDetails: listdetail,
+        };
+        console.log(data);
+    };
     return (
         <main>
             <div className="main-cart container">
@@ -12,7 +102,14 @@ export const ShippingInformation = () => {
                                     Thông tin giao hàng
                                 </div>
                                 <div className="col-xs-12 col-sm-12 col-md-10 col-lg-10 form-group">
-                                    <input type="text" placeholder="HỌ TÊN" id="fullname" className="form-control" />
+                                    <input
+                                        type="text"
+                                        placeholder="HỌ TÊN"
+                                        id="fullname"
+                                        className="form-control"
+                                        value={userInfo.user && userInfo.user.name}
+                                        onChange={(e) => setName(e.target.value)}
+                                    />
                                 </div>
                                 <div className="col-xs-12 col-sm-12 col-md-10 col-lg-10 form-group">
                                     <input
@@ -20,21 +117,42 @@ export const ShippingInformation = () => {
                                         placeholder="Số điện thoại"
                                         id="phone_number"
                                         className="form-control"
+                                        value={userInfo.user && userInfo.user.phoneNumber}
+                                        onChange={(e) => setPhoneNumber(e.target.value)}
                                     />
                                 </div>
                                 <div className="col-xs-12 col-sm-12 col-md-10 col-lg-10 form-group">
-                                    <input type="text" placeholder="Email" id="email" className="form-control" />
+                                    <input
+                                        type="text"
+                                        placeholder="Email"
+                                        id="email"
+                                        className="form-control"
+                                        value={userInfo.user && userInfo.user.email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
                                 </div>
                                 <div className="col-xs-12 col-sm-12 col-md-10 col-lg-10 form-group">
-                                    <input type="text" placeholder="Địa chỉ" id="address" className="form-control" />
+                                    <input
+                                        type="text"
+                                        placeholder="Địa chỉ cụ thể số nhà, thôn, đội ..."
+                                        id="address"
+                                        className="form-control"
+                                        onChange={(e) => setVillage(e.target.value)}
+                                    />
                                 </div>
+
                                 <div
                                     className="col-xs-12 col-sm-12 col-md-10 col-lg-10 form-group location"
                                     id="list-city"
                                 >
-                                    <select name="city" id="city" className="form-control">
-                                        <option value="0">Tỉnh/Thành phố</option>
-                                    </select>
+                                    <input
+                                        type="text"
+                                        name="city"
+                                        id="city"
+                                        className="form-control"
+                                        value={userInfo.user.province !== undefined ? userInfo.user.province : ''}
+                                        onChange={(e) => setProvince(e.target.value)}
+                                    />
                                 </div>
                                 <div
                                     className="col-xs-12 col-sm-12 col-md-10 col-lg-10 form-group"
@@ -44,54 +162,38 @@ export const ShippingInformation = () => {
                                         className="col-xs-12 col-sm-12 col-md-5 col-lg-5 form-group location"
                                         id="list-district"
                                     >
-                                        <select name="district" id="district" className="form-control">
-                                            <option value="0">Quận/Huyện</option>
-                                        </select>
+                                        <input
+                                            type="text"
+                                            name="district"
+                                            id="district"
+                                            className="form-control"
+                                            value={userInfo.user.district !== undefined ? userInfo.user.district : ''}
+                                            onChange={(e) => setDistrict(e.target.value)}
+                                        />
                                     </div>
                                     <div
                                         className="col-xs-12 col-sm-12 col-md-5 col-lg-5 form-group location"
                                         id="list-commune"
                                     >
-                                        <select name="commune" id="commune" className="form-control">
-                                            <option value="0">Phường/Xã</option>
-                                        </select>
+                                        <input
+                                            type="text"
+                                            name="commune"
+                                            id="commune"
+                                            className="form-control"
+                                            value={userInfo.user.ward !== undefined ? userInfo.user.ward : ''}
+                                            onChange={(e) => setWard(e.target.value)}
+                                        />
                                     </div>
                                 </div>
                                 <div className=" col-xs-12 col-sm-12 col-md-12 col-lg-12 title-1">
                                     Phương thức giao hàng
                                 </div>
-                                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 group-shipping-type">
-                                    <div className="col-xs-12 col-sm-12 col-md-8 col-lg-8 form-group">
-                                        <input type="checkbox" id="shippingType-1" className="form-check-input" />
-                                        <label htmlFor="shippingType-1">
-                                            Tốc độ tiêu chuẩn (từ 2 - 5 ngày làm việc)
-                                            <img src="https://ananas.vn/wp-content/themes/ananas/fe-assets/images/svg/icon_cham_hoi.svg" />
-                                        </label>
-                                    </div>
-                                    <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4 form-group title-right normal-fee">
-                                        0 VND
-                                    </div>
-                                </div>
+                                <PaymentTypeItem paymentTypes={paymentTypes} setPaymentTypeId={setPaymentTypeId} />
 
                                 <div className=" col-xs-12 col-sm-12 col-md-12 col-lg-12 title-1">
                                     Phương thức thanh toán
                                 </div>
-                                <div className="col-xs-12 col-sm-12 col-md-8 col-lg-8 form-group">
-                                    <input type="checkbox" id="paymentType-1" className="form-check-input" />
-                                    <label htmlFor="paymentType-1">
-                                        Thanh toán trực tiếp khi giao hàng
-                                        <img src="https://ananas.vn/wp-content/themes/ananas/fe-assets/images/svg/icon_cham_hoi.svg" />
-                                        <img src="https://ananas.vn/wp-content/themes/ananas/fe-assets/images/svg/icon_COD.svg" />
-                                    </label>
-                                </div>
-                                <div className="col-xs-12 col-sm-12 col-md-8 col-lg-8 form-group">
-                                    <input type="checkbox" id="paymentType-2" className="form-check-input" />
-                                    <label htmlFor="paymentType-2">
-                                        Thanh toán trực tiếp khi giao hàng
-                                        <img src="https://ananas.vn/wp-content/themes/ananas/fe-assets/images/svg/icon_cham_hoi.svg" />
-                                        <img src="https://ananas.vn/wp-content/themes/ananas/fe-assets/images/svg/icon_COD.svg" />
-                                    </label>
-                                </div>
+                                <ShippingTypeItem shippingTypes={shippingTypes} setShippingTypeId={setShippingTypeId} />
                             </form>
                         </div>
                     </div>
@@ -99,33 +201,40 @@ export const ShippingInformation = () => {
                         <ul className="list-group">
                             <li className="list-group-item title">Đơn hàng</li>
                             <li className="list-group-item divider" />
-                            <li className="list-group-item title-1">NHẬP MÃ KHUYẾN MÃI</li>
-                            <li className="list-group-item">
-                                <div className="input-group">
-                                    <div className="input">
-                                        <input type="text" className="form-control text-uppercase" />
-                                    </div>
-                                    <div className="input-group-btn">
-                                        <button className="btn btn-apply">ÁP DỤNG</button>
-                                    </div>
-                                </div>
-                            </li>
-                            <li className="list-group-item divider-1" />
+                            <CartItem cartlist={info.carts} totalPriceItem={info.totalPriceItem} />
+                            <li className="list-group-item divider-1"></li>
                             <li className="list-group-item text-1">
-                                <span>Đơn hàng</span>
-                                <span>620.000 VND</span>
+                                <span className="title-3">Đơn hàng</span>
+                                <span className="title-3-1 ">{info.totalPrice.toLocaleString(undefined)} VND</span>
                             </li>
-                            <li className="list-group-item text-2">
-                                <span>Giảm</span>
-                                <span> 0 VND</span>
+                            <li className="list-group-item text-2-2">
+                                <span className="title-3 lb-discount">Giảm</span>
+                                <span className="title-4-1">- 0 VND</span>
                             </li>
-                            <li className="list-group-item divider-1" />
-                            <li className="list-group-item totalPrice">
-                                <span>Tạm tính</span>
-                                <span> 620.000 VND</span>
+                            <li className="list-group-item text-2-3 shipping-fee-group">
+                                <span className="title-21 label"> Phí vân chuyển</span>
+                                <span className="title-22">
+                                    <span className="shipping-fee">0</span> VND
+                                </span>
+                            </li>
+                            <li className="list-group-item text-2-3 payment-fee-input">
+                                <span className="title-21 label">Phí thanh toán</span>
+                                <span className="title-22">
+                                    <span className="card-fee">0 </span>
+                                    VND
+                                </span>
+                            </li>
+                            <li className="list-group-item divider-1"> </li>
+                            <li className="list-group-item">
+                                <span className="title-5 lb-total-price">Tổng Cộng</span>
+                                <span className="title-5-2">
+                                    <span className="total-price">{info.totalPrice.toLocaleString(undefined)} VND</span>
+                                </span>
                             </li>
                             <li className="list-group-item">
-                                <button className="btn btn-cart to-checkout">Tiếp tục thanh toán </button>
+                                <button className="btn btn-cart to-checkout" onClick={createOrder}>
+                                    Hoàn tất đặt hàng{' '}
+                                </button>
                             </li>
                         </ul>
                     </div>
