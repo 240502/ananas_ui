@@ -228,12 +228,14 @@ function ProductDetail() {
                                     cartItem = {
                                         id: product.id,
                                         name: product.pro_name,
-                                        style: style.name_style,
-                                        color: color.color_name,
+                                        styleName: style.name_style,
+                                        colorName: color.color_name,
                                         price: price.price,
                                         qty: Number(quantity),
                                         size: Number(size),
                                         thumbnail: img.img_src,
+                                        colorId: color.id,
+                                        styleId: style.id,
                                     };
                                     addToCart(cartItem, info.carts, setCarts);
                                 }}

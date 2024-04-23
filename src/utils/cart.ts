@@ -6,9 +6,11 @@ export const addToCart = (cartItem: CartItemType, listCart: CartItemType[], setC
         qty: cartItem.qty,
         size: cartItem.size,
         thumbnail: cartItem.thumbnail,
-        color: cartItem.color,
+        colorId: cartItem.colorId,
         price: cartItem.price,
-        style: cartItem.style,
+        styleId: cartItem.styleId,
+        styleName: cartItem.styleName,
+        colorName: cartItem.colorName,
     };
     let newCarts;
     if (cartItem.qty === 0 || cartItem.size === 0) {
@@ -20,9 +22,9 @@ export const addToCart = (cartItem: CartItemType, listCart: CartItemType[], setC
                 newCarts = listCart.map((item: CartItemType) => {
                     if (
                         item.id === product.id &&
-                        item.color === product.color &&
+                        item.colorId === product.colorId &&
                         item.size === product.size &&
-                        item.style === product.style
+                        item.styleId === product.styleId
                     ) {
                         return { ...item, qty: item.qty + product.qty };
                     } else {

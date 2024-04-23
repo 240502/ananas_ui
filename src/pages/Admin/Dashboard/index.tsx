@@ -12,12 +12,16 @@ function Dashboard() {
     let stt = 1;
     useEffect(() => {
         async function loadData() {
-            let items = await getList({
-                pageIndex: page,
-                pageSize: pageSize,
-            });
-            setCates(items.data);
-            setPageCount(Math.ceil(items.totalItems / pageSize));
+            try {
+                let items = await getList({
+                    pageIndex: page,
+                    pageSize: pageSize,
+                });
+                setCates(items.data);
+                setPageCount(Math.ceil(items.totalItems / pageSize));
+            } catch (err) {
+                console.log(err);
+            }
         }
         loadData();
     }, [page, pageSize]);

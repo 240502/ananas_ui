@@ -1,0 +1,57 @@
+import React from 'react';
+
+export const SearchOrder = () => {
+    return (
+        <>
+            <div
+                className="search-order container"
+                style={{ maxWidth: '800px', marginTop: '30px', marginBottom: '80px' }}
+            >
+                <div className="row">
+                    <div
+                        className="col-xs-12 col-sm-12 col-md-12 col-lg-12 title-1"
+                        style={{
+                            color: '#000',
+                            fontSize: '30px',
+                            margin: '10px 0px 40px 0px',
+                            textAlign: 'center',
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        TRA CỨU ĐƠN HÀNG
+                    </div>
+                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                        <input
+                            type="text"
+                            className="form-control text-uppercase"
+                            placeholder="MÃ ĐƠN HÀNG"
+                            id="order_id"
+                        />
+                    </div>
+                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                        <input type="text" className="form-control" placeholder="Email / Số điện thoại" id="input" />
+                    </div>
+                    <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4 title-3">
+                        <button
+                            className="btn btn-search-order"
+                            type="button"
+                            style={{
+                                backgroundColor: '#f15e2c',
+                                borderRadius: 0,
+                                height: '40px',
+                                width: '240px',
+                                border: 'none',
+                                color: '#fff',
+                                fontSize: '18px',
+                                textTransform: 'uppercase',
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            Tra cứu đơn hàng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+};

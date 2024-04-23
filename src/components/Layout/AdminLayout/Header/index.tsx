@@ -9,11 +9,6 @@ function Header() {
     const userInfo = useRecoilValue(userValue);
     const info = useRecoilValue(infoValue);
 
-    const [carts, setCarts] = useRecoilState(cartState);
-    useEffect(() => {
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        setCarts(cart);
-    }, []);
     return (
         <header>
             <div className="container-fluid header hidden-sm hidden-xs">
@@ -48,7 +43,7 @@ function Header() {
                                 <i key={5} className="fa-solid fa-cart-shopping" />
                                 <span>
                                     Giỏ hàng{' '}
-                                    <span style={{ display: `${carts.length == 0 ? 'none' : 'inline-block'}` }}>
+                                    <span style={{ display: `${info.carts.length == 0 ? 'none' : 'inline-block'}` }}>
                                         ({info.total})
                                     </span>
                                 </span>

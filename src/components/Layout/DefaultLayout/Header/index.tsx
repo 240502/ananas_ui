@@ -1,6 +1,6 @@
 import { useEffect, useState, memo } from 'react';
 import SlideHotNews from '../../SlickSlide/SlideHotNews';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { getMenus } from '../../../../services/header.services';
 import '../../../../assets/css/Shop/header.css';
 import '../../../../assets/css/Shop/slick-slide.css';
@@ -11,22 +11,16 @@ import { userState, userValue } from '../../../../store/user.atom';
 
 function Header() {
     const [menus, setMenus] = useState([]);
-    const [carts, setCarts] = useRecoilState(cartState);
     const [index, setIndexGender] = useRecoilState(indexGender);
     const info = useRecoilValue(infoValue);
     const userInfo = useRecoilValue(userValue);
-    const setUser = useSetRecoilState(userState);
+    const [inputSearch, setInputSearch] = useState('');
+    const navigate = useNavigate();
     useEffect(() => {
         async function loadData() {
             try {
                 let data = await getMenus();
                 setMenus(data);
-                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-                setCarts(cart);
-                const user = JSON.parse(localStorage.getItem('user') || '{}');
-                setUser(user);
-                console.log(user);
-
                 const indexLocal = JSON.parse(localStorage.getItem('indexGender') || '0');
                 setIndexGender(indexLocal);
             } catch (error) {
@@ -34,7 +28,6 @@ function Header() {
             }
         }
         loadData();
-        console.log(userInfo.user);
     }, []);
 
     return (
@@ -43,7 +36,7 @@ function Header() {
                 <div className="row">
                     <ul className="menu">
                         <li>
-                            <Link to="#">
+                            <Link to="/search-order">
                                 <i className="fa-brands fa-dropbox" />
                                 <span>Tra cứu đơn hàng</span>
                             </Link>
@@ -71,7 +64,7 @@ function Header() {
                                 <i className="fa-solid fa-cart-shopping" />
                                 <span>
                                     Giỏ hàng{' '}
-                                    <span style={{ display: `${carts.length == 0 ? 'none' : 'inline-block'}` }}>
+                                    <span style={{ display: `${info.carts.length == 0 ? 'none' : 'inline-block'}` }}>
                                         ({info.total})
                                     </span>
                                 </span>
@@ -288,8 +281,23 @@ function Header() {
                         </div>
                         <form action="" className="navbar-form navbar-right">
                             <div className="form-group form-search">
-                                <i className="fa-solid fa-magnifying-glass" />
-                                <input type="text" className="form-control input-search" placeholder="Tìm kiếm" />
+                                <i
+                                    className="fa-solid fa-magnifying-glass"
+                                    onClick={() => {
+                                        navigate(`/search-product/${inputSearch}`);
+                                    }}
+                                />
+                                <input
+                                    type="text"
+                                    className="form-control input-search"
+                                    placeholder="Tìm kiếm"
+                                    onKeyUp={(e) => {
+                                        if (e.key === 'Enter') {
+                                            navigate(`/search-product/${inputSearch}`);
+                                        }
+                                    }}
+                                    onChange={(e) => setInputSearch(e.target.value)}
+                                />
                             </div>
                         </form>
                     </div>

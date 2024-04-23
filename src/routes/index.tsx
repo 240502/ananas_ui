@@ -12,12 +12,19 @@ import {
     ADMIN_PATH,
     PRODUCT_GENDER_PATH,
     SHIPPING_INFORMATION_PATTH,
+    THANKYOU_PATH,
+    SEARCH_ORDER_PATH,
+    SEARCH_PRODUCT_PATH,
 } from './paths';
 import Cart from '../pages/Shop/Cart';
 import ProductDetail from '../pages/Shop/ProductDetail';
 import path from 'path';
 import { LoginLayout } from '../components/Layout/LoginLayout/index';
 import { ShippingInformation } from '../pages/Shop/ShippingInformation';
+import { ThankYou } from '../pages/Shop/ThankYou';
+import ThankYouLayout from '../components/Layout/ThankYouLayout';
+import { SearchOrder } from '../pages/Shop/SearchOrder';
+import { SearchProduct } from '../pages/Shop/SearchProduct';
 export const publicRoutes = [
     { path: HOME_PATH, component: Home, layout: undefined },
     { path: PRODUCT_PATH, component: Product, layout: undefined },
@@ -27,6 +34,9 @@ export const publicRoutes = [
     { path: PRODUCT_GENDER_PATH, component: Product, layout: undefined },
     { path: SHIPPING_INFORMATION_PATTH, component: ShippingInformation, layout: undefined },
     { path: LOGIN_PATH, component: Login, layout: LoginLayout },
+    { path: THANKYOU_PATH, component: ThankYou, layout: ThankYouLayout },
+    { path: SEARCH_ORDER_PATH, component: SearchOrder, layout: undefined },
+    { path: SEARCH_PRODUCT_PATH, component: SearchProduct, layout: undefined },
 ];
 
 export const privateRoutes = [

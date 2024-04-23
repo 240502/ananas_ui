@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import '../../../assets/css/Shop/shippinginformation.css';
-import { useRecoilValue } from 'recoil';
-import { CartItemType, infoValue } from '../../../store/cart.atom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { CartItemType, cartState, infoValue } from '../../../store/cart.atom';
 import { CartItem } from './CartItem';
 import {
+    CreateOrder,
     getAllDistrict,
     getAllProvinces,
     getAllWard,
@@ -13,6 +14,7 @@ import {
 import { ShippingTypeItem } from './ShippingTypeItem';
 import { PaymentTypeItem } from './PaymentTypeItem';
 import { userValue } from '../../../store/user.atom';
+import { useNavigate } from 'react-router-dom';
 type ShippingType = {
     id: number;
     shippingType_name: string;
@@ -38,7 +40,9 @@ type WardType = {
     name: string;
 };
 export const ShippingInformation = () => {
+    const navigate = useNavigate();
     const info = useRecoilValue(infoValue);
+    const setCarts = useSetRecoilState(cartState);
     const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([]);
     const [shippingTypes, setShippingTypes] = useState<ShippingType[]>([]);
     const [provinces, setProvince] = useState('');
@@ -66,30 +70,43 @@ export const ShippingInformation = () => {
         loadData();
     }, []);
 
-    const createOrder = async () => {
+    const handleCreateOrder = () => {
         const listdetail: any[] = [];
         info.carts.forEach((cart: CartItemType) => {
             listdetail.push({
                 product_id: cart.id,
                 quantity: cart.qty,
                 price: cart.price,
-                color_id: cart.color,
+                color_id: cart.colorId,
                 size_id: cart.size,
+                style_id: cart.styleId,
                 status: 0,
             });
         });
         const data = {
+            user_id: userInfo.user.user_id,
+            money_total: info.totalPrice,
             receiving_address: `${village} - ${ward == '' ? userInfo.user.ward : ward} - ${
                 district == '' ? userInfo.user.district : district
             } - ${provinces == '' ? userInfo.user.province : provinces}`,
             phone_number: phoneNumber == '' ? userInfo.user.phoneNumber : phoneNumber,
-            status_id: 1,
-            user_id: userInfo.user.user_id,
             shippingType_id: shippingTypeId,
             paymentType_id: paymentTypeId,
+            status_id: 1,
             orderDetails: listdetail,
         };
-        console.log(data);
+        createOrder(data);
+    };
+    const createOrder = async (order: any) => {
+        try {
+            const res = await CreateOrder(order);
+            localStorage.setItem('cart', JSON.stringify(undefined));
+            navigate('/thankyou');
+            setCarts([]);
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+        }
     };
     return (
         <main>
@@ -232,7 +249,7 @@ export const ShippingInformation = () => {
                                 </span>
                             </li>
                             <li className="list-group-item">
-                                <button className="btn btn-cart to-checkout" onClick={createOrder}>
+                                <button className="btn btn-cart to-checkout" onClick={handleCreateOrder}>
                                     Hoàn tất đặt hàng{' '}
                                 </button>
                             </li>

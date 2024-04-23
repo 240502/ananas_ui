@@ -20,8 +20,8 @@ function CartItem() {
                             <h3 className="pro-name">
                                 <a href="#">
                                     <span style={{ textTransform: 'capitalize' }}>{cart.name}</span> -{' '}
-                                    <span style={{ textTransform: 'capitalize' }}>{cart.style}</span> -{' '}
-                                    <span style={{ textTransform: 'capitalize' }}>{cart.color}</span>
+                                    <span style={{ textTransform: 'capitalize' }}>{cart.styleName}</span> -{' '}
+                                    <span style={{ textTransform: 'capitalize' }}>{cart.colorName}</span>
                                 </a>
                             </h3>
                             <p className="pro-price">

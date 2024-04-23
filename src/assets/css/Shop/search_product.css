@@ -1,0 +1,109 @@
+.thumbnail:hover .btn-addtocart {
+    opacity: 1;
+}
+.thumbnail .button {
+    transition: all 0.3s linear;
+}
+.thumbnail .button .btn-addtocart {
+    color: #fff;
+    opacity: 0;
+
+    background-color: #f15e2c;
+    border: 1px solid #f15e2c;
+    font-size: 23px;
+    width: 180px;
+    height: 60px;
+    padding-top: 6px;
+    position: absolute;
+    top: 100%;
+    right: 50%;
+    transform: translate(50%, -100%);
+    line-height: 30px;
+    font-weight: 700;
+    border-radius: 0;
+    transition: all 0.3s linear;
+}
+.thumbnail .button .btn-addtocart a {
+    color: #fff;
+}
+.thumbnail .button .btn-like {
+    width: 35px;
+    height: 30px;
+    text-align: center;
+    vertical-align: middle;
+    position: absolute !important;
+    top: 100%;
+    transform: translateY(-130%);
+    background-color: transparent;
+    right: 10px;
+    bottom: 10px;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+}
+.thumbnail .btn-like i {
+    color: #f15e2c !important;
+    font-size: 28px !important;
+}
+.thumbnail .btn-addtocart:hover {
+    opacity: 0.7;
+}
+.thumbnail .button {
+    text-align: center;
+    position: relative;
+    height: 60px;
+    top: -60px;
+    z-index: 85;
+}
+
+.prd1-right-items .thumbnail .caption {
+    text-align: center;
+    padding: 0px;
+    margin-top: -40px;
+    color: #333;
+}
+.type {
+    font-family: NunitoSanRegular;
+    font-size: 16px;
+    color: #ff5f17;
+    margin-bottom: 15px;
+    text-transform: capitalize;
+    font-weight: 400;
+}
+.right .divider {
+    height: 1px;
+    margin: 10px 0px;
+    font-family: GeometricExtraBold;
+    font-weight: normal;
+    color: #000;
+    border: #000 dashed 1px;
+}
+.prd1-right-items .name {
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    transition: all 0.3s linear;
+    text-transform: capitalize;
+}
+.prd1-right-items .name a {
+    text-decoration: none;
+    color: #000;
+}
+.name:hover a {
+    color: #f15e2c;
+    cursor: pointer;
+}
+.color {
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 10px;
+    font-weight: 400;
+    text-transform: capitalize;
+}
+.price {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 10px;
+    font-weight: 700;
+}

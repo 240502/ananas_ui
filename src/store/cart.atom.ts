@@ -7,9 +7,11 @@ export type CartItemType = {
     qty: number;
     size: number;
     thumbnail: string;
-    color: string;
+    colorName: string;
     price: number;
-    style: string;
+    styleName: string;
+    colorId: number;
+    styleId: number;
 };
 
 export const cartState = atom({

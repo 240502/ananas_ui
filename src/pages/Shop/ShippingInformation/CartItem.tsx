@@ -8,7 +8,7 @@ export const CartItem = ({ cartlist, totalPriceItem }: any) => {
                     <>
                         <li className="list-group-item text-1" key={cart.id}>
                             <span className="title-6 pro-info">
-                                {cart.name} - {cart.style} - {cart.color}
+                                {cart.name} - {cart.styleName} - {cart.colorName}
                             </span>
                             <span className="title-6-1 pro-price">
                                 {totalPriceItem(cart.id).toLocaleString(undefined)} VND
