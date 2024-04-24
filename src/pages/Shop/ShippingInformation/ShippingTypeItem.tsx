@@ -4,7 +4,7 @@ type ShippingType = {
     shippingType_name: string;
     price: number;
 };
-export const ShippingTypeItem = ({ shippingTypes, setShippingTypeId }: any) => {
+export const ShippingTypeItem = ({ shippingTypes, setShippingTypeId, getShippingType, setShippingTypePrice }: any) => {
     return (
         <>
             {shippingTypes.map((shippingType: ShippingType) => {
@@ -20,6 +20,8 @@ export const ShippingTypeItem = ({ shippingTypes, setShippingTypeId }: any) => {
                                 onChange={(e) => {
                                     if (e.target.checked) {
                                         setShippingTypeId(Number(e.target.value));
+                                        const shippingType = getShippingType(Number(e.target.value));
+                                        setShippingTypePrice(shippingType['price']);
                                     }
                                 }}
                             />

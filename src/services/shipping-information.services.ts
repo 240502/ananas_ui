@@ -27,8 +27,3 @@ export const getAllWard = async (id: any): Promise<any> => {
     );
     return res?.data;
 };
-
-export const CreateOrder = async (data: any): Promise<any> => {
-    const res = await apiClient.post('/api-admin/Order/create', data);
-    return res?.data;
-};

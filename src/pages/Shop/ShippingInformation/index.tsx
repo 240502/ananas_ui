@@ -3,8 +3,8 @@ import '../../../assets/css/Shop/shippinginformation.css';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { CartItemType, cartState, infoValue } from '../../../store/cart.atom';
 import { CartItem } from './CartItem';
+import { CreateOrder } from '../../../services/order.services';
 import {
-    CreateOrder,
     getAllDistrict,
     getAllProvinces,
     getAllWard,
@@ -54,7 +54,7 @@ export const ShippingInformation = () => {
     const [email, setEmail] = useState('');
     const [paymentTypeId, setPaymentTypeId] = useState(0);
     const [shippingTypeId, setShippingTypeId] = useState(0);
-
+    const [shippingTypePrice, setShippingTypePrice] = useState(0);
     const userInfo = useRecoilValue(userValue);
     useEffect(() => {
         async function loadData() {
@@ -72,6 +72,7 @@ export const ShippingInformation = () => {
 
     const handleCreateOrder = () => {
         const listdetail: any[] = [];
+
         info.carts.forEach((cart: CartItemType) => {
             listdetail.push({
                 product_id: cart.id,
@@ -85,7 +86,7 @@ export const ShippingInformation = () => {
         });
         const data = {
             user_id: userInfo.user.user_id,
-            money_total: info.totalPrice,
+            money_total: info.totalPrice + shippingTypePrice,
             receiving_address: `${village} - ${ward == '' ? userInfo.user.ward : ward} - ${
                 district == '' ? userInfo.user.district : district
             } - ${provinces == '' ? userInfo.user.province : provinces}`,
@@ -93,9 +94,15 @@ export const ShippingInformation = () => {
             shippingType_id: shippingTypeId,
             paymentType_id: paymentTypeId,
             status_id: 1,
+            email: userInfo.user.email,
+            full_name: userInfo.user.name,
             orderDetails: listdetail,
         };
         createOrder(data);
+    };
+    const getShippingType = (shippingId: number): any => {
+        const shippingType: any = shippingTypes.find((item: ShippingType) => item.id === shippingId);
+        return shippingType;
     };
     const createOrder = async (order: any) => {
         try {
@@ -210,7 +217,12 @@ export const ShippingInformation = () => {
                                 <div className=" col-xs-12 col-sm-12 col-md-12 col-lg-12 title-1">
                                     Phương thức thanh toán
                                 </div>
-                                <ShippingTypeItem shippingTypes={shippingTypes} setShippingTypeId={setShippingTypeId} />
+                                <ShippingTypeItem
+                                    shippingTypes={shippingTypes}
+                                    setShippingTypeId={setShippingTypeId}
+                                    getShippingType={getShippingType}
+                                    setShippingTypePrice={setShippingTypePrice}
+                                />
                             </form>
                         </div>
                     </div>
@@ -237,7 +249,7 @@ export const ShippingInformation = () => {
                             <li className="list-group-item text-2-3 payment-fee-input">
                                 <span className="title-21 label">Phí thanh toán</span>
                                 <span className="title-22">
-                                    <span className="card-fee">0 </span>
+                                    <span className="card-fee">{shippingTypePrice.toLocaleString(undefined)} </span>
                                     VND
                                 </span>
                             </li>
@@ -245,7 +257,9 @@ export const ShippingInformation = () => {
                             <li className="list-group-item">
                                 <span className="title-5 lb-total-price">Tổng Cộng</span>
                                 <span className="title-5-2">
-                                    <span className="total-price">{info.totalPrice.toLocaleString(undefined)} VND</span>
+                                    <span className="total-price">
+                                        {(info.totalPrice + shippingTypePrice).toLocaleString(undefined)} VND
+                                    </span>
                                 </span>
                             </li>
                             <li className="list-group-item">

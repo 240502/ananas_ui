@@ -15,6 +15,7 @@ import {
     THANKYOU_PATH,
     SEARCH_ORDER_PATH,
     SEARCH_PRODUCT_PATH,
+    TRACKING_ORDER_PATH,
 } from './paths';
 import Cart from '../pages/Shop/Cart';
 import ProductDetail from '../pages/Shop/ProductDetail';
@@ -25,6 +26,7 @@ import { ThankYou } from '../pages/Shop/ThankYou';
 import ThankYouLayout from '../components/Layout/ThankYouLayout';
 import { SearchOrder } from '../pages/Shop/SearchOrder';
 import { SearchProduct } from '../pages/Shop/SearchProduct';
+import { TrackingOrder } from '../pages/Shop/TrackingOrder';
 export const publicRoutes = [
     { path: HOME_PATH, component: Home, layout: undefined },
     { path: PRODUCT_PATH, component: Product, layout: undefined },
@@ -37,6 +39,7 @@ export const publicRoutes = [
     { path: THANKYOU_PATH, component: ThankYou, layout: ThankYouLayout },
     { path: SEARCH_ORDER_PATH, component: SearchOrder, layout: undefined },
     { path: SEARCH_PRODUCT_PATH, component: SearchProduct, layout: undefined },
+    { path: TRACKING_ORDER_PATH, component: TrackingOrder, layout: undefined },
 ];
 
 export const privateRoutes = [
