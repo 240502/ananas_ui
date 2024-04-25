@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getProductCateById } from '../../../services/product-detail.service';
+import { getProductCateById } from '../../../services/product.servies';
 export const BreadCrumb = ({cateId,proName,style}:any) => {
     const [cateName ,setCateName] = useState("");
     useEffect(()=>{

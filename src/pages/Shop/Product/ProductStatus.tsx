@@ -1,6 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { getProductStatus } from '../../../services/product.servies';
-
+import { getProductStatus } from '../../../services/product_status.services';
 const ProductStatus = ({ id }: any) => {
     const [statusName, setStatus] = useState('');
     useEffect(() => {

@@ -5,20 +5,19 @@ import SlickSlideProductViewed from '../../../components/Layout/SlickSlide/Slick
 import '../../../assets/css/Shop/product_detail.css';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import {
-    getProductById,
-    getColor,
-    getListSizeByProId,
-    getProductStatus,
-    getStyleById,
-    getProDetailByProIdAndSize,
-    getRelatedProduct,
-} from '../../../services/product-detail.service';
-import { getProductPrice } from '../../../services/product.servies';
+import { getProductById, getRelatedProduct } from '../../../services/product.servies';
+import { getProDetailByProIdAndSize,getListSizeByProId } from '../../../services/product_detail.services';
+import { getStyleById } from '../../../services/style.services';
+import { getColor } from '../../../services/color.services';
+import { getProductStatus } from '../../../services/product_status.services';
+import { getProductPrice } from '../../../services/price.services';
+
+
 import ProductImage from './ProductImage';
 import { BreadCrumb } from './BreadCrumb';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { CartItemType, cartState, infoValue, sizeState } from '../../../store/cart.atom';
+import { CartItemType, cartState, infoValue } from '../../../store/cart.atom';
+
 import { addToCart } from '../../../utils/cart';
 type DataParams = {
     id: string;

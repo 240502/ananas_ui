@@ -291,8 +291,8 @@ function Header() {
                                     type="text"
                                     className="form-control input-search"
                                     placeholder="Tìm kiếm"
-                                    onKeyUp={(e) => {
-                                        if (e.key === 'Enter') {
+                                    onKeyDown={(e) => {
+                                        if (e.key == 'Enter') {
                                             navigate(`/search-product/${inputSearch}`);
                                         }
                                     }}

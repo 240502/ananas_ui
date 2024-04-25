@@ -1,5 +1,6 @@
 import React, { memo, useState, useEffect } from 'react';
-import { getImageFeature } from '../../../services/product.servies';
+import { getImageFeature } from '../../../services/image_product.services';
+
 
 const ProductImage = ({ proId }: any) => {
     const [img_src, setUrl] = useState('');

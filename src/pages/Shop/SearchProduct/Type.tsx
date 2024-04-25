@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getProductStatus } from '../../../services/product.servies';
-
+import { getProductStatus } from '../../../services/product_status.services';
 export const Type = ({ id }: any) => {
     const [statusName, setStatus] = useState('');
     useEffect(() => {

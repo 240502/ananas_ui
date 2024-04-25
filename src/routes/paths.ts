@@ -10,6 +10,10 @@ const THANKYOU_PATH = '/thankyou';
 const SEARCH_ORDER_PATH = '/search-order';
 const SEARCH_PRODUCT_PATH = '/search-product/:value';
 const TRACKING_ORDER_PATH = '/tracking-order';
+const CATEGORY_PATH = 'admin/category';
+const CREATE_CATEGORY_PATH = 'admin/category/create';
+const UPDATE_CATEGORY_PATH = 'admin/category/create';
+
 export {
     HOME_PATH,
     PRODUCT_PATH,
@@ -23,4 +27,7 @@ export {
     SEARCH_ORDER_PATH,
     SEARCH_PRODUCT_PATH,
     TRACKING_ORDER_PATH,
+    CATEGORY_PATH,
+    CREATE_CATEGORY_PATH,
+    UPDATE_CATEGORY_PATH,
 };

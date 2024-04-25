@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import '../../../assets/css/Shop/search_product.css';
-import { searchProduct } from '../../../services/search-product.services';
+import { searchProduct } from '../../../services/product.servies';
 import ReactPaginate from 'react-paginate';
 import { Thumbnail } from './Thumbnail';
 import Price from '../Product/Price';
@@ -28,6 +28,7 @@ export const SearchProduct = () => {
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
+    const [totalItems, setTotalItems] = useState(0);
     const { value } = useParams<DataParams>();
     useEffect(() => {
         async function Search(value: any) {
@@ -39,8 +40,11 @@ export const SearchProduct = () => {
                 });
                 setProducts(data.data);
                 setPageCount(Math.ceil(data.totalItems / pageSize));
+                setTotalItems(data.totalItems);
             } catch (error) {
                 console.log(error);
+                setTotalItems(0);
+
                 setPageCount(0);
                 setProducts([]);
             }
@@ -81,7 +85,7 @@ export const SearchProduct = () => {
                                 fontWeight: 'bold',
                             }}
                         >
-                            TÌM THẤY 2 KẾT QUẢ CHO " Vintas Nauda EXT"
+                            TÌM THẤY {totalItems} KẾT QUẢ CHO "{value}"
                         </div>
                         <div
                             className="row divider2"
@@ -97,6 +101,7 @@ export const SearchProduct = () => {
                                 marginLeft: '-20px',
                                 marginRight: '-20px',
                                 minHeight: '200px',
+                                display: `${products.length >= 1 ? 'flex' : 'none'}`,
                             }}
                         >
                             {products.map((product: ProductType) => {
@@ -150,7 +155,7 @@ export const SearchProduct = () => {
                                                 <h3 className="name">
                                                     <Link to={`/product-detail/${product.id}`}>{product.pro_name}</Link>
                                                 </h3>
-                                                <Color proId={product.id}></Color>
+                                                <Color proId={product.color_id}></Color>
                                                 <Price proId={product.id}></Price>
                                             </div>
                                         </div>
@@ -166,9 +171,9 @@ export const SearchProduct = () => {
                                 value={pageSize}
                             >
                                 <option value="5">6</option>
-                                <option value="10">12</option>
-                                <option value="15">18</option>
-                                <option value="20">24</option>
+                                <option value="12">12</option>
+                                <option value="18">18</option>
+                                <option value="24">24</option>
                             </select>
                             <ReactPaginate
                                 breakLabel="..."

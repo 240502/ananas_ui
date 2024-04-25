@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { getProductPrice } from '../../../services/product.servies';
+import { getProductPrice } from '../../../services/price.services';
 const Price = ({ proId }: any) => {
     const [price, setPrice] = useState(0);
     var value = price.toLocaleString(undefined);

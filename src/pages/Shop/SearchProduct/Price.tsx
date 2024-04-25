@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getProductPrice } from '../../../services/product.servies';
-
+import { getProductPrice } from '../../../services/price.services';
 export const Price = ({ proId }: any) => {
     const [price, setPrice] = useState(0);
     useEffect(() => {

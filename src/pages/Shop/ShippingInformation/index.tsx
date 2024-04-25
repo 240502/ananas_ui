@@ -4,13 +4,9 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { CartItemType, cartState, infoValue } from '../../../store/cart.atom';
 import { CartItem } from './CartItem';
 import { CreateOrder } from '../../../services/order.services';
-import {
-    getAllDistrict,
-    getAllProvinces,
-    getAllWard,
-    getListPaymentType,
-    getListShippingType,
-} from '../../../services/shipping-information.services';
+import { getListPaymentType } from '../../../services/paymentType.services';
+import { getListShippingType } from '../../../services/shippingType.services';
+
 import { ShippingTypeItem } from './ShippingTypeItem';
 import { PaymentTypeItem } from './PaymentTypeItem';
 import { userValue } from '../../../store/user.atom';

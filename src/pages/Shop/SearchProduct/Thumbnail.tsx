@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getImageFeature } from '../../../services/product.servies';
-
+import { getImageFeature } from '../../../services/image_product.services';
 export const Thumbnail = ({ proId }: any) => {
     const [img_src, setUrl] = useState('');
     useEffect(() => {

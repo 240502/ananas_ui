@@ -1,80 +1,86 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../../../../assets/css/Admin/sidebar.css';
 export const Sidebar = () => {
     return (
-        <div className="form-us ">
-            <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                        <Link to="/">Trang chủ</Link>
-                    </li>
-                    <li className="line" />
-                    <li className="breadcrumb-item active" aria-current="page">
-                        Tài khoản
-                    </li>
-                </ol>
-            </nav>
-            <div className="content">
-                <div className="nav ">
-                    <ul className="list-nav">
-                        <li className="nav-item">
-                            <a style={{ color: '#000', textDecoration: 'none' }} href="#">
-                                {' '}
-                                Thông tin tài khoản
-                            </a>
-                        </li>
-                        <li className="nav-item  active">
-                            <a style={{ color: '#000', textDecoration: 'none' }} href="/dashboard">
-                                {' '}
-                                Quản lý loại sản phẩm
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a style={{ color: '#000', textDecoration: 'none' }} href="./ManageProduct.html">
-                                {' '}
-                                Quản lý sản phẩm
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a style={{ color: '#000', textDecoration: 'none' }} href="./ManageOrder.html">
-                                {' '}
-                                Quản lý đơn hàng
-                            </a>
-                        </li>
-                        <li className="nav-item  ">
-                            <span> Báo cáo kết quả</span>
-                            <i className="fa-solid fa-caret-down" style={{ color: '#000000' }} />
-                        </li>
-                        <li>
-                            <ul className="sub-nav" style={{ display: 'none' }}>
-                                <li className="active">
-                                    <a href="./BaoCaoChung.html">Báo cáo chung</a>
-                                </li>
-                                <li>
-                                    <a href="./ThongKeDoanhThu.html">Kết quả bán hàng</a>
-                                </li>
-                                <li>
-                                    <a href="./KetQuaMakerting.html">Kết quả marketing</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li className="nav-item  nav-parent">
-                            <span>Cài đặt chung</span>
-                            <i className="fa-solid fa-caret-down" style={{ color: '#000000' }} />
-                        </li>
-                        <li>
-                            <ul className="sub-nav" style={{ display: 'none' }}>
-                                <li>
-                                    <a href="#">Đổi mật khẩu</a>
-                                </li>
-                                <li className="logout">
-                                    <button className=" btnLogout">Đăng xuất</button>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+        <div className="sidebar active">
+            <div className="top">
+                <div className="logo">
+                    <i className="fa-brands fa-codepen" />
+                    <span>Ananas</span>
+                </div>
+                <i className="fa-solid fa-bars" id="btn" />
+            </div>
+            <div className="user">
+                <img
+                    src="https://scontent.fhan3-2.fna.fbcdn.net/v/t39.30808-6/373658815_1239626233412960_2893644615644052814_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeH4uhilOpPHjX84-F8MW6PW7zBD8G69ZlTvMEPwbr1mVM0BS1ZHGYyDy0CWwLui4umPZ5jdVi6zEmg5RqRYXOzD&_nc_ohc=h8lKptMZRx8Ab6MXBQ-&_nc_ht=scontent.fhan3-2.fna&oh=00_AfBmQ1w0r80yx4oPU4dpg9xjh6JQNeP9WI2ZI5yd1Vmt3w&oe=66307A12"
+                    className="user-img"
+                />
+                <div>
+                    <p className="bole">Nguyễn Văn Sang</p>
+                    <p>Admin</p>
                 </div>
             </div>
+            <ul>
+                <li className="giangvien">
+                    <Link to="/admin/category">
+                        <i className="fa-solid fa-users" />
+                        <span className="nav-item"> Loại sản phẩm</span>
+                    </Link>
+                    <span className="tooltip">Loại sản phẩm</span>
+                </li>
+                <li className="giangvien">
+                    <a href="#">
+                        <i className="fa-solid fa-building-columns" />
+                        <span className="nav-item"> Ngân hàng câu hỏi</span>
+                    </a>
+                    <span className="tooltip">Ngân hàng câu hỏi</span>
+                </li>
+                <li className="giangvien">
+                    <a href="#">
+                        <i className="fa-regular fa-newspaper" />
+                        <span className="nav-item"> Đề thi</span>
+                    </a>
+                    <span className="tooltip">Đề thi</span>
+                </li>
+                <li className="giangvien">
+                    <a href="#">
+                        <i className="fa-solid fa-people-arrows" />
+                        <span className="nav-item"> Giao đề thi</span>
+                    </a>
+                    <span className="tooltip">Giao đề thi</span>
+                </li>
+                <li className="giangvien">
+                    <a href="./QLLop.html">
+                        <i className="fa-solid fa-person-shelter" />
+                        <span className="nav-item"> Lớp</span>
+                    </a>
+                    <span className="tooltip">Lớp</span>
+                </li>
+                <li className="admin">
+                    <a href="./QuanLyUsers.html">
+                        <i className="fa-solid fa-users" />
+                        <span className="nav-item">Quản lý users</span>
+                    </a>
+                    <span className="tooltip">Quản lý users</span>
+                </li>
+                <li>
+                    <a href="./TaiKhoan.html">
+                        <i className="fa-regular fa-circle-user" />
+                        <span className="nav-item"> Tài khoản</span>
+                    </a>
+                    <span className="tooltip">Tài khoản</span>
+                </li>
+                <li>
+                    <a href="#" className="btnLogoff">
+                        <span style={{ transform: 'rotate(-180deg)' }}>
+                            <i className="fa-solid fa-arrow-right-from-bracket" />
+                        </span>
+                        <span className="nav-item"> Đăng xuất</span>
+                    </a>
+                    <span className="tooltip">Đăng xuất</span>
+                </li>
+            </ul>
         </div>
     );
 };

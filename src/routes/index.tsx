@@ -16,10 +16,12 @@ import {
     SEARCH_ORDER_PATH,
     SEARCH_PRODUCT_PATH,
     TRACKING_ORDER_PATH,
+    UPDATE_CATEGORY_PATH,
+    CREATE_CATEGORY_PATH,
+    CATEGORY_PATH,
 } from './paths';
 import Cart from '../pages/Shop/Cart';
 import ProductDetail from '../pages/Shop/ProductDetail';
-import path from 'path';
 import { LoginLayout } from '../components/Layout/LoginLayout/index';
 import { ShippingInformation } from '../pages/Shop/ShippingInformation';
 import { ThankYou } from '../pages/Shop/ThankYou';
@@ -27,6 +29,8 @@ import ThankYouLayout from '../components/Layout/ThankYouLayout';
 import { SearchOrder } from '../pages/Shop/SearchOrder';
 import { SearchProduct } from '../pages/Shop/SearchProduct';
 import { TrackingOrder } from '../pages/Shop/TrackingOrder';
+import { Category } from '../pages/Admin/Category';
+import { AddCategory } from '../pages/Admin/Category/AddCategory';
 export const publicRoutes = [
     { path: HOME_PATH, component: Home, layout: undefined },
     { path: PRODUCT_PATH, component: Product, layout: undefined },
@@ -45,4 +49,7 @@ export const publicRoutes = [
 export const privateRoutes = [
     { path: '/admin', component: Home, layout: undefined },
     { path: '/dashboard', component: Dashboard, layout: AdminLayout },
+    { path: CATEGORY_PATH, component: Category, layout: AdminLayout },
+    { path: CREATE_CATEGORY_PATH, component: AddCategory, layout: AdminLayout },
+    { path: UPDATE_CATEGORY_PATH, component: Category, layout: AdminLayout },
 ];

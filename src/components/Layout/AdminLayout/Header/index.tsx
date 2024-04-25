@@ -14,33 +14,33 @@ function Header() {
             <div className="container-fluid header hidden-sm hidden-xs">
                 <div className="row">
                     <ul className="menu">
-                        <li key={1}>
-                            <Link to="#" key={1}>
-                                <i className="fa-brands fa-dropbox" key={1} />
-                                <span key={1}>Tra cứu đơn hàng</span>
+                        <li>
+                            <Link to="/search-order">
+                                <i className="fa-brands fa-dropbox" />
+                                <span>Tra cứu đơn hàng</span>
                             </Link>
                         </li>
-                        <li key={2}>
-                            <Link to="#" key={2}>
-                                <i key={2} className="fa-solid fa-location-dot" />
-                                <span key={2}>Tìm cửa hàng</span>
+                        <li>
+                            <Link to="#">
+                                <i className="fa-solid fa-location-dot" />
+                                <span>Tìm cửa hàng</span>
                             </Link>
                         </li>
-                        <li key={3}>
-                            <Link to="#" key={3}>
-                                <i key={3} className="fa-solid fa-heart" />
-                                <span key={3}>Yêu thích</span>
+                        <li>
+                            <Link to="#">
+                                <i className="fa-solid fa-heart" />
+                                <span>Yêu thích</span>
                             </Link>
                         </li>
-                        <li key={4}>
-                            <Link to={userInfo.user.token !== undefined ? '/dashboard' : '/login'} key={4}>
-                                <i className="fa-solid fa-user" key={4} />
-                                <span key={4}>{userInfo.user.token !== undefined ? 'Tài khoản' : 'Đăng nhập'}</span>
+                        <li>
+                            <Link to={userInfo.user.token !== undefined ? '/dashboard' : '/login'}>
+                                <i className="fa-solid fa-user" />
+                                <span>{userInfo.user.token !== undefined ? 'Tài khoản' : 'Đăng nhập'}</span>
                             </Link>
                         </li>
-                        <li key={5}>
-                            <Link key={5} to="/your-cart">
-                                <i key={5} className="fa-solid fa-cart-shopping" />
+                        <li>
+                            <Link to="/your-cart">
+                                <i className="fa-solid fa-cart-shopping" />
                                 <span>
                                     Giỏ hàng{' '}
                                     <span style={{ display: `${info.carts.length == 0 ? 'none' : 'inline-block'}` }}>

@@ -3,25 +3,28 @@ export const getList = async (data: any): Promise<any> => {
     const res = await apiClient.post(`/api-customer/Product/getList`, data);
     return res?.data;
 };
-export const getProductPrice = async (proId: any): Promise<any> => {
-    const res = await apiClient.get(`/api-customer/ProductPrice/getPriceByProId?proId=` + proId);
-    return res?.data;
-};
-export const getImageFeature = async (proId: any): Promise<any> => {
-    const res = await apiClient.get(`/api-customer/ImageGallery/getImageFeatureByProId?proId=` + proId);
-    return res?.data;
-};
-export const getProductStatus = async (id: number): Promise<any> => {
-    const res = await apiClient.get(`/api-customer/ProductStatus/getById?id=${id}`);
+
+
+export const searchProduct = async (data: any): Promise<any> => {
+    const res = await apiClient.post(`/api-customer/Product/Search`, data);
     return res?.data;
 };
 
-export const getColor = async (id: number): Promise<any> => {
-    const res = await apiClient.get(`/api-customer/Color/getById?id=${id}`);
+
+export const getProductById = async (id: any): Promise<any> => {
+    const res = await apiClient.get(`/api-customer/Product/product/getById?id=${id}`);
     return res?.data;
 };
 
-export const getCategories = async (): Promise<any> => {
-    const res = await apiClient.get(`/api-customer/ProductCategory/getList`);
+
+export const getProductCateById = async (id: any): Promise<any> => {
+    const res = await apiClient.get(`/api-customer/ProductCategory/getById?id=${id}`);
     return res?.data;
 };
+
+
+export const getRelatedProduct = async(data:any): Promise<any> => {
+    const res = await apiClient.post(`/api-customer/Product/getRelatedProduct`,data);
+    return res?.data;
+};
+

@@ -1,5 +1,8 @@
-import { apiClient } from "../constant/api";
-
+import { apiClient } from '../constant/api';
+export const getCategories = async (): Promise<any> => {
+    const res = await apiClient.get(`/api-customer/ProductCategory/getList`);
+    return res?.data;
+};
 export const getList = async (data: any): Promise<any> => {
     const res = await apiClient.post(`/api-customer/ProductCategory/getList`, data);
     return res?.data;

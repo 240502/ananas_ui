@@ -1,0 +1,63 @@
+.app-container {
+    position: relative;
+    min-height: 100vh;
+}
+.main-content {
+    position: relative;
+    max-width: calc(100% - 80px);
+    padding: 1rem;
+    background-color: #f1f1f1;
+}
+.container {
+    margin-left: 0;
+    padding-left: 0;
+}
+.rdt_Table {
+}
+.rdt_TableRow {
+}
+.rdt_TableCol {
+}
+.rdt_TableCol_Sortable {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.rdt_TableCell {
+    font-size: 16px;
+}
+.rdt_TableHeader {
+}
+.rdt_TableFooter {
+}
+.rdt_TableHead {
+}
+.rdt_TableHeadRow div {
+}
+.rdt_TableBody {
+}
+.rdt_ExpanderRow {
+}
+#form{
+
+    position: absolute !important;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+.form-add {
+    width: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    
+    
+}
+.form-add .card-body{
+    padding: 50px 50px;
+
+}

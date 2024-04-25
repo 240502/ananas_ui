@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
-import { getImageFeature } from '../../../services/product.servies';
+import { getImageFeature } from '../../../services/image_product.services';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';

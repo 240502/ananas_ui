@@ -1,8 +1,7 @@
 import React from 'react';
 import { toggleNav } from '../../../utils/product';
 import { useEffect, useState } from 'react';
-import { getCategories } from '../../../services/product.servies';
-
+import { getCategories } from '../../../services/category.services';
 export const ProductCategory = ({ setCateId }: any) => {
     const [indexCate, setIndexCate] = useState(0);
     const [categories, setCategories] = useState([]);

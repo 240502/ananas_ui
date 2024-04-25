@@ -4,20 +4,52 @@ import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { OrderDetailType, OrderType, searchOption } from '../../../store/order.atom';
 import { getTrackingOrder } from '../../../services/order.services';
+import { getShippingTypeById } from '../../../services/shippingType.services';
+import ProductImage from '../Product/ProductImage';
+type ShippingType = {
+    id: number;
+    shippingType_name: string;
+    price: number;
+};
 export const TrackingOrder = () => {
     const option = useRecoilValue(searchOption);
-    const [order, setOrder] = useState<OrderType>();
+    const [order, setOrder] = useState<OrderType>({
+        id: 0,
+        full_name: '',
+        email: '',
+        money_total: 0,
+        order_date: '',
+        paymentType_id: 0,
+        shippingType_id: 0,
+        phone_number: '',
+        receiving_address: '',
+        update_at: '',
+        user_id: 0,
+        status_id: 0,
+        orderDetails: [],
+    });
+    const [shippingType, setShippingType] = useState<ShippingType>({ id: 0, shippingType_name: '', price: 0 });
     useEffect(() => {
         async function loadData(orderId: number, optionSearch: string) {
             try {
                 const data = await getTrackingOrder(orderId, optionSearch);
                 setOrder(data);
+                getShippingType(data?.shippingType_id);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        async function getShippingType(shippingId: any) {
+            try {
+                const data = await getShippingTypeById(shippingId);
+                setShippingType(data);
             } catch (err) {
                 console.log(err);
             }
         }
         loadData(option.orderId, option.optionSearch);
     }, []);
+
     return (
         <div className="order-track container">
             <div className="row step ">
@@ -90,12 +122,7 @@ export const TrackingOrder = () => {
                                 return (
                                     <div className="pro-info" key={item.id} style={{ marginBottom: '20px' }}>
                                         <div className="group-info-left">
-                                            <a href="#">
-                                                <img
-                                                    src="https://ananas.vn/wp-content/uploads/Pro_AV00008_1.jpg"
-                                                    alt=""
-                                                />
-                                            </a>
+                                            <ProductImage proId={item.product_id} />
                                         </div>
                                         <div className="group-info-right">
                                             <h4 className="pro-name label">
@@ -135,7 +162,10 @@ export const TrackingOrder = () => {
                             <h4 className="title">THANH TOÁN</h4>
                             <h4>
                                 <span className="pleft">Trị giá đơn hàng :</span>
-                                <span className="pright bold"> {order?.money_total.toLocaleString(undefined)} VND</span>
+                                <span className="pright bold">
+                                    {' '}
+                                    {(order?.money_total - shippingType?.price).toLocaleString(undefined)} VND
+                                </span>
                             </h4>
                             <h4>
                                 <span className="pleft">Giảm giá : </span>
@@ -144,7 +174,10 @@ export const TrackingOrder = () => {
 
                             <h4>
                                 <span className="pleft">Phí giao hàng : </span>
-                                <span className="pright bold"> 50.000 VND</span>
+                                <span className="pright bold">
+                                    {' '}
+                                    {shippingType?.price.toLocaleString(undefined)} VND
+                                </span>
                             </h4>
                             <h4>
                                 <span className="pleft">Phí thanh toán : </span>

@@ -1,6 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { getColor } from '../../../services/product.servies';
-
+import { getColor } from '../../../services/color.services';
 const ProductColor = ({ id }: any) => {
     const [colorName, setColorName] = useState('');
     useEffect(() => {
