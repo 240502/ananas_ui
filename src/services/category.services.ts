@@ -10,4 +10,14 @@ export const getList = async (data: any): Promise<any> => {
 export const Create = async (data: any): Promise<any> => {
     const res = await apiClient.post(`/api-admin/ProductCategory/create`, data);
     return res;
-}
+};
+
+export const Delete = async (id: any): Promise<any> => {
+    const res = await apiClient.delete(`/api-admin/ProductCategory/delete?id=${id}`);
+    return res;
+};
+
+export const Update = async (data: any): Promise<any> => {
+    const res = await apiClient.put(`/api-admin/ProductCategory/update`, data);
+    return res;
+};

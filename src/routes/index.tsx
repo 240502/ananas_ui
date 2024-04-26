@@ -19,6 +19,8 @@ import {
     UPDATE_CATEGORY_PATH,
     CREATE_CATEGORY_PATH,
     CATEGORY_PATH,
+    PRODUCT_ADMIN_PATH,
+    CREATE_PRODUCT_PATH,
 } from './paths';
 import Cart from '../pages/Shop/Cart';
 import ProductDetail from '../pages/Shop/ProductDetail';
@@ -31,6 +33,9 @@ import { SearchProduct } from '../pages/Shop/SearchProduct';
 import { TrackingOrder } from '../pages/Shop/TrackingOrder';
 import { Category } from '../pages/Admin/Category';
 import { AddCategory } from '../pages/Admin/Category/AddCategory';
+import { UpdateCategory } from '../pages/Admin/Category/UpdateCategory';
+import { ProductAdmin } from '../pages/Admin/Product';
+import { AddProduct } from '../pages/Admin/Product/AddProduct';
 export const publicRoutes = [
     { path: HOME_PATH, component: Home, layout: undefined },
     { path: PRODUCT_PATH, component: Product, layout: undefined },
@@ -51,5 +56,7 @@ export const privateRoutes = [
     { path: '/dashboard', component: Dashboard, layout: AdminLayout },
     { path: CATEGORY_PATH, component: Category, layout: AdminLayout },
     { path: CREATE_CATEGORY_PATH, component: AddCategory, layout: AdminLayout },
-    { path: UPDATE_CATEGORY_PATH, component: Category, layout: AdminLayout },
+    { path: UPDATE_CATEGORY_PATH, component: UpdateCategory, layout: AdminLayout },
+    { path: PRODUCT_ADMIN_PATH, component: ProductAdmin, layout: AdminLayout },
+    { path: CREATE_PRODUCT_PATH, component: AddProduct, layout: AdminLayout },
 ];

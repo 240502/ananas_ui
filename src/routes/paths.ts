@@ -12,7 +12,9 @@ const SEARCH_PRODUCT_PATH = '/search-product/:value';
 const TRACKING_ORDER_PATH = '/tracking-order';
 const CATEGORY_PATH = 'admin/category';
 const CREATE_CATEGORY_PATH = 'admin/category/create';
-const UPDATE_CATEGORY_PATH = 'admin/category/create';
+const UPDATE_CATEGORY_PATH = 'admin/category/:id';
+const PRODUCT_ADMIN_PATH = 'admin/product';
+const CREATE_PRODUCT_PATH = 'admin/product/create';
 
 export {
     HOME_PATH,
@@ -30,4 +32,6 @@ export {
     CATEGORY_PATH,
     CREATE_CATEGORY_PATH,
     UPDATE_CATEGORY_PATH,
+    PRODUCT_ADMIN_PATH,
+    CREATE_PRODUCT_PATH,
 };

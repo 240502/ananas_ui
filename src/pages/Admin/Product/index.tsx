@@ -1,76 +1,100 @@
 import React, { useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { Link } from 'react-router-dom';
-import { Delete, getList } from '../../../services/category.services';
-import '../../../assets/css/Admin/toast.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import ReactPaginate from 'react-paginate';
-type ProductCategoryType = {
+import { Link } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { getList } from '../../../services/product.servies';
+
+type ProductType = {
     id: number;
-    cate_name: string;
+    pro_name: string;
+    color_id: number;
+    style_id: number;
+    cate_id: number;
+    status_id: number;
+    out_sole: string;
+    gender: string;
+    material_id: number;
+    collection_id: number;
     created_at: string;
-    updated_at: string;
 };
-export const Category = () => {
+export const ProductAdmin = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [pageCount, setPageCount] = useState(0);
-    const [cates, setCates] = useState<ProductCategoryType[]>([]);
-    const handlePageClick = (event: any) => {
-        setPage(event.selected + 1);
-    };
-    const changeInputValue = (e: any) => {
-        setPageSize(+e.target.value);
-    };
+    const [products, setProducts] = useState<ProductType[]>([
+        {
+            id: 0,
+            pro_name: '',
+            color_id: 0,
+            style_id: 0,
+            cate_id: 0,
+            status_id: 0,
+            out_sole: '',
+            gender: '',
+            material_id: 0,
+            collection_id: 0,
+            created_at: '',
+        },
+    ]);
     useEffect(() => {
         async function loadData() {
             try {
                 let items = await getList({
                     pageIndex: page,
                     pageSize: pageSize,
+                    gender: '',
+                    cate: 0,
+                    startPrice: 0,
+                    endPrice: 0,
                 });
-                setCates(items.data);
+                setProducts(items.data);
                 setPageCount(Math.ceil(items.totalItems / pageSize));
-                console.log(pageCount);
             } catch (err) {
                 console.log(err);
                 setPageCount(0);
-                setCates([]);
+                setProducts([]);
             }
         }
         loadData();
     }, [page, pageSize]);
-    const handleDelete = async (id: number) => {
-        try {
-            const res = await Delete(id);
-            const newList = cates.filter((cate) => cate.id !== id);
-            setCates(newList);
-            toast.success('Xóa thành công', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
-        } catch (err) {
-            toast.success('Xóa thất bại', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
-            console.log(err);
-        }
+
+    const handlePageClick = (event: any) => {
+        setPage(event.selected + 1);
     };
-    const columns: TableColumn<ProductCategoryType>[] = [
+    const changeInputValue = (e: any) => {
+        setPageSize(+e.target.value);
+    };
+    const handleDelete = async (id: number) => {
+        // try {
+        //     const res = await Delete(id);
+        //     const newList = cates.filter((cate) => cate.id !== id);
+        //     setCates(newList);
+        //     toast.success('Xóa thành công', {
+        //         position: 'top-right',
+        //         autoClose: 3000,
+        //         hideProgressBar: false,
+        //         closeOnClick: true,
+        //         pauseOnHover: true,
+        //         draggable: true,
+        //         progress: undefined,
+        //         theme: 'light',
+        //     });
+        // } catch (err) {
+        //     toast.success('Xóa thất bại', {
+        //         position: 'top-right',
+        //         autoClose: 3000,
+        //         hideProgressBar: false,
+        //         closeOnClick: true,
+        //         pauseOnHover: true,
+        //         draggable: true,
+        //         progress: undefined,
+        //         theme: 'light',
+        //     });
+        //     console.log(err);
+        // }
+    };
+    const columns: TableColumn<ProductType>[] = [
         {
             name: 'ID',
             selector: (row): any => row.id,
@@ -78,7 +102,7 @@ export const Category = () => {
         },
         {
             name: 'Tên Loại Sản Phẩm',
-            selector: (row): any => row.cate_name,
+            selector: (row): any => row.pro_name,
             sortable: true,
         },
         {
@@ -106,22 +130,21 @@ export const Category = () => {
             },
         },
     ];
-
     return (
         <>
             <div className="main-content">
                 <div className="text-start container">
-                    <Link className="btn btn-primary" style={{ width: '200px' }} to={'/admin/category/create'}>
-                        Thêm loại sản phẩm +
+                    <Link className="btn btn-primary" style={{ width: '200px' }} to={'/admin/product/create'}>
+                        Thêm sản phẩm +
                     </Link>
                 </div>
                 <div className="card">
                     <div className="card-header">
-                        <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách loại sản phẩm</h3>
+                        <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách sản phẩm</h3>
                     </div>
 
                     <div className="card-body">
-                        <DataTable columns={columns} data={cates} selectableRows fixedHeader />
+                        <DataTable columns={columns} data={products} selectableRows fixedHeader />
                         <section className="page" style={{ display: `${pageCount > 1 ? 'flex' : 'none'}` }}>
                             <select
                                 name="pageSize"

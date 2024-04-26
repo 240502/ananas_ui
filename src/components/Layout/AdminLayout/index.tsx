@@ -1,5 +1,6 @@
 import Header from './Header';
 import { Sidebar } from './Sidebar';
+import Toast from './Toast';
 function AdminLayout({ children }: any) {
     return (
         <>
@@ -8,6 +9,7 @@ function AdminLayout({ children }: any) {
                 <Sidebar />
                 {children}
             </div>
+            <Toast />
         </>
     );
 }

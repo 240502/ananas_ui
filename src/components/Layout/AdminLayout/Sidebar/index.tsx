@@ -22,19 +22,19 @@ export const Sidebar = () => {
                 </div>
             </div>
             <ul>
-                <li className="giangvien">
+                <li className="">
                     <Link to="/admin/category">
                         <i className="fa-solid fa-users" />
                         <span className="nav-item"> Loại sản phẩm</span>
                     </Link>
                     <span className="tooltip">Loại sản phẩm</span>
                 </li>
-                <li className="giangvien">
-                    <a href="#">
+                <li className="">
+                    <Link to="/admin/product">
                         <i className="fa-solid fa-building-columns" />
-                        <span className="nav-item"> Ngân hàng câu hỏi</span>
-                    </a>
-                    <span className="tooltip">Ngân hàng câu hỏi</span>
+                        <span className="nav-item">Sản phẩm</span>
+                    </Link>
+                    <span className="tooltip">Sản phẩm</span>
                 </li>
                 <li className="giangvien">
                     <a href="#">

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import '../../../../assets/css/Shop/header.css';
 import { useRecoilState, useRecoilTransaction_UNSTABLE, useRecoilValue, useSetRecoilState } from 'recoil';
 import { cartState, infoValue } from '../../../../store/cart.atom';
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { userState, userValue } from '../../../../store/user.atom';
 
 function Header() {
@@ -56,4 +56,4 @@ function Header() {
     );
 }
 
-export default Header;
+export default memo(Header);
