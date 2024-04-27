@@ -88,3 +88,13 @@
     margin-bottom: 10px;
     text-transform: capitalize;
 }
+
+.form-add .title {
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.form-add label {
+    font-weight: 600;
+}

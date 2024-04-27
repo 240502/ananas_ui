@@ -1,6 +1,6 @@
 import { apiClient } from '../constant/api';
 export const getCategories = async (): Promise<any> => {
-    const res = await apiClient.get(`/api-customer/ProductCategory/getList`);
+    const res = await apiClient.get(`/api-customer/ProductCategory/getAll`);
     return res?.data;
 };
 export const getList = async (data: any): Promise<any> => {
