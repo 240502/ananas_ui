@@ -28,3 +28,8 @@ export const create = async (data: any): Promise<any> => {
     const res = await apiClient.post(`/api-admin/Product/create`, data);
     return res?.data;
 };
+
+export const Delete = async (id: any): Promise<any> => {
+    const res = await apiClient.delete(`/api-admin/Product/delete?id=${id}`);
+    return res;
+};

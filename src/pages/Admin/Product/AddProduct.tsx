@@ -12,6 +12,16 @@ import { createImage } from '../../../services/image_product.services';
 import { createProductDetail } from '../../../services/product_detail.services';
 import { createProductPrice } from '../../../services/price.services';
 import { toast } from 'react-toastify';
+import {
+    checkDateError,
+    checkDateWithCurrentDate,
+    checkOutSoleNotIsNumber,
+    checkPriceIsNumber,
+    checkSizeError,
+    checkSizeIsNumber,
+    handleFocusInput,
+} from '../../../utils/validation_product';
+import { checkEmptyError } from '../../../utils/global';
 type CategoryType = {
     id: number;
     cate_name: string;
@@ -59,6 +69,13 @@ type InputProductType = {
     file: any;
 };
 export const AddProduct = () => {
+    let listInput: any;
+    let inputEndSize: any;
+    let inputStartSize: any;
+    let inputPrice: any;
+    let inputOutSole: any;
+    let inputStartDate: any;
+    let inputEndDate: any;
     const navigate = useNavigate();
     const [cates, setCates] = useState<CategoryType[]>();
     const [status, setStatus] = useState<StatusType[]>();
@@ -84,6 +101,15 @@ export const AddProduct = () => {
         startDate: '',
         endDate: '',
         file: '',
+    });
+    useEffect(() => {
+        listInput = document.querySelectorAll('.form-add input');
+        inputEndSize = document.querySelector('#endSize');
+        inputStartSize = document.querySelector('#startSize');
+        inputPrice = document.querySelector('#price');
+        inputOutSole = document.querySelector('#outSole');
+        inputStartDate = document.querySelector('#startDate');
+        inputEndDate = document.querySelector('#endDate');
     });
     useEffect(() => {
         async function getCategory() {
@@ -135,81 +161,44 @@ export const AddProduct = () => {
                 console.log(err);
             }
         }
+
         getCategory();
         getStatus();
         getStyle();
         getCollection();
         getMaterial();
         getColor();
+        handleFocusInput(listInput);
     }, []);
-    const handleCreateProduct = async () => {
-        console.log('data=', inputProduct);
-        try {
-            const data = {
-                pro_name: inputProduct.proName,
-                status_id: inputProduct.statusId,
-                cate_id: inputProduct.cateId,
-                style_id: inputProduct.styleId,
-                collection_id: inputProduct.collectionId,
-                material_id: inputProduct.materialId,
-                color_id: inputProduct.colorId,
-                gender: inputProduct.gender,
-                out_sole: inputProduct.outSole,
-            };
-            const res = await create(data);
-            handleCreateImageGallery(Number(res));
-            handleCreatePrice(Number(res));
-            handleCreateDetail(Number(res));
-            navigate('/admin/product');
-            toast.success('Thêm thành công', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
-        } catch (e) {
-            console.log(e);
-            toast.error('Thêm không thành công', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
-        }
-    };
+
     const handleCreateImageGallery = async (proId: number) => {
         try {
-            var formData: FormData = new FormData();
-            formData.append('file', inputProduct.file, inputProduct.file['name']);
-            const path = await upload(formData);
-            const data = {
-                img_src: path.data['fullPath'],
-                product_id: proId,
-            };
-            const res = await createImage(data);
-            console.log(res);
+            var formFile: FormData = new FormData();
+            if (inputProduct.file != '') {
+                formFile.append('formFile', inputProduct.file, inputProduct.file['name']);
+                const path = await upload(formFile);
+                const data = {
+                    img_src: path.data,
+                    product_id: proId,
+                };
+                const res = await createImage(data);
+            }
         } catch (e) {
             console.log(e);
         }
     };
     const handleCreatePrice = async (proId: number) => {
         try {
-            const data = {
-                price: inputProduct.price,
-                product_id: proId,
-                start_date: inputProduct.startDate,
-                end_date: inputProduct.endDate,
-            };
-            const res = await createProductPrice(data);
-            console.log(res);
+            if (inputProduct.price != 0 && inputProduct.endDate != '' && inputProduct.startDate != '') {
+                const data = {
+                    price: inputProduct.price,
+                    product_id: proId,
+                    start_date: inputProduct.startDate,
+                    end_date: inputProduct.endDate,
+                };
+                const res = await createProductPrice(data);
+                console.log(res);
+            }
         } catch (err) {
             console.log(err);
         }
@@ -228,6 +217,76 @@ export const AddProduct = () => {
             console.log(err);
         }
     };
+    const handleCreateProduct = async () => {
+        const isEmpty = checkEmptyError(listInput);
+        console.log(inputOutSole);
+        if (!isEmpty) {
+            const isOutSoleError = checkOutSoleNotIsNumber(inputOutSole);
+            const isPriceError = checkPriceIsNumber(inputPrice);
+            const isEndSizeError = checkSizeIsNumber(inputEndSize);
+            const isStartSizeError = checkSizeIsNumber(inputStartSize);
+            const isEndDateError = checkDateWithCurrentDate(inputEndDate);
+            const isStartDateError = checkDateWithCurrentDate(inputStartDate);
+
+            if (
+                isOutSoleError &&
+                isPriceError &&
+                isEndSizeError &&
+                isStartSizeError &&
+                !isEndDateError &&
+                !isStartDateError
+            ) {
+                const isSizeError = checkSizeError(inputEndSize, inputStartSize);
+                const isDateError = checkDateError(inputEndDate, inputStartDate);
+
+                if (!isSizeError && !isDateError) {
+                    console.log('oge');
+                    // try {
+
+                    //     const data = {
+                    //         pro_name: inputProduct.proName,
+                    //         status_id: inputProduct.statusId,
+                    //         cate_id: inputProduct.cateId,
+                    //         style_id: inputProduct.styleId,
+                    //         collection_id: inputProduct.collectionId,
+                    //         material_id: inputProduct.materialId,
+                    //         color_id: inputProduct.colorId,
+                    //         gender: inputProduct.gender,
+                    //         out_sole: inputProduct.outSole,
+                    //     };
+                    //     const res = await create(data);
+                    //     handleCreateImageGallery(Number(res));
+                    //     handleCreatePrice(Number(res));
+                    //     handleCreateDetail(Number(res));
+                    //     navigate('/admin/product');
+                    //     toast.success('Thêm thành công', {
+                    //         position: 'top-right',
+                    //         autoClose: 3000,
+                    //         hideProgressBar: false,
+                    //         closeOnClick: true,
+                    //         pauseOnHover: true,
+                    //         draggable: true,
+                    //         progress: undefined,
+                    //         theme: 'light',
+                    //     });
+                    // } catch (e) {
+                    //     console.log(e);
+                    //     toast.error('Thêm không thành công', {
+                    //         position: 'top-right',
+                    //         autoClose: 3000,
+                    //         hideProgressBar: false,
+                    //         closeOnClick: true,
+                    //         pauseOnHover: true,
+                    //         draggable: true,
+                    //         progress: undefined,
+                    //         theme: 'light',
+                    //     });
+                    // }
+                }
+            }
+        }
+    };
+
     return (
         <div className="main-content">
             <div id="form">
@@ -250,6 +309,7 @@ export const AddProduct = () => {
                                                 setInputProduct({ ...inputProduct, proName: e.target.value })
                                             }
                                         ></input>
+                                        <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
 
                                     <div className="form-group">
@@ -270,6 +330,7 @@ export const AddProduct = () => {
                                                 </option>
                                             ))}
                                         </select>
+                                        <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="cate_id">Loại sản phẩm:</label>
@@ -289,6 +350,7 @@ export const AddProduct = () => {
                                                 </option>
                                             ))}
                                         </select>
+                                        <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
 
                                     <div className="form-group">
@@ -309,6 +371,7 @@ export const AddProduct = () => {
                                                 </option>
                                             ))}
                                         </select>
+                                        <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
 
                                     <div className="form-group">
@@ -331,6 +394,7 @@ export const AddProduct = () => {
                                                 </option>
                                             ))}
                                         </select>
+                                        <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="material_id">Chất liệu sản phẩm:</label>
@@ -350,6 +414,7 @@ export const AddProduct = () => {
                                                 </option>
                                             ))}
                                         </select>
+                                        <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="gender">Giới tính:</label>
@@ -367,15 +432,16 @@ export const AddProduct = () => {
                                         </select>
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="out_sole">Chất liệu đế:</label>
+                                        <label htmlFor="outSole">Chất liệu đế:</label>
                                         <input
                                             name="out_sole"
-                                            id="out_sole"
+                                            id="outSole"
                                             className="form-control"
                                             onChange={(e) =>
                                                 setInputProduct({ ...inputProduct, outSole: e.target.value })
                                             }
                                         ></input>
+                                        <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
@@ -401,11 +467,13 @@ export const AddProduct = () => {
                                                     </option>
                                                 ))}
                                             </select>
+                                            <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="">Số lượng:</label>
                                             <input
                                                 type="text"
+                                                id="quantity"
                                                 className="form-control quantity"
                                                 onChange={(e) =>
                                                     setInputProduct({
@@ -414,11 +482,13 @@ export const AddProduct = () => {
                                                     })
                                                 }
                                             />
+                                            <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="">Size nhỏ nhất:</label>
                                             <input
                                                 type="text"
+                                                id="startSize"
                                                 className="form-control size"
                                                 onChange={(e) =>
                                                     setInputProduct({
@@ -427,11 +497,13 @@ export const AddProduct = () => {
                                                     })
                                                 }
                                             />
+                                            <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>{' '}
                                         <div className="form-group">
-                                            <label htmlFor="">Size bé nhất:</label>
+                                            <label htmlFor="">Size lớn nhất:</label>
                                             <input
                                                 type="text"
+                                                id="endSize"
                                                 className="form-control size"
                                                 onChange={(e) =>
                                                     setInputProduct({
@@ -440,6 +512,7 @@ export const AddProduct = () => {
                                                     })
                                                 }
                                             />
+                                            <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>{' '}
                                         <div className="form-group">
                                             <label htmlFor="price">Giá sản phẩm:</label>
@@ -451,6 +524,7 @@ export const AddProduct = () => {
                                                     setInputProduct({ ...inputProduct, price: Number(e.target.value) })
                                                 }
                                             />
+                                            <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="startDate">Ngày bắt đầu áp dụng</label>
@@ -462,6 +536,7 @@ export const AddProduct = () => {
                                                     setInputProduct({ ...inputProduct, startDate: e.target.value })
                                                 }
                                             />
+                                            <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="endDate">Ngày kết thúc áp dụng</label>
@@ -473,6 +548,7 @@ export const AddProduct = () => {
                                                     setInputProduct({ ...inputProduct, endDate: e.target.value })
                                                 }
                                             />
+                                            <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
                                     </div>
                                     <div className="col-lg-6">
@@ -486,6 +562,7 @@ export const AddProduct = () => {
                                                     setInputProduct({ ...inputProduct, file: e.target.files?.[0] })
                                                 }
                                             />
+                                            <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
                                     </div>
                                 </div>

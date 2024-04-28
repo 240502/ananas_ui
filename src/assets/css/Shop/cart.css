@@ -123,7 +123,7 @@
     padding-right: 25px;
 }
 #size,
-#quantity {
+.pro-detail #quantity {
     width: 50px;
     text-align: center;
 }

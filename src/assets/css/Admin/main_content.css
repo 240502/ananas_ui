@@ -98,3 +98,15 @@
 .form-add label {
     font-weight: 600;
 }
+
+.error .error_message {
+    display: block !important;
+    color: #c70039;
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 10px;
+}
+.error select,
+.error input {
+    border: 1px solid #c70039 !important;
+}

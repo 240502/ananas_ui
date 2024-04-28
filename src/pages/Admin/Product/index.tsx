@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import { getList } from '../../../services/product.servies';
+import { ToastContainer, toast } from 'react-toastify';
+import { Delete, getList } from '../../../services/product.servies';
 
 type ProductType = {
     id: number;
@@ -37,8 +37,9 @@ export const ProductAdmin = () => {
             created_at: '',
         },
     ]);
+
     useEffect(() => {
-        async function loadData() {
+        const loadData = async () => {
             try {
                 let items = await getList({
                     pageIndex: page,
@@ -55,7 +56,7 @@ export const ProductAdmin = () => {
                 setPageCount(0);
                 setProducts([]);
             }
-        }
+        };
         loadData();
     }, [page, pageSize]);
 
@@ -66,39 +67,46 @@ export const ProductAdmin = () => {
         setPageSize(+e.target.value);
     };
     const handleDelete = async (id: number) => {
-        // try {
-        //     const res = await Delete(id);
-        //     const newList = cates.filter((cate) => cate.id !== id);
-        //     setCates(newList);
-        //     toast.success('Xóa thành công', {
-        //         position: 'top-right',
-        //         autoClose: 3000,
-        //         hideProgressBar: false,
-        //         closeOnClick: true,
-        //         pauseOnHover: true,
-        //         draggable: true,
-        //         progress: undefined,
-        //         theme: 'light',
-        //     });
-        // } catch (err) {
-        //     toast.success('Xóa thất bại', {
-        //         position: 'top-right',
-        //         autoClose: 3000,
-        //         hideProgressBar: false,
-        //         closeOnClick: true,
-        //         pauseOnHover: true,
-        //         draggable: true,
-        //         progress: undefined,
-        //         theme: 'light',
-        //     });
-        //     console.log(err);
-        // }
+        try {
+            const res = await Delete(id);
+            if (res.status === 200) {
+                const newList = products.filter((pro) => pro.id !== id);
+                setProducts(newList);
+                toast.success('Xóa thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
+        } catch (err) {
+            toast.error('Xóa thất bại', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
+            console.log(err);
+        }
     };
     const columns: TableColumn<ProductType>[] = [
         {
             name: 'ID',
             selector: (row): any => row.id,
             sortable: true,
+        },
+        {
+            name: 'Hình Ảnh Sản Phẩm',
+            selector: (row): any => row.created_at,
+
         },
         {
             name: 'Tên Loại Sản Phẩm',
@@ -116,7 +124,7 @@ export const ProductAdmin = () => {
                 return (
                     <>
                         <Link
-                            to={`/admin/category/${row.id}`}
+                            to={`/admin/product/${row.id}`}
                             className="btn btn-success"
                             style={{ marginRight: '10px' }}
                         >
