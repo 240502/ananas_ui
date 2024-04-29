@@ -15,7 +15,7 @@ const CREATE_CATEGORY_PATH = 'admin/category/create';
 const UPDATE_CATEGORY_PATH = 'admin/category/:id';
 const PRODUCT_ADMIN_PATH = 'admin/product';
 const CREATE_PRODUCT_PATH = 'admin/product/create';
-
+const UPDATE_PRODUCT_PATH = 'admin/product/update/:id';
 export {
     HOME_PATH,
     PRODUCT_PATH,
@@ -34,4 +34,5 @@ export {
     UPDATE_CATEGORY_PATH,
     PRODUCT_ADMIN_PATH,
     CREATE_PRODUCT_PATH,
+    UPDATE_PRODUCT_PATH,
 };

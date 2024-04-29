@@ -33,3 +33,8 @@ export const Delete = async (id: any): Promise<any> => {
     const res = await apiClient.delete(`/api-admin/Product/delete?id=${id}`);
     return res;
 };
+
+export const update = async (data: any): Promise<any> => {
+    const res = await apiClient.put(`/api-admin/Product/update`, data);
+    return res;
+};

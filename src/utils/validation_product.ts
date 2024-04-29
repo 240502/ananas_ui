@@ -14,10 +14,6 @@ export const checkDateError = (inputEndDate: any, inputStartDate: any) => {
 export const checkDateWithCurrentDate = (inputDate: any) => {
     const date: any = inputDate.value;
     const currentDate = new Date();
-    console.log(date);
-    console.log(currentDate.toISOString().slice(0, 10));
-
-    console.log(date < currentDate.toISOString().slice(0, 10));
     if (date < currentDate.toISOString().slice(0, 10)) {
         showError(inputDate, 'Ngày áp dụng phải lớn hơn hoặc bằng ngày hiện tại ');
         return true;
@@ -72,4 +68,15 @@ export const handleFocusInput = (listInput: any) => {
             showSuccess(input);
         };
     });
+};
+
+export const checkQuantityIsNumber = (input: any) => {
+    const quantity = input.value.trim();
+    for (var i = 0; i < quantity.length; i++) {
+        if (!isNumber(quantity[i])) {
+            showError(input, 'Số lượng sản phẩm chỉ chứa kí tự số ');
+            return false;
+        }
+    }
+    return true;
 };

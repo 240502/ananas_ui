@@ -21,6 +21,7 @@ import {
     CATEGORY_PATH,
     PRODUCT_ADMIN_PATH,
     CREATE_PRODUCT_PATH,
+    UPDATE_PRODUCT_PATH,
 } from './paths';
 import Cart from '../pages/Shop/Cart';
 import ProductDetail from '../pages/Shop/ProductDetail';
@@ -59,4 +60,5 @@ export const privateRoutes = [
     { path: UPDATE_CATEGORY_PATH, component: UpdateCategory, layout: AdminLayout },
     { path: PRODUCT_ADMIN_PATH, component: ProductAdmin, layout: AdminLayout },
     { path: CREATE_PRODUCT_PATH, component: AddProduct, layout: AdminLayout },
+    { path: UPDATE_PRODUCT_PATH, component: AddProduct, layout: AdminLayout },
 ];

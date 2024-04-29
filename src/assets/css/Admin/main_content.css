@@ -27,6 +27,8 @@
 .rdt_TableCell {
     font-size: 16px;
 }
+.rdt_TableCell {
+}
 .rdt_TableHeader {
 }
 .rdt_TableFooter {
@@ -109,4 +111,8 @@
 .error select,
 .error input {
     border: 1px solid #c70039 !important;
+}
+
+select option {
+    text-transform: capitalize;
 }

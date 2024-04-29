@@ -4,24 +4,16 @@ import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { Delete, getList } from '../../../services/product.servies';
+import { ProductType } from '../../../types';
+import { hostServerAdmin } from '../../../constant/api';
+import { DeleteFile } from '../../../services/image_product.services';
+import path from 'path';
 
-type ProductType = {
-    id: number;
-    pro_name: string;
-    color_id: number;
-    style_id: number;
-    cate_id: number;
-    status_id: number;
-    out_sole: string;
-    gender: string;
-    material_id: number;
-    collection_id: number;
-    created_at: string;
-};
 export const ProductAdmin = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [pageCount, setPageCount] = useState(0);
+
     const [products, setProducts] = useState<ProductType[]>([
         {
             id: 0,
@@ -35,6 +27,17 @@ export const ProductAdmin = () => {
             material_id: 0,
             collection_id: 0,
             created_at: '',
+            imageGallery: { id: 0, img_src: '', product_id: 0, feature: false },
+            priceModel: {
+                id: 0,
+                price: 0,
+                product_id: 0,
+                start_date: '',
+                end_date: '',
+                created_at: '',
+                updated_at: '',
+            },
+            productDetails: [{ id: 0, quantity: 0, product_id: 0, size: 0 }],
         },
     ]);
 
@@ -66,9 +69,16 @@ export const ProductAdmin = () => {
     const changeInputValue = (e: any) => {
         setPageSize(+e.target.value);
     };
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: number, img_src: string) => {
         try {
             const res = await Delete(id);
+            if (img_src.includes('uploads')) {
+                let path: string = img_src.slice(18, img_src.length);
+                console.log(img_src.slice(18, img_src.length));
+
+                const resDeleteFile = await DeleteFile(path);
+                console.log(resDeleteFile);
+            }
             if (res.status === 200) {
                 const newList = products.filter((pro) => pro.id !== id);
                 setProducts(newList);
@@ -105,8 +115,19 @@ export const ProductAdmin = () => {
         },
         {
             name: 'Hình Ảnh Sản Phẩm',
-            selector: (row): any => row.created_at,
-
+            selector: (row): any => {
+                return (
+                    <img
+                        style={{ width: '50%', padding: '10px 0' }}
+                        src={
+                            row.imageGallery.img_src.includes('uploads')
+                                ? hostServerAdmin + row.imageGallery.img_src
+                                : 'http://localhost:3000/' + row.imageGallery.img_src
+                        }
+                        alt=""
+                    />
+                );
+            },
         },
         {
             name: 'Tên Loại Sản Phẩm',
@@ -114,8 +135,8 @@ export const ProductAdmin = () => {
             sortable: true,
         },
         {
-            name: 'Ngày Tạo',
-            selector: (row): any => row.created_at,
+            name: 'Giá',
+            selector: (row): any => row.priceModel.price.toLocaleString(undefined) + ' VND',
             sortable: true,
         },
         {
@@ -124,13 +145,16 @@ export const ProductAdmin = () => {
                 return (
                     <>
                         <Link
-                            to={`/admin/product/${row.id}`}
+                            to={`/admin/product/update/${row.id}`}
                             className="btn btn-success"
                             style={{ marginRight: '10px' }}
                         >
                             Sửa
                         </Link>
-                        <button className="btn btn-danger" onClick={() => handleDelete(row.id)}>
+                        <button
+                            className="btn btn-danger"
+                            onClick={() => handleDelete(row.id, row.imageGallery.img_src)}
+                        >
                             Xóa
                         </button>
                     </>
