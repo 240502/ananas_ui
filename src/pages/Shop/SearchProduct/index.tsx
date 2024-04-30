@@ -17,6 +17,7 @@ export const SearchProduct = () => {
             id: 0,
             pro_name: '',
             color_id: 0,
+            amountOfSale: 0,
             style_id: 0,
             cate_id: 0,
             status_id: 0,

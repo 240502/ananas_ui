@@ -86,6 +86,7 @@ export const AddProduct = () => {
         pro_name: '',
         color_id: 0,
         style_id: 0,
+        amountOfSale: 0,
         cate_id: 0,
         status_id: 0,
         out_sole: '',

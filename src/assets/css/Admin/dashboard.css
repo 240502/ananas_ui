@@ -1,0 +1,60 @@
+.heading {
+    margin-left: 10px;
+}
+.heading h3 {
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.heading p {
+    font-size: 14px;
+    color: #6d6b6b;
+}
+.group-box {
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0.5%;
+}
+
+.group-box .box-item {
+    border-radius: 10px;
+    background-color: #192655;
+    width: 22%;
+    color: #fff;
+    padding: 10px 20px;
+    text-transform: capitalize;
+}
+
+.group-box .box-item h6 {
+    margin: 0;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.group-box .box-item .box-icon {
+    font-size: 20px;
+    margin-right: 5px;
+    padding: 5px;
+    display: inherit;
+    justify-content: center;
+    align-items: center;
+    color: #eeeeee !important;
+}
+.group-box .box-item .data {
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+
+.block-product {
+    margin-top: 50px;
+}
+.block-line-chart canvas {
+    width: 1000px !important;
+    height: 500px !important;
+    margin: 0 auto;
+}

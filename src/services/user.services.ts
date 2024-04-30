@@ -22,3 +22,8 @@ export const getUserById = async (id: any): Promise<any> => {
     const res = await apiClient.get(`/api-admin/Users/getById?id=${id}`);
     return res?.data;
 };
+
+export const getTotalUser = async (): Promise<any> => {
+    const res = await apiClient.get(`/api-admin/Users/getTotalUser`);
+    return res?.data;
+};

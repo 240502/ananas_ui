@@ -19,7 +19,9 @@ const UPDATE_PRODUCT_PATH = 'admin/product/update/:id';
 const USER_ADMIN_PATH = 'admin/user';
 const CREATE_USER_PATH = 'admin/user/create';
 const UPDATE_USER_PATH = 'admin/user/update/:id';
+const DASHBOARD_PATH = 'admin/dashboard';
 export {
+    DASHBOARD_PATH,
     HOME_PATH,
     PRODUCT_PATH,
     CART_PATH,

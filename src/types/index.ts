@@ -35,6 +35,7 @@ export type ProductType = {
     imageGallery: ImageGalleryType;
     priceModel: ProductPriceType;
     productDetails: ProductDetailType[];
+    amountOfSale: number;
 };
 export type ProductCategoryType = {
     id: number;

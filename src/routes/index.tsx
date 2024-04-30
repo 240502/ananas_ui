@@ -25,6 +25,7 @@ import {
     USER_ADMIN_PATH,
     CREATE_USER_PATH,
     UPDATE_USER_PATH,
+    DASHBOARD_PATH,
 } from './paths';
 import Cart from '../pages/Shop/Cart';
 import ProductDetail from '../pages/Shop/ProductDetail';
@@ -59,7 +60,7 @@ export const publicRoutes = [
 
 export const privateRoutes = [
     { path: '/admin', component: Home, layout: undefined },
-    { path: '/dashboard', component: Dashboard, layout: AdminLayout },
+    { path: DASHBOARD_PATH, component: Dashboard, layout: AdminLayout },
     { path: CATEGORY_PATH, component: Category, layout: AdminLayout },
     { path: CREATE_CATEGORY_PATH, component: AddCategory, layout: AdminLayout },
     { path: UPDATE_CATEGORY_PATH, component: UpdateCategory, layout: AdminLayout },

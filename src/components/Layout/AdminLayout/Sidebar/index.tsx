@@ -23,6 +23,13 @@ export const Sidebar = () => {
             </div>
             <ul>
                 <li className="">
+                    <Link to="/admin/dashboard">
+                        <i className="fa-solid fa-list"></i>
+                        <span className="nav-item">Dashboard</span>
+                    </Link>
+                    <span className="tooltip">Dashboard</span>
+                </li>
+                <li className="">
                     <Link to="/admin/category">
                         <i className="fa-solid fa-list"></i>
                         <span className="nav-item"> Loại sản phẩm</span>

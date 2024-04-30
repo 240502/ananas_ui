@@ -21,6 +21,7 @@ export const ProductAdmin = () => {
             color_id: 0,
             style_id: 0,
             cate_id: 0,
+            amountOfSale: 0,
             status_id: 0,
             out_sole: '',
             gender: '',
@@ -169,7 +170,7 @@ export const ProductAdmin = () => {
                     Thêm sản phẩm +
                 </Link>
             </div>
-            <div className="card">
+            <div className="card card-data">
                 <div className="card-header">
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách sản phẩm</h3>
                 </div>

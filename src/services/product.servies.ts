@@ -38,3 +38,8 @@ export const update = async (data: any): Promise<any> => {
     const res = await apiClient.put(`/api-admin/Product/update`, data);
     return res;
 };
+
+export const getTop5ProductBestSale = async (data: any): Promise<any> => {
+    const res = await apiClient.post(`/api-admin/Product/getTop5ProductBestSale`, data);
+    return res?.data;
+};

@@ -46,6 +46,7 @@ function ProductDetail() {
             gender: '',
             material_id: 0,
             collection_id: 0,
+            amountOfSale: 0,
             created_at: '',
             imageGallery: { id: 0, img_src: '', product_id: 0, feature: false },
             priceModel: {
@@ -69,6 +70,7 @@ function ProductDetail() {
         color_id: 0,
         style_id: 0,
         cate_id: 0,
+        amountOfSale: 0,
         status_id: 0,
         out_sole: '',
         gender: '',
