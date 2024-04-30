@@ -164,56 +164,42 @@ export const ProductAdmin = () => {
     ];
     return (
         <>
-            <div className="main-content">
-                <div className="text-start container">
-                    <Link className="btn btn-primary" style={{ width: '200px' }} to={'/admin/product/create'}>
-                        Thêm sản phẩm +
-                    </Link>
+            <div className="text-start container">
+                <Link className="btn btn-primary" style={{ width: '200px' }} to={'/admin/product/create'}>
+                    Thêm sản phẩm +
+                </Link>
+            </div>
+            <div className="card">
+                <div className="card-header">
+                    <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách sản phẩm</h3>
                 </div>
-                <div className="card">
-                    <div className="card-header">
-                        <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách sản phẩm</h3>
-                    </div>
 
-                    <div className="card-body">
-                        <DataTable columns={columns} data={products} selectableRows fixedHeader />
-                        <section className="page" style={{ display: `${pageCount > 1 ? 'flex' : 'none'}` }}>
-                            <select
-                                name="pageSize"
-                                className="form-control"
-                                onChange={(e) => changeInputValue(e)}
-                                value={pageSize}
-                            >
-                                <option value="5">6</option>
-                                <option value="10">12</option>
-                                <option value="15">18</option>
-                                <option value="20">24</option>
-                            </select>
-                            <ReactPaginate
-                                breakLabel="..."
-                                nextLabel={<i className="fa-solid fa-chevron-right"></i>}
-                                onPageChange={handlePageClick}
-                                pageRangeDisplayed={5}
-                                pageCount={pageCount}
-                                previousLabel={<i className="fa-solid fa-angle-left"></i>}
-                                renderOnZeroPageCount={null}
-                            />
-                        </section>
-                    </div>
+                <div className="card-body">
+                    <DataTable columns={columns} data={products} selectableRows fixedHeader />
+                    <section className="page" style={{ display: `${pageCount > 1 ? 'flex' : 'none'}` }}>
+                        <select
+                            name="pageSize"
+                            className="form-control"
+                            onChange={(e) => changeInputValue(e)}
+                            value={pageSize}
+                        >
+                            <option value="5">6</option>
+                            <option value="10">12</option>
+                            <option value="15">18</option>
+                            <option value="20">24</option>
+                        </select>
+                        <ReactPaginate
+                            breakLabel="..."
+                            nextLabel={<i className="fa-solid fa-chevron-right"></i>}
+                            onPageChange={handlePageClick}
+                            pageRangeDisplayed={5}
+                            pageCount={pageCount}
+                            previousLabel={<i className="fa-solid fa-angle-left"></i>}
+                            renderOnZeroPageCount={null}
+                        />
+                    </section>
                 </div>
             </div>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
         </>
     );
 };

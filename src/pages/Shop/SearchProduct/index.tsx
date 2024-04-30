@@ -3,28 +3,41 @@ import { Link, useParams } from 'react-router-dom';
 import '../../../assets/css/Shop/search_product.css';
 import { searchProduct } from '../../../services/product.servies';
 import ReactPaginate from 'react-paginate';
-import { Thumbnail } from './Thumbnail';
-import Price from '../Product/Price';
 import { Color } from './Color';
 import { Type } from './Type';
+import { ProductType } from '../../../types';
 
 type DataParams = {
     value: string;
 };
-type ProductType = {
-    id: number;
-    pro_name: string;
-    color_id: number;
-    style_id: number;
-    cate_id: number;
-    status_id: number;
-    out_sole: string;
-    gender: string;
-    material_id: number;
-    collection_id: number;
-};
+
 export const SearchProduct = () => {
-    const [products, setProducts] = useState<ProductType[]>([]);
+    const [products, setProducts] = useState<ProductType[]>([
+        {
+            id: 0,
+            pro_name: '',
+            color_id: 0,
+            style_id: 0,
+            cate_id: 0,
+            status_id: 0,
+            out_sole: '',
+            gender: '',
+            material_id: 0,
+            collection_id: 0,
+            created_at: '',
+            imageGallery: { id: 0, img_src: '', product_id: 0, feature: false },
+            priceModel: {
+                id: 0,
+                price: 0,
+                product_id: 0,
+                start_date: '',
+                end_date: '',
+                created_at: '',
+                updated_at: '',
+            },
+            productDetails: [{ id: 0, quantity: 0, product_id: 0, size: 0 }],
+        },
+    ]);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
@@ -134,7 +147,21 @@ export const SearchProduct = () => {
                                                     position: 'relative',
                                                 }}
                                             >
-                                                <Thumbnail proId={product.id}></Thumbnail>
+                                                <img
+                                                    src={'http://localhost:3000/' + product.imageGallery.img_src}
+                                                    alt=""
+                                                    style={{
+                                                        display: 'block',
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        position: 'absolute',
+                                                        objectFit: 'cover',
+                                                        top: 0,
+                                                        left: 0,
+                                                        right: 0,
+                                                        bottom: 0,
+                                                    }}
+                                                />
                                             </div>
                                             <div className="button">
                                                 <button type="button" className="btn btn-addtocart">
@@ -146,17 +173,14 @@ export const SearchProduct = () => {
                                             </div>
                                             <div className="caption">
                                                 {product['status_id'] != 0 ? <Type id={product['status_id']} /> : null}
-                                                <h3
-                                                    className="divider"
-                                                    style={{
-                                                        display: ` block`,
-                                                    }}
-                                                />
+
                                                 <h3 className="name">
                                                     <Link to={`/product-detail/${product.id}`}>{product.pro_name}</Link>
                                                 </h3>
                                                 <Color proId={product.color_id}></Color>
-                                                <Price proId={product.id}></Price>
+                                                <h3 style={{ textTransform: 'capitalize' }} className="price">
+                                                    {product.priceModel.price.toLocaleString(undefined)} VNĐ
+                                                </h3>
                                             </div>
                                         </div>
                                     </div>

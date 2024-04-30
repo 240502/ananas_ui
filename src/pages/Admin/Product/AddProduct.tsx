@@ -489,437 +489,426 @@ export const AddProduct = () => {
     };
 
     return (
-        <div className="main-content">
-            <div id="form">
-                <div className="card form-add">
-                    <div className="card-header">
-                        <h1>{id === undefined ? 'Thêm sản phẩm' : `Sửa sản phẩm có mã ${id}`} </h1>
-                    </div>
-                    <div className="card-body">
-                        <form>
-                            <div className="row">
-                                <h3 className="title">Thông tin sản phẩm</h3>
-                                <div className="col-lg-6">
+        <div id="form">
+            <div className="card form-add">
+                <div className="card-header">
+                    <h1>{id === undefined ? 'Thêm sản phẩm' : `Sửa sản phẩm có mã ${id}`} </h1>
+                </div>
+                <div className="card-body">
+                    <form>
+                        <div className="row">
+                            <h3 className="title">Thông tin sản phẩm</h3>
+                            <div className="col-lg-6">
+                                {id !== undefined && (
+                                    <div className="form-group">
+                                        <input
+                                            id="product_id"
+                                            className="form-control"
+                                            value={inputProduct.proId}
+                                        ></input>
+                                        <div className="error_message" style={{ display: 'none' }}></div>
+                                    </div>
+                                )}
+                                <div className="form-group">
+                                    <label htmlFor="pro_name">Tên sản phẩm:</label>
+                                    <input
+                                        name="pro_name"
+                                        id="pro_name"
+                                        className="form-control"
+                                        onChange={(e) => setInputProduct({ ...inputProduct, proName: e.target.value })}
+                                        value={inputProduct.proName}
+                                    ></input>
+                                    <div className="error_message" style={{ display: 'none' }}></div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="status_id">Trạng thái sản phẩm:</label>
+                                    <select
+                                        name="status_id"
+                                        id="status_id"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setInputProduct({ ...inputProduct, statusId: Number(e.target.value) })
+                                        }
+                                        value={inputProduct.statusId}
+                                    >
+                                        <option value="0">Chọn trạng thái sản phẩm</option>
+
+                                        {status?.map((item: any) => {
+                                            if (item.id === inputProduct.statusId) {
+                                                return (
+                                                    <option value={item.id} key={item.id} selected>
+                                                        {item.status_name}
+                                                    </option>
+                                                );
+                                            } else
+                                                return (
+                                                    <option value={item.id} key={item.id}>
+                                                        {item.status_name}
+                                                    </option>
+                                                );
+                                        })}
+                                    </select>
+                                    <div className="error_message" style={{ display: 'none' }}></div>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="cate_id">Loại sản phẩm:</label>
+                                    <select
+                                        name="cate_id"
+                                        id="cate_id"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setInputProduct({ ...inputProduct, cateId: Number(e.target.value) })
+                                        }
+                                    >
+                                        <option value="0">Chọn loại sản phẩm</option>
+
+                                        {cates?.map((cate) => {
+                                            if (cate.id === inputProduct.cateId) {
+                                                return (
+                                                    <option value={cate.id} key={cate.id} selected>
+                                                        {cate.cate_name}
+                                                    </option>
+                                                );
+                                            } else
+                                                return (
+                                                    <option value={cate.id} key={cate.id}>
+                                                        {cate.cate_name}
+                                                    </option>
+                                                );
+                                        })}
+                                    </select>
+                                    <div className="error_message" style={{ display: 'none' }}></div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="style_id">Kiểu dáng sản phẩm:</label>
+                                    <select
+                                        name="style_id"
+                                        id="style_id"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setInputProduct({ ...inputProduct, styleId: Number(e.target.value) })
+                                        }
+                                        value={inputProduct.styleId}
+                                    >
+                                        <option value="0">Chọn kiểu dáng sản phẩm</option>
+
+                                        {styles?.map((style) => {
+                                            if (style.id === inputProduct.styleId) {
+                                                return (
+                                                    <option value={style.id} key={style.id} selected>
+                                                        {style.name_style}
+                                                    </option>
+                                                );
+                                            } else
+                                                return (
+                                                    <option value={style.id} key={style.id}>
+                                                        {style.name_style}
+                                                    </option>
+                                                );
+                                        })}
+                                    </select>
+                                    <div className="error_message" style={{ display: 'none' }}></div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="collection_id">Bộ sưu tập sản phẩm:</label>
+                                    <select
+                                        name="collection_id"
+                                        id="collection_id"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setInputProduct({
+                                                ...inputProduct,
+                                                collectionId: Number(e.target.value),
+                                            })
+                                        }
+                                        value={inputProduct.collectionId}
+                                    >
+                                        <option value="0">Chọn bộ sưu tập</option>
+                                        {collections?.map((collection) => {
+                                            if (collection.id === inputProduct.collectionId) {
+                                                return (
+                                                    <option value={collection.id} key={collection.id} selected>
+                                                        {collection.collection_name}
+                                                    </option>
+                                                );
+                                            } else
+                                                return (
+                                                    <option value={collection.id} key={collection.id}>
+                                                        {collection.collection_name}
+                                                    </option>
+                                                );
+                                        })}
+                                    </select>
+                                    <div className="error_message" style={{ display: 'none' }}></div>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="material_id">Chất liệu sản phẩm:</label>
+                                    <select
+                                        name="material_id"
+                                        id="material_id"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setInputProduct({ ...inputProduct, materialId: Number(e.target.value) })
+                                        }
+                                        value={inputProduct.materialId}
+                                    >
+                                        <option value="0">Chọn chất liệu sản phẩm</option>
+
+                                        {materials?.map((material) => {
+                                            if (material.id === inputProduct.materialId) {
+                                                return (
+                                                    <option value={material.id} key={material.id} selected>
+                                                        {material.material_name}
+                                                    </option>
+                                                );
+                                            } else
+                                                return (
+                                                    <option value={material.id} key={material.id}>
+                                                        {material.material_name}
+                                                    </option>
+                                                );
+                                        })}
+                                    </select>
+                                    <div className="error_message" style={{ display: 'none' }}></div>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="gender">Giới tính:</label>
+                                    <select
+                                        name="gender"
+                                        id="gender"
+                                        className="form-control"
+                                        onChange={(e) => setInputProduct({ ...inputProduct, gender: e.target.value })}
+                                        value={inputProduct.gender}
+                                    >
+                                        {genders.map((g: any) => {
+                                            if (g === inputProduct.gender) {
+                                                return (
+                                                    <option value={g} selected>
+                                                        {g}
+                                                    </option>
+                                                );
+                                            } else return <option value={g}>{g}</option>;
+                                        })}
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="outSole">Chất liệu đế:</label>
+                                    <input
+                                        name="out_sole"
+                                        id="outSole"
+                                        className="form-control"
+                                        onChange={(e) => setInputProduct({ ...inputProduct, outSole: e.target.value })}
+                                        value={inputProduct.outSole}
+                                    ></input>
+                                    <div className="error_message" style={{ display: 'none' }}></div>
+                                </div>
+                            </div>
+                            <div className="col-lg-6">
+                                <div className="row">
+                                    <div className="form-group">
+                                        <label htmlFor="color_id">Màu sản phẩm:</label>
+                                        <select
+                                            name="color_id"
+                                            id="color_id"
+                                            className="form-control"
+                                            onChange={(e) =>
+                                                setInputProduct({
+                                                    ...inputProduct,
+                                                    colorId: Number(e.target.value),
+                                                })
+                                            }
+                                            value={inputProduct.colorId}
+                                        >
+                                            <option value="0">Chọn màu sản phẩm</option>
+
+                                            {colors?.map((color) => {
+                                                if (color.id === inputProduct.colorId) {
+                                                    return (
+                                                        <option value={color.id} key={color.id} selected>
+                                                            {color.color_name}
+                                                        </option>
+                                                    );
+                                                } else
+                                                    return (
+                                                        <option value={color.id} key={color.id}>
+                                                            {color.color_name}
+                                                        </option>
+                                                    );
+                                            })}
+                                        </select>
+                                        <div className="error_message" style={{ display: 'none' }}></div>
+                                    </div>
                                     {id !== undefined && (
-                                        <div className="form-group">
+                                        <div
+                                            className="form-group"
+                                            style={{ display: `${id !== undefined ? 'block' : 'none'}` }}
+                                        >
+                                            <label htmlFor="create_at">Ngày tạo:</label>
                                             <input
-                                                id="product_id"
+                                                type="date"
+                                                name="create_at"
+                                                id="create_at"
                                                 className="form-control"
-                                                value={inputProduct.proId}
+                                                onChange={(e) => {
+                                                    console.log(e.target.value);
+                                                    setInputProduct({
+                                                        ...inputProduct,
+                                                        create_at: e.target.value,
+                                                    });
+                                                }}
+                                                value={inputProduct.create_at.slice(0, 10)}
                                             ></input>
                                             <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
                                     )}
                                     <div className="form-group">
-                                        <label htmlFor="pro_name">Tên sản phẩm:</label>
+                                        <label htmlFor="">Số lượng:</label>
                                         <input
-                                            name="pro_name"
-                                            id="pro_name"
-                                            className="form-control"
-                                            onChange={(e) =>
-                                                setInputProduct({ ...inputProduct, proName: e.target.value })
-                                            }
-                                            value={inputProduct.proName}
-                                        ></input>
-                                        <div className="error_message" style={{ display: 'none' }}></div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="status_id">Trạng thái sản phẩm:</label>
-                                        <select
-                                            name="status_id"
-                                            id="status_id"
-                                            className="form-control"
-                                            onChange={(e) =>
-                                                setInputProduct({ ...inputProduct, statusId: Number(e.target.value) })
-                                            }
-                                            value={inputProduct.statusId}
-                                        >
-                                            <option value="0">Chọn trạng thái sản phẩm</option>
-
-                                            {status?.map((item: any) => {
-                                                if (item.id === inputProduct.statusId) {
-                                                    return (
-                                                        <option value={item.id} key={item.id} selected>
-                                                            {item.status_name}
-                                                        </option>
-                                                    );
-                                                } else
-                                                    return (
-                                                        <option value={item.id} key={item.id}>
-                                                            {item.status_name}
-                                                        </option>
-                                                    );
-                                            })}
-                                        </select>
-                                        <div className="error_message" style={{ display: 'none' }}></div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="cate_id">Loại sản phẩm:</label>
-                                        <select
-                                            name="cate_id"
-                                            id="cate_id"
-                                            className="form-control"
-                                            onChange={(e) =>
-                                                setInputProduct({ ...inputProduct, cateId: Number(e.target.value) })
-                                            }
-                                        >
-                                            <option value="0">Chọn loại sản phẩm</option>
-
-                                            {cates?.map((cate) => {
-                                                if (cate.id === inputProduct.cateId) {
-                                                    return (
-                                                        <option value={cate.id} key={cate.id} selected>
-                                                            {cate.cate_name}
-                                                        </option>
-                                                    );
-                                                } else
-                                                    return (
-                                                        <option value={cate.id} key={cate.id}>
-                                                            {cate.cate_name}
-                                                        </option>
-                                                    );
-                                            })}
-                                        </select>
-                                        <div className="error_message" style={{ display: 'none' }}></div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="style_id">Kiểu dáng sản phẩm:</label>
-                                        <select
-                                            name="style_id"
-                                            id="style_id"
-                                            className="form-control"
-                                            onChange={(e) =>
-                                                setInputProduct({ ...inputProduct, styleId: Number(e.target.value) })
-                                            }
-                                            value={inputProduct.styleId}
-                                        >
-                                            <option value="0">Chọn kiểu dáng sản phẩm</option>
-
-                                            {styles?.map((style) => {
-                                                if (style.id === inputProduct.styleId) {
-                                                    return (
-                                                        <option value={style.id} key={style.id} selected>
-                                                            {style.name_style}
-                                                        </option>
-                                                    );
-                                                } else
-                                                    return (
-                                                        <option value={style.id} key={style.id}>
-                                                            {style.name_style}
-                                                        </option>
-                                                    );
-                                            })}
-                                        </select>
-                                        <div className="error_message" style={{ display: 'none' }}></div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="collection_id">Bộ sưu tập sản phẩm:</label>
-                                        <select
-                                            name="collection_id"
-                                            id="collection_id"
-                                            className="form-control"
+                                            type="text"
+                                            id="quantity"
+                                            className="form-control quantity"
                                             onChange={(e) =>
                                                 setInputProduct({
                                                     ...inputProduct,
-                                                    collectionId: Number(e.target.value),
+                                                    quantity: Number(e.target.value),
                                                 })
                                             }
-                                            value={inputProduct.collectionId}
-                                        >
-                                            <option value="0">Chọn bộ sưu tập</option>
-                                            {collections?.map((collection) => {
-                                                if (collection.id === inputProduct.collectionId) {
-                                                    return (
-                                                        <option value={collection.id} key={collection.id} selected>
-                                                            {collection.collection_name}
-                                                        </option>
-                                                    );
-                                                } else
-                                                    return (
-                                                        <option value={collection.id} key={collection.id}>
-                                                            {collection.collection_name}
-                                                        </option>
-                                                    );
-                                            })}
-                                        </select>
-                                        <div className="error_message" style={{ display: 'none' }}></div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="material_id">Chất liệu sản phẩm:</label>
-                                        <select
-                                            name="material_id"
-                                            id="material_id"
-                                            className="form-control"
-                                            onChange={(e) =>
-                                                setInputProduct({ ...inputProduct, materialId: Number(e.target.value) })
-                                            }
-                                            value={inputProduct.materialId}
-                                        >
-                                            <option value="0">Chọn chất liệu sản phẩm</option>
+                                            value={inputProduct.quantity != 0 ? inputProduct.quantity : ''}
+                                        />
 
-                                            {materials?.map((material) => {
-                                                if (material.id === inputProduct.materialId) {
-                                                    return (
-                                                        <option value={material.id} key={material.id} selected>
-                                                            {material.material_name}
-                                                        </option>
-                                                    );
-                                                } else
-                                                    return (
-                                                        <option value={material.id} key={material.id}>
-                                                            {material.material_name}
-                                                        </option>
-                                                    );
-                                            })}
-                                        </select>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="gender">Giới tính:</label>
-                                        <select
-                                            name="gender"
-                                            id="gender"
-                                            className="form-control"
-                                            onChange={(e) =>
-                                                setInputProduct({ ...inputProduct, gender: e.target.value })
-                                            }
-                                            value={inputProduct.gender}
-                                        >
-                                            {genders.map((g: any) => {
-                                                if (g === inputProduct.gender) {
-                                                    return (
-                                                        <option value={g} selected>
-                                                            {g}
-                                                        </option>
-                                                    );
-                                                } else return <option value={g}>{g}</option>;
-                                            })}
-                                        </select>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="outSole">Chất liệu đế:</label>
+                                        <label htmlFor="">Size nhỏ nhất:</label>
                                         <input
-                                            name="out_sole"
-                                            id="outSole"
-                                            className="form-control"
+                                            type="text"
+                                            id="startSize"
+                                            className="form-control size"
                                             onChange={(e) =>
-                                                setInputProduct({ ...inputProduct, outSole: e.target.value })
+                                                setInputProduct({
+                                                    ...inputProduct,
+                                                    startSize: Number(e.target.value),
+                                                })
                                             }
-                                            value={inputProduct.outSole}
-                                        ></input>
+                                            value={inputProduct.startSize != 0 ? inputProduct.startSize : ''}
+                                        />
+                                        <div className="error_message" style={{ display: 'none' }}></div>
+                                    </div>{' '}
+                                    <div className="form-group">
+                                        <label htmlFor="">Size lớn nhất:</label>
+                                        <input
+                                            type="text"
+                                            id="endSize"
+                                            className="form-control size"
+                                            onChange={(e) =>
+                                                setInputProduct({
+                                                    ...inputProduct,
+                                                    endSize: Number(e.target.value),
+                                                })
+                                            }
+                                            value={inputProduct.endSize != 0 ? inputProduct.endSize : ''}
+                                        />
+                                        <div className="error_message" style={{ display: 'none' }}></div>
+                                    </div>{' '}
+                                    <div className="form-group">
+                                        <label htmlFor="price">Giá sản phẩm:</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="price"
+                                            onChange={(e) =>
+                                                setInputProduct({ ...inputProduct, price: Number(e.target.value) })
+                                            }
+                                            value={inputProduct.price != 0 ? inputProduct.price : ''}
+                                        />
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <div className="row">
-                                        <div className="form-group">
-                                            <label htmlFor="color_id">Màu sản phẩm:</label>
-                                            <select
-                                                name="color_id"
-                                                id="color_id"
-                                                className="form-control"
-                                                onChange={(e) =>
-                                                    setInputProduct({
-                                                        ...inputProduct,
-                                                        colorId: Number(e.target.value),
-                                                    })
-                                                }
-                                                value={inputProduct.colorId}
-                                            >
-                                                <option value="0">Chọn màu sản phẩm</option>
-
-                                                {colors?.map((color) => {
-                                                    if (color.id === inputProduct.colorId) {
-                                                        return (
-                                                            <option value={color.id} key={color.id} selected>
-                                                                {color.color_name}
-                                                            </option>
-                                                        );
-                                                    } else
-                                                        return (
-                                                            <option value={color.id} key={color.id}>
-                                                                {color.color_name}
-                                                            </option>
-                                                        );
-                                                })}
-                                            </select>
-                                            <div className="error_message" style={{ display: 'none' }}></div>
-                                        </div>
-                                        {id !== undefined && (
-                                            <div
-                                                className="form-group"
-                                                style={{ display: `${id !== undefined ? 'block' : 'none'}` }}
-                                            >
-                                                <label htmlFor="create_at">Ngày tạo:</label>
-                                                <input
-                                                    type="date"
-                                                    name="create_at"
-                                                    id="create_at"
-                                                    className="form-control"
-                                                    onChange={(e) => {
-                                                        console.log(e.target.value);
-                                                        setInputProduct({
-                                                            ...inputProduct,
-                                                            create_at: e.target.value,
-                                                        });
-                                                    }}
-                                                    value={inputProduct.create_at.slice(0, 10)}
-                                                ></input>
-                                                <div className="error_message" style={{ display: 'none' }}></div>
-                                            </div>
-                                        )}
-                                        <div className="form-group">
-                                            <label htmlFor="">Số lượng:</label>
-                                            <input
-                                                type="text"
-                                                id="quantity"
-                                                className="form-control quantity"
-                                                onChange={(e) =>
-                                                    setInputProduct({
-                                                        ...inputProduct,
-                                                        quantity: Number(e.target.value),
-                                                    })
-                                                }
-                                                value={inputProduct.quantity != 0 ? inputProduct.quantity : ''}
-                                            />
-
-                                            <div className="error_message" style={{ display: 'none' }}></div>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="">Size nhỏ nhất:</label>
-                                            <input
-                                                type="text"
-                                                id="startSize"
-                                                className="form-control size"
-                                                onChange={(e) =>
-                                                    setInputProduct({
-                                                        ...inputProduct,
-                                                        startSize: Number(e.target.value),
-                                                    })
-                                                }
-                                                value={inputProduct.startSize != 0 ? inputProduct.startSize : ''}
-                                            />
-                                            <div className="error_message" style={{ display: 'none' }}></div>
-                                        </div>{' '}
-                                        <div className="form-group">
-                                            <label htmlFor="">Size lớn nhất:</label>
-                                            <input
-                                                type="text"
-                                                id="endSize"
-                                                className="form-control size"
-                                                onChange={(e) =>
-                                                    setInputProduct({
-                                                        ...inputProduct,
-                                                        endSize: Number(e.target.value),
-                                                    })
-                                                }
-                                                value={inputProduct.endSize != 0 ? inputProduct.endSize : ''}
-                                            />
-                                            <div className="error_message" style={{ display: 'none' }}></div>
-                                        </div>{' '}
-                                        <div className="form-group">
-                                            <label htmlFor="price">Giá sản phẩm:</label>
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                id="price"
-                                                onChange={(e) =>
-                                                    setInputProduct({ ...inputProduct, price: Number(e.target.value) })
-                                                }
-                                                value={inputProduct.price != 0 ? inputProduct.price : ''}
-                                            />
-                                            <div className="error_message" style={{ display: 'none' }}></div>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="startDate">Ngày bắt đầu áp dụng</label>
-                                            <input
-                                                type="date"
-                                                className="form-control"
-                                                id="startDate"
-                                                onChange={(e) =>
-                                                    setInputProduct({ ...inputProduct, startDate: e.target.value })
-                                                }
-                                                value={inputProduct.startDate.slice(0, 10)}
-                                            />
-                                            <div className="error_message" style={{ display: 'none' }}></div>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="endDate">Ngày kết thúc áp dụng</label>
-                                            <input
-                                                type="date"
-                                                className="form-control"
-                                                id="endDate"
-                                                onChange={(e) =>
-                                                    setInputProduct({ ...inputProduct, endDate: e.target.value })
-                                                }
-                                                value={inputProduct.endDate.slice(0, 10)}
-                                            />
-                                            <div className="error_message" style={{ display: 'none' }}></div>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="image">Hình ảnh</label>
-                                            <input
-                                                type="file"
-                                                className="form-control"
-                                                id="image"
-                                                onChange={(e) =>
-                                                    setInputProduct({
-                                                        ...inputProduct,
-                                                        file: e.target.files?.[0],
-                                                    })
-                                                }
-                                            />
-                                            <img
-                                                style={{
-                                                    display: `${id === undefined ? `none` : `block`}`,
-                                                    width: '30%',
-                                                    padding: '10px 0',
-                                                }}
-                                                src={
-                                                    id !== undefined
-                                                        ? typeof inputProduct.file == 'string'
-                                                            ? inputProduct.file.includes('uploads')
-                                                                ? hostServerAdmin + inputProduct.file
-                                                                : 'http://localhost:3000/' + inputProduct.file
-                                                            : ''
-                                                        : ''
-                                                }
-                                                alt=""
-                                            />
-                                            <div className="error_message" style={{ display: 'none' }}></div>
-                                        </div>
+                                    <div className="form-group">
+                                        <label htmlFor="startDate">Ngày bắt đầu áp dụng</label>
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            id="startDate"
+                                            onChange={(e) =>
+                                                setInputProduct({ ...inputProduct, startDate: e.target.value })
+                                            }
+                                            value={inputProduct.startDate.slice(0, 10)}
+                                        />
+                                        <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
-                                </div>
-
-                                <div
-                                    className="form-group"
-                                    style={{ display: 'flex', justifyContent: 'space-between' }}
-                                >
-                                    <button
-                                        type="button"
-                                        style={{ width: '20%', padding: '10px 0px' }}
-                                        name="cmd"
-                                        className="btn btn-primary btn-add"
-                                        onClick={() => handleCreateProduct()}
-                                    >
-                                        {id !== undefined ? 'Lưu Lại' : 'Thêm mới'}
-                                        <i className="fa-solid fa-plus" style={{ marginLeft: '10px' }}></i>
-                                    </button>
-                                    <Link
-                                        to={'/admin/product'}
-                                        className="btn btn-secondary btn-return"
-                                        style={{ width: '20%', padding: '10px 0px' }}
-                                    >
-                                        Quay lại
-                                        <i className="fa-solid fa-arrow-left-long" style={{ marginLeft: '10px' }}></i>
-                                    </Link>
+                                    <div className="form-group">
+                                        <label htmlFor="endDate">Ngày kết thúc áp dụng</label>
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            id="endDate"
+                                            onChange={(e) =>
+                                                setInputProduct({ ...inputProduct, endDate: e.target.value })
+                                            }
+                                            value={inputProduct.endDate.slice(0, 10)}
+                                        />
+                                        <div className="error_message" style={{ display: 'none' }}></div>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="image">Hình ảnh</label>
+                                        <input
+                                            type="file"
+                                            className="form-control"
+                                            id="image"
+                                            onChange={(e) =>
+                                                setInputProduct({
+                                                    ...inputProduct,
+                                                    file: e.target.files?.[0],
+                                                })
+                                            }
+                                        />
+                                        <img
+                                            style={{
+                                                display: `${id === undefined ? `none` : `block`}`,
+                                                width: '30%',
+                                                padding: '10px 0',
+                                            }}
+                                            src={
+                                                id !== undefined
+                                                    ? typeof inputProduct.file == 'string'
+                                                        ? inputProduct.file.includes('uploads')
+                                                            ? hostServerAdmin + inputProduct.file
+                                                            : 'http://localhost:3000/' + inputProduct.file
+                                                        : ''
+                                                    : ''
+                                            }
+                                            alt=""
+                                        />
+                                        <div className="error_message" style={{ display: 'none' }}></div>
+                                    </div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+
+                            <div className="form-group" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <button
+                                    type="button"
+                                    style={{ width: '20%', padding: '10px 0px' }}
+                                    name="cmd"
+                                    className="btn btn-primary btn-add"
+                                    onClick={() => handleCreateProduct()}
+                                >
+                                    {id !== undefined ? 'Lưu Lại' : 'Thêm mới'}
+                                    <i className="fa-solid fa-plus" style={{ marginLeft: '10px' }}></i>
+                                </button>
+                                <Link
+                                    to={'/admin/product'}
+                                    className="btn btn-secondary btn-return"
+                                    style={{ width: '20%', padding: '10px 0px' }}
+                                >
+                                    Quay lại
+                                    <i className="fa-solid fa-arrow-left-long" style={{ marginLeft: '10px' }}></i>
+                                </Link>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

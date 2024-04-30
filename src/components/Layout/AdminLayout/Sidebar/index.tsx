@@ -24,24 +24,24 @@ export const Sidebar = () => {
             <ul>
                 <li className="">
                     <Link to="/admin/category">
-                        <i className="fa-solid fa-users" />
+                        <i className="fa-solid fa-list"></i>
                         <span className="nav-item"> Loại sản phẩm</span>
                     </Link>
                     <span className="tooltip">Loại sản phẩm</span>
                 </li>
                 <li className="">
                     <Link to="/admin/product">
-                        <i className="fa-solid fa-building-columns" />
+                        <i className="fa-solid fa-shoe-prints"></i>
                         <span className="nav-item">Sản phẩm</span>
                     </Link>
                     <span className="tooltip">Sản phẩm</span>
                 </li>
                 <li className="giangvien">
-                    <a href="#">
-                        <i className="fa-regular fa-newspaper" />
-                        <span className="nav-item"> Đề thi</span>
-                    </a>
-                    <span className="tooltip">Đề thi</span>
+                    <Link to="/admin/user">
+                        <i className="fa-regular fa-user"></i>
+                        <span className="nav-item"> Người dùng</span>
+                    </Link>
+                    <span className="tooltip">Người dùng</span>
                 </li>
                 <li className="giangvien">
                     <a href="#">

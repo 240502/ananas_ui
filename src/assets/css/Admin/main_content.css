@@ -14,10 +14,13 @@
 }
 .rdt_Table {
 }
-.rdt_TableRow {
+.rdt_TableRow div:nth-child(2) {
+    width: 10%;
+    flex-grow: 0;
 }
 .rdt_TableCol {
 }
+
 .rdt_TableCol_Sortable {
     font-size: 16px;
     font-weight: 700;
@@ -29,13 +32,13 @@
 }
 .rdt_TableCell {
 }
-.rdt_TableHeader {
-}
-.rdt_TableFooter {
+.rdt_TableHeader .rdt_TableFooter {
 }
 .rdt_TableHead {
 }
-.rdt_TableHeadRow div {
+.rdt_TableHeadRow div:nth-child(2) {
+    width: 10%;
+    flex-grow: 0;
 }
 .rdt_TableBody {
 }

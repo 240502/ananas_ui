@@ -1,18 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { UsersType } from '../../../types';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { Link } from 'react-router-dom';
-import { Delete, getList } from '../../../services/category.services';
-import '../../../assets/css/Admin/toast.css';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import ReactPaginate from 'react-paginate';
-import { ProductCategoryType } from '../../../types';
+import { Delete, getListUsers, getUserById } from '../../../services/user.services';
+import axios from 'axios';
+type ProvinceType = {
+    id: number;
+    name: string;
+};
 
-export const Category = () => {
+export const Users = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [pageCount, setPageCount] = useState(0);
-    const [cates, setCates] = useState<ProductCategoryType[]>([]);
+
+    const [users, setUsers] = useState<UsersType[]>([
+        {
+            id: 0,
+            passowrd: '',
+            role: 1,
+            active: true,
+            us_name: '',
+            email: '',
+            phone_number: '',
+            birhtday: '',
+            created_at: '',
+            updated_at: '',
+            province: '',
+            district: '',
+            ward: '',
+            token: '',
+        },
+    ]);
+
     const handlePageClick = (event: any) => {
         setPage(event.selected + 1);
     };
@@ -22,26 +44,23 @@ export const Category = () => {
     useEffect(() => {
         async function loadData() {
             try {
-                let items = await getList({
-                    pageIndex: page,
-                    pageSize: pageSize,
-                });
-                setCates(items.data);
-                setPageCount(Math.ceil(items.totalItems / pageSize));
-                console.log(pageCount);
-            } catch (err) {
-                console.log(err);
+                const res = await getListUsers({ pageIndex: page, pageSize: pageSize });
+                setUsers(res.data);
+                setPageCount(Math.ceil(res.totalItems / pageSize));
+            } catch (e) {
+                console.error(e);
                 setPageCount(0);
-                setCates([]);
+                setUsers([]);
             }
         }
+
         loadData();
-    }, [page, pageSize]);
+    }, [pageSize, page]);
     const handleDelete = async (id: number) => {
         try {
             const res = await Delete(id);
-            const newList = cates.filter((cate) => cate.id !== id);
-            setCates(newList);
+            const newList = users.filter((user) => user.id !== id);
+            setUsers(newList);
             toast.success('Xóa thành công', {
                 position: 'top-right',
                 autoClose: 3000,
@@ -66,20 +85,27 @@ export const Category = () => {
             console.log(err);
         }
     };
-    const columns: TableColumn<ProductCategoryType>[] = [
+
+    const columns: TableColumn<UsersType>[] = [
         {
             name: 'ID',
             selector: (row): any => row.id,
             sortable: true,
         },
         {
-            name: 'Tên Loại Sản Phẩm',
-            selector: (row): any => row.cate_name,
+            name: 'Họ và tên',
+            selector: (row): any => row.us_name,
+            sortable: true,
+        },
+
+        {
+            name: 'Số điện thoại',
+            selector: (row): any => row.phone_number,
             sortable: true,
         },
         {
-            name: 'Ngày Tạo',
-            selector: (row): any => row.created_at,
+            name: 'Địa chỉ',
+            selector: (row): any => row.ward + '-' + row.district + '-' + row.province,
             sortable: true,
         },
         {
@@ -88,7 +114,7 @@ export const Category = () => {
                 return (
                     <>
                         <Link
-                            to={`/admin/category/${row.id}`}
+                            to={`/admin/user/update/${row.id}`}
                             className="btn btn-success"
                             style={{ marginRight: '10px' }}
                         >
@@ -106,17 +132,17 @@ export const Category = () => {
     return (
         <>
             <div className="text-start container">
-                <Link className="btn btn-primary" style={{ width: '200px' }} to={'/admin/category/create'}>
-                    Thêm loại sản phẩm +
+                <Link className="btn btn-primary" style={{ width: '200px' }} to={'/admin/user/create'}>
+                    Thêm người dùng +
                 </Link>
             </div>
             <div className="card">
                 <div className="card-header">
-                    <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách loại sản phẩm</h3>
+                    <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách người dùng</h3>
                 </div>
 
                 <div className="card-body">
-                    <DataTable columns={columns} data={cates} selectableRows fixedHeader />
+                    <DataTable columns={columns} data={users} selectableRows fixedHeader />
                     <section className="page" style={{ display: `${pageCount > 1 ? 'flex' : 'none'}` }}>
                         <select
                             name="pageSize"

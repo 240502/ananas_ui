@@ -6,19 +6,19 @@ import '../../../assets/css/Shop/product_detail.css';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getProductById, getRelatedProduct } from '../../../services/product.servies';
-import { getProDetailByProIdAndSize,getListSizeByProId } from '../../../services/product_detail.services';
+import { getProDetailByProIdAndSize, getListSizeByProId } from '../../../services/product_detail.services';
 import { getStyleById } from '../../../services/style.services';
 import { getColor } from '../../../services/color.services';
 import { getProductStatus } from '../../../services/product_status.services';
 import { getProductPrice } from '../../../services/price.services';
 
-
-import ProductImage from './ProductImage';
 import { BreadCrumb } from './BreadCrumb';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { CartItemType, cartState, infoValue } from '../../../store/cart.atom';
 
 import { addToCart } from '../../../utils/cart';
+import { ProductType } from '../../../types';
+import { hostServerAdmin } from '../../../constant/api';
 type DataParams = {
     id: string;
 };
@@ -34,11 +34,36 @@ function ProductDetail() {
     const [img, setImage] = useState({ id: 0, img_src: '' });
     const [quantity, setNumberPro] = useState(0);
     const [cart, setCarts] = useRecoilState(cartState);
-    const [relatedProducts, setRelatedProducts] = useState([]);
+    const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([
+        {
+            id: 0,
+            pro_name: '',
+            color_id: 0,
+            style_id: 0,
+            cate_id: 0,
+            status_id: 0,
+            out_sole: '',
+            gender: '',
+            material_id: 0,
+            collection_id: 0,
+            created_at: '',
+            imageGallery: { id: 0, img_src: '', product_id: 0, feature: false },
+            priceModel: {
+                id: 0,
+                price: 0,
+                product_id: 0,
+                start_date: '',
+                end_date: '',
+                created_at: '',
+                updated_at: '',
+            },
+            productDetails: [{ id: 0, quantity: 0, product_id: 0, size: 0 }],
+        },
+    ]);
     const info = useRecoilValue(infoValue);
 
     let cartItem: CartItemType;
-    const [product, setProduct] = useState({
+    const [product, setProduct] = useState<ProductType>({
         id: 0,
         pro_name: '',
         color_id: 0,
@@ -49,7 +74,20 @@ function ProductDetail() {
         gender: '',
         material_id: 0,
         collection_id: 0,
+        created_at: '',
+        imageGallery: { id: 0, img_src: '', product_id: 0, feature: false },
+        priceModel: {
+            id: 0,
+            price: 0,
+            product_id: 0,
+            start_date: '',
+            end_date: '',
+            created_at: '',
+            updated_at: '',
+        },
+        productDetails: [{ id: 0, quantity: 0, product_id: 0, size: 0 }],
     });
+
     const handleChangeSize = (event: any) => {
         setSize(event.target.value);
     };
@@ -82,22 +120,10 @@ function ProductDetail() {
         async function getProduct(id: any) {
             const product = await getProductById(id);
             setProduct(product);
+            console.log(product);
         }
-        async function getProductDetail(proId: any) {
-            let price = await getProductPrice(proId);
-            setPrice(price);
-        }
-        async function getSize(proId: any) {
-            const res = await getListSizeByProId(proId);
-            try {
-                setProDetail(res);
-            } catch (err) {
-                console.log(err);
-            }
-        }
+
         getProduct(id);
-        getProductDetail(id);
-        getSize(id);
     }, [id]);
     useEffect(() => {
         async function getRelated(cateId: any, styleId: any, collectionId: any, gender: any) {
@@ -159,7 +185,18 @@ function ProductDetail() {
                         <BreadCrumb proName={product.pro_name} cateId={product.cate_id} style={style.name_style} />
                     </div>
                     <div className="col-xs-12 col-sm-12 col-md-7 col-lg-7">
-                        <ProductImage proId={id} setImage={setImage} image={img} />
+                        <div className="wrapper-slide">
+                            <div className="prd-detail-main-img">
+                                <img
+                                    className="main-img"
+                                    src={
+                                        product.imageGallery.img_src.includes('uploads')
+                                            ? hostServerAdmin + product.imageGallery.img_src
+                                            : 'http://localhost:3000/' + product.imageGallery.img_src
+                                    }
+                                />
+                            </div>
+                        </div>
                     </div>
                     <div className="col-xs-12 col-sm-12 col-md-5 col-lg-5 prd-detail-right">
                         <h4 className="pro-name">
@@ -177,7 +214,7 @@ function ProductDetail() {
                             </span>
                         </div>
                         <div className="detail">
-                            <h3 className="price">{price.price.toLocaleString(undefined)} VNĐ</h3>
+                            <h3 className="price">{product.priceModel.price.toLocaleString(undefined)} VNĐ</h3>
                         </div>
                         <div className="divider" />
                         <div className="color">
@@ -202,8 +239,17 @@ function ProductDetail() {
                                     onChange={handleChangeSize}
                                 >
                                     <option value={0}>Chọn size</option>
-                                    {details.map((detail) => {
-                                        return <option value={detail['size']}>{detail['size']}</option>;
+                                    {product.productDetails.map((detail) => {
+                                        return (
+                                            <option
+                                                value={detail.id}
+                                                onChange={() => {
+                                                    console.log(detail.id);
+                                                }}
+                                            >
+                                                {detail.size}
+                                            </option>
+                                        );
                                     })}
                                 </select>
                             </div>
@@ -229,12 +275,12 @@ function ProductDetail() {
                                         name: product.pro_name,
                                         styleName: style.name_style,
                                         colorName: color.color_name,
-                                        price: price.price,
+                                        price: product.priceModel.price,
                                         qty: Number(quantity),
                                         size: Number(size),
-                                        thumbnail: img.img_src,
-                                        colorId: color.id,
-                                        styleId: style.id,
+                                        thumbnail: product.imageGallery.img_src,
+                                        colorId: product.color_id,
+                                        styleId: product.style_id,
                                     };
                                     addToCart(cartItem, info.carts, setCarts);
                                 }}

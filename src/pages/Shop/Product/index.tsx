@@ -1,24 +1,49 @@
 import { unstable_batchedUpdates } from 'react-dom';
 import '../../../assets/css/Shop/product.css';
 import { toggleNav, activeItemTree } from '../../../utils/product';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getList } from '../../../services/product.servies';
-import ProductImage from './ProductImage';
-import Price from './Price';
 import ProductColor from './ProductColor';
 import { useRecoilState } from 'recoil';
 import { indexGender } from '../../../store/product.atom';
 import ProductStatus from './ProductStatus';
 import ReactPaginate from 'react-paginate';
-import { ProductCategory } from './ProductCategory';
-import { ProductPrice } from './ProductPrice';
+import { SideBarCategory } from './SideBarCategory';
+import { SideBarPrice } from './SideBarPrice';
+import { ProductType } from '../../../types';
+import { hostServerAdmin } from '../../../constant/api';
 
 type DataParams = {
     gender: string;
 };
 function Product() {
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState<ProductType[]>([
+        {
+            id: 0,
+            pro_name: '',
+            color_id: 0,
+            style_id: 0,
+            cate_id: 0,
+            status_id: 0,
+            out_sole: '',
+            gender: '',
+            material_id: 0,
+            collection_id: 0,
+            created_at: '',
+            imageGallery: { id: 0, img_src: '', product_id: 0, feature: false },
+            priceModel: {
+                id: 0,
+                price: 0,
+                product_id: 0,
+                start_date: '',
+                end_date: '',
+                created_at: '',
+                updated_at: '',
+            },
+            productDetails: [{ id: 0, quantity: 0, product_id: 0, size: 0 }],
+        },
+    ]);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
@@ -40,6 +65,7 @@ function Product() {
                 });
                 setProducts(items.data);
                 setPageCount(Math.ceil(items.totalItems / pageSize));
+                console.log(products);
             } catch (err) {
                 console.log(err);
                 setPageCount(0);
@@ -103,9 +129,9 @@ function Product() {
 
                         <div className="left-tree">
                             <ul className="nav" style={{ display: 'block' }}>
-                                <ProductCategory setCateId={setCateId} />
+                                <SideBarCategory setCateId={setCateId} />
                                 <li className="nav-divider" />
-                                <ProductPrice setStartPrice={setStartPrice} setEndPrice={setEndPrice} />
+                                <SideBarPrice setStartPrice={setStartPrice} setEndPrice={setEndPrice} />
                             </ul>
                         </div>
                     </div>
@@ -120,21 +146,28 @@ function Product() {
                                         <div className="col-xs-6 col-sm-6 col-md-4 col-lg-4 item" key={product['id']}>
                                             <div className="thumbnail">
                                                 <div className="cont-item">
-                                                    <Link to={'/product-detail/' + product['id']}>
-                                                        <ProductImage proId={product['id']} gender={gender} />
+                                                    <Link to={'/product-detail/' + product.id}>
+                                                        <img
+                                                            src={
+                                                                product.imageGallery.img_src.includes('uploads')
+                                                                    ? hostServerAdmin + product.imageGallery.img_src
+                                                                    : 'http://localhost:3000/' +
+                                                                      product.imageGallery.img_src
+                                                            }
+                                                        />
                                                     </Link>
                                                 </div>
                                                 <div className="button">
                                                     <button type="button" className="btn btn-addtocart">
-                                                        <Link to={'/product-detail/' + product['id']}>Mua ngay</Link>
+                                                        <Link to={'/product-detail/' + product.id}>Mua ngay</Link>
                                                     </button>
                                                     <button type="button" className="btn btn-like">
                                                         <i className="fa-regular fa-heart" />
                                                     </button>
                                                 </div>
                                                 <div className="caption">
-                                                    {product['status_id'] != 0 ? (
-                                                        <ProductStatus id={product['status_id']} />
+                                                    {product.status_id != 0 ? (
+                                                        <ProductStatus id={product.status_id} />
                                                     ) : null}
                                                     <h3
                                                         className="divider"
@@ -143,12 +176,14 @@ function Product() {
                                                         }}
                                                     />
                                                     <h3 className="name">
-                                                        <Link to={'/product-detail/' + product['id']}>
-                                                            {product['pro_name']}
+                                                        <Link to={'/product-detail/' + product.id}>
+                                                            {product.pro_name}
                                                         </Link>
                                                     </h3>
                                                     <ProductColor id={product['color_id']} />
-                                                    <Price proId={product['id']} />
+                                                    <h3 style={{ textTransform: 'capitalize' }} className="price">
+                                                        {product.priceModel.price.toLocaleString(undefined)} VNĐ
+                                                    </h3>
                                                 </div>
                                             </div>
                                         </div>

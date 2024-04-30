@@ -3,9 +3,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import NextArrow from './NextArrow';
 import PrevArrow from './PrevArrow';
-import RelatedProductImage from '../../../pages/Shop/ProductDetail/RelatedProductImage';
 import ProductColor from '../../../pages/Shop/ProductDetail/ProductColor';
-import ProductPrice from '../../../pages/Shop/Product/Price';
+import { hostServerAdmin } from '../../../constant/api';
 
 export default function SlickSlideProductRef({ data }: any) {
     var settings = {
@@ -21,6 +20,9 @@ export default function SlickSlideProductRef({ data }: any) {
         nextArrow: <NextArrow />,
         prevArrow: <PrevArrow />,
     };
+    data.map((item: any) => {
+        console.log(item.color_id);
+    });
     return (
         <Slider {...settings}>
             {data.map((item: any) => {
@@ -28,15 +30,24 @@ export default function SlickSlideProductRef({ data }: any) {
                     <div className="thumbnail">
                         <div className="cont-item">
                             <a href="#">
-                                <RelatedProductImage proId={item['id']} />
+                                <img
+                                    className="main-img"
+                                    src={
+                                        item.imageGallery.img_src.includes('uploads')
+                                            ? hostServerAdmin + item.imageGallery.img_src
+                                            : 'http://localhost:3000/' + item.imageGallery.img_src
+                                    }
+                                />
                             </a>
                         </div>
                         <div className="caption">
                             <h3 className="name" style={{ textTransform: 'capitalize' }}>
                                 {item['pro_name']}
                             </h3>
-                            <ProductColor id={item['color_id']} />
-                            <ProductPrice proId={item['id']} />
+                            <ProductColor id={item.color_id} />
+                            <h3 style={{ textTransform: 'capitalize' }} className="price">
+                                {item.priceModel.price.toLocaleString(undefined)} VNĐ
+                            </h3>
                         </div>
                     </div>
                 );

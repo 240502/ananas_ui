@@ -16,6 +16,9 @@ const UPDATE_CATEGORY_PATH = 'admin/category/:id';
 const PRODUCT_ADMIN_PATH = 'admin/product';
 const CREATE_PRODUCT_PATH = 'admin/product/create';
 const UPDATE_PRODUCT_PATH = 'admin/product/update/:id';
+const USER_ADMIN_PATH = 'admin/user';
+const CREATE_USER_PATH = 'admin/user/create';
+const UPDATE_USER_PATH = 'admin/user/update/:id';
 export {
     HOME_PATH,
     PRODUCT_PATH,
@@ -35,4 +38,7 @@ export {
     PRODUCT_ADMIN_PATH,
     CREATE_PRODUCT_PATH,
     UPDATE_PRODUCT_PATH,
+    USER_ADMIN_PATH,
+    CREATE_USER_PATH,
+    UPDATE_USER_PATH,
 };

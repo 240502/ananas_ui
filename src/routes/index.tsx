@@ -22,6 +22,9 @@ import {
     PRODUCT_ADMIN_PATH,
     CREATE_PRODUCT_PATH,
     UPDATE_PRODUCT_PATH,
+    USER_ADMIN_PATH,
+    CREATE_USER_PATH,
+    UPDATE_USER_PATH,
 } from './paths';
 import Cart from '../pages/Shop/Cart';
 import ProductDetail from '../pages/Shop/ProductDetail';
@@ -37,6 +40,8 @@ import { AddCategory } from '../pages/Admin/Category/AddCategory';
 import { UpdateCategory } from '../pages/Admin/Category/UpdateCategory';
 import { ProductAdmin } from '../pages/Admin/Product';
 import { AddProduct } from '../pages/Admin/Product/AddProduct';
+import { Users } from '../pages/Admin/Users';
+import { AddUser } from '../pages/Admin/Users/AddUser';
 export const publicRoutes = [
     { path: HOME_PATH, component: Home, layout: undefined },
     { path: PRODUCT_PATH, component: Product, layout: undefined },
@@ -61,4 +66,7 @@ export const privateRoutes = [
     { path: PRODUCT_ADMIN_PATH, component: ProductAdmin, layout: AdminLayout },
     { path: CREATE_PRODUCT_PATH, component: AddProduct, layout: AdminLayout },
     { path: UPDATE_PRODUCT_PATH, component: AddProduct, layout: AdminLayout },
+    { path: USER_ADMIN_PATH, component: Users, layout: AdminLayout },
+    { path: CREATE_USER_PATH, component: AddUser, layout: AdminLayout },
+    { path: UPDATE_USER_PATH, component: AddUser, layout: AdminLayout },
 ];

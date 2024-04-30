@@ -1,7 +1,7 @@
 import React from 'react';
 import { toggleNav } from '../../../utils/product';
 import { useEffect, useState } from 'react';
-export const ProductPrice = ({ setStartPrice, setEndPrice }: any) => {
+export const SideBarPrice = ({ setStartPrice, setEndPrice }: any) => {
     const [indexPrice, setIndexPrice] = useState(0);
 
     return (

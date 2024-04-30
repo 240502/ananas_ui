@@ -36,3 +36,26 @@ export type ProductType = {
     priceModel: ProductPriceType;
     productDetails: ProductDetailType[];
 };
+export type ProductCategoryType = {
+    id: number;
+    cate_name: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export type UsersType = {
+    id: number;
+    passowrd: string;
+    role: number;
+    active: boolean;
+    us_name: string;
+    email: string;
+    phone_number: string;
+    birhtday: string;
+    created_at: string;
+    updated_at: string;
+    province: string;
+    district: string;
+    ward: string;
+    token: string;
+};

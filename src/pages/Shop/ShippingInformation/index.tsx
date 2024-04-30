@@ -81,17 +81,17 @@ export const ShippingInformation = () => {
             });
         });
         const data = {
-            user_id: userInfo.user.user_id,
+            user_id: userInfo.user.id,
             money_total: info.totalPrice + shippingTypePrice,
             receiving_address: `${village} - ${ward == '' ? userInfo.user.ward : ward} - ${
                 district == '' ? userInfo.user.district : district
             } - ${provinces == '' ? userInfo.user.province : provinces}`,
-            phone_number: phoneNumber == '' ? userInfo.user.phoneNumber : phoneNumber,
+            phone_number: phoneNumber == '' ? userInfo.user.phone_number : phoneNumber,
             shippingType_id: shippingTypeId,
             paymentType_id: paymentTypeId,
             status_id: 1,
             email: userInfo.user.email,
-            full_name: userInfo.user.name,
+            full_name: userInfo.user.us_name,
             orderDetails: listdetail,
         };
         createOrder(data);
@@ -127,7 +127,7 @@ export const ShippingInformation = () => {
                                         placeholder="HỌ TÊN"
                                         id="fullname"
                                         className="form-control"
-                                        value={userInfo.user && userInfo.user.name}
+                                        value={userInfo.user && userInfo.user.us_name}
                                         onChange={(e) => setName(e.target.value)}
                                     />
                                 </div>
@@ -137,7 +137,7 @@ export const ShippingInformation = () => {
                                         placeholder="Số điện thoại"
                                         id="phone_number"
                                         className="form-control"
-                                        value={userInfo.user && userInfo.user.phoneNumber}
+                                        value={userInfo.user && userInfo.user.phone_number}
                                         onChange={(e) => setPhoneNumber(e.target.value)}
                                     />
                                 </div>

@@ -10,5 +10,21 @@ export const Type = ({ id }: any) => {
         getProductStatusById(id);
     }, [id]);
 
-    return <h3 className="type"> {statusName}</h3>;
+    return (
+        <>
+            <h3 className="type"> {statusName}</h3>
+            <h3
+                className="divider"
+                style={{
+                    display: ` block`,
+                    height: ` 1px`,
+                    margin: ` 10px 0px`,
+                    fontFamily: `GeometricExtraBold`,
+                    fontWeight: `normal`,
+                    color: ` #000`,
+                    border: `#000 dashed 1px`,
+                }}
+            />
+        </>
+    );
 };
