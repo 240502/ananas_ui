@@ -1,3 +1,5 @@
+import { ProductType } from '../types';
+
 export function toggleNav(): void {
     const list_btn_down = document.querySelectorAll('.tree-title');
 
@@ -27,3 +29,24 @@ export function activeItemTree(setCateId: any, id: any): void {
         });
     });
 }
+
+export const addToListProductViewed = (
+    product: ProductType,
+    setProductViewed: any,
+    listProductViewed: ProductType[],
+) => {
+    let newList;
+    if (listProductViewed.length > 0) {
+        const currentProduct = listProductViewed.find((pro: ProductType) => pro.id === product.id);
+        if (currentProduct) {
+        } else {
+            newList = [...listProductViewed, product];
+            setProductViewed(newList);
+            localStorage.setItem('productViewed', JSON.stringify(newList));
+        }
+    } else {
+        newList = [product];
+        setProductViewed(newList);
+        localStorage.setItem('productViewed', JSON.stringify(newList));
+    }
+};

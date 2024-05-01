@@ -32,12 +32,15 @@ type DataParams = {
 };
 
 export const AddUser = () => {
-    let listInput: any;
     let inputEmail: any;
     let inputPhone: any;
     let inputPassword: any;
     let inputBirthday: any;
     let inputName: any;
+    let listInputText: any;
+    let listInputDate: any;
+    let listInputFile: any;
+
     const navigate = useNavigate();
     const { id } = useParams<DataParams>();
     const [provinces, setProvinces] = useState([{ id: 0, name: '' }]);
@@ -80,7 +83,9 @@ export const AddUser = () => {
         token: '',
     });
     useEffect(() => {
-        listInput = document.querySelectorAll(`${id === undefined ? '.form-add input' : '.form-add input[text]'}`);
+        listInputText = document.querySelectorAll('.form-control input[type="text"]');
+        listInputDate = document.querySelectorAll('.form-add input[type="date"]');
+        listInputFile = document.querySelectorAll('.form-add input[type="file"]');
         inputEmail = document.querySelector('#email');
         inputPhone = document.querySelector('#phonenumber');
         inputPassword = document.querySelector('#password');
@@ -99,7 +104,9 @@ export const AddUser = () => {
             }
         };
         getProvinces();
-        handleFocusInput(listInput);
+        handleFocusInput(listInputDate);
+        handleFocusInput(listInputText);
+        handleFocusInput(listInputFile);
     }, []);
     const getListDistrct = async (provinceId: any) => {
         try {
@@ -119,34 +126,6 @@ export const AddUser = () => {
             setWards(res.data.results);
         } catch (err) {
             console.log(err);
-        }
-    };
-    const handleCreateProduct = () => {
-        const isEmpty = checkEmptyError(listInput);
-        if (!isEmpty) {
-            const isEmailError = checkEmailError(inputEmail);
-            const isPhoneError = checkPhoneError(inputPhone);
-            const isBirthDayError = checkBirthDayError(inputBirthday);
-            const isPasswordError = checkPasswordError(inputPassword);
-            const isNameError = checkNameError(inputName);
-            if (!isEmailError && !isPhoneError && !isPasswordError && !isBirthDayError && !isNameError) {
-                const province = provinces.find((p) => p.id == Number(inputUser.province));
-                const district = districts.find((d) => d.id == Number(inputUser.district));
-                const ward = wards.find((d) => d.id == Number(inputUser.ward));
-                const data = {
-                    password: inputUser.password,
-                    us_name: inputUser.us_name,
-                    email: inputUser.email,
-                    phone_number: inputUser.phonenumber,
-                    birthday: inputUser.birthday,
-                    province: province?.name,
-                    district: district?.name,
-                    ward: ward?.name,
-                    token: '',
-                };
-                console.log(data);
-                Create(data);
-            }
         }
     };
     useEffect(() => {
@@ -197,6 +176,66 @@ export const AddUser = () => {
             }
         }
     }, [districts.length]);
+    const handleCreateProduct = () => {
+        const isInputTextEmpty = checkEmptyError(listInputText);
+        const isInputFileEmpty = id == undefined ? checkEmptyError(listInputFile) : false;
+        const isInputDateEmpty = checkEmptyError(listInputDate);
+        if (!isInputTextEmpty && !isInputDateEmpty && !isInputFileEmpty) {
+            const isEmailError = checkEmailError(inputEmail);
+            const isPhoneError = checkPhoneError(inputPhone);
+            const isBirthDayError = checkBirthDayError(inputBirthday);
+            const isPasswordError = checkPasswordError(inputPassword);
+            const isNameError = checkNameError(inputName);
+            if (!isEmailError && !isPhoneError && !isPasswordError && !isBirthDayError && !isNameError) {
+                const province = provinces.find((p) => p.id == Number(inputUser.province));
+                const district = districts.find((d) => d.id == Number(inputUser.district));
+                const ward = wards.find((d) => d.id == Number(inputUser.ward));
+                const data = {
+                    password: inputUser.password,
+                    us_name: inputUser.us_name,
+                    email: inputUser.email,
+                    phone_number: inputUser.phonenumber,
+                    birthday: inputUser.birthday,
+                    province: province?.name,
+                    district: district?.name,
+                    ward: ward?.name,
+                    token: '',
+                };
+                Create(data);
+            }
+        }
+    };
+    const handleUpdate = () => {
+        const isInputTextEmpty = checkEmptyError(listInputText);
+        const isInputFileEmpty = id == undefined ? checkEmptyError(listInputFile) : false;
+        const isInputDateEmpty = checkEmptyError(listInputDate);
+        if (!isInputTextEmpty && !isInputDateEmpty && !isInputFileEmpty) {
+            const isEmailError = checkEmailError(inputEmail);
+            const isPhoneError = checkPhoneError(inputPhone);
+            const isBirthDayError = checkBirthDayError(inputBirthday);
+            const isPasswordError = checkPasswordError(inputPassword);
+            const isNameError = checkNameError(inputName);
+            if (!isEmailError && !isPhoneError && !isPasswordError && !isBirthDayError && !isNameError) {
+                const province = provinces.find((p) => p.id == Number(inputUser.province));
+                const district = districts.find((d) => d.id == Number(inputUser.district));
+                const ward = wards.find((d) => d.id == Number(inputUser.ward));
+                const data = {
+                    id: inputUser.id,
+                    password: inputUser.password,
+                    us_name: inputUser.us_name,
+                    email: inputUser.email,
+                    phone_number: inputUser.phonenumber,
+                    birthday: inputUser.birthday,
+                    province: province?.name === undefined ? user.province : province?.name,
+                    district: district?.name === undefined ? user.district : district?.name,
+                    ward: ward?.name == undefined ? user.ward : ward?.name,
+                    token: '',
+                };
+                Update(data);
+            }
+        }
+    };
+
     const Create = async (data: any) => {
         try {
             const res = await CreateUser(data);
@@ -225,24 +264,7 @@ export const AddUser = () => {
             });
         }
     };
-    const handleUpdate = () => {
-        const province = provinces.find((p) => p.id == Number(inputUser.province));
-        const district = districts.find((d) => d.id == Number(inputUser.district));
-        const ward = wards.find((d) => d.id == Number(inputUser.ward));
-        const data = {
-            id: inputUser.id,
-            password: inputUser.password,
-            us_name: inputUser.us_name,
-            email: inputUser.email,
-            phone_number: inputUser.phonenumber,
-            birthday: inputUser.birthday,
-            province: province?.name === undefined ? user.province : province?.name,
-            district: district?.name === undefined ? user.district : district?.name,
-            ward: ward?.name == undefined ? user.ward : ward?.name,
-            token: '',
-        };
-        Update(data);
-    };
+
     const Update = async (data: any) => {
         try {
             const res = await UpdateUser(data);

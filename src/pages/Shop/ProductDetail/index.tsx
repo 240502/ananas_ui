@@ -13,13 +13,17 @@ import { getProductStatus } from '../../../services/product_status.services';
 import { getProductPrice } from '../../../services/price.services';
 
 import { BreadCrumb } from './BreadCrumb';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { CartItemType, cartState, infoValue } from '../../../store/cart.atom';
 
 import { addToCart } from '../../../utils/cart';
 import { ProductDetailType, ProductType } from '../../../types';
 import { hostServerAdmin } from '../../../constant/api';
 import { render } from '@testing-library/react';
+import { createProductViews } from '../../../services/productviews.services';
+import { walkUpBindingElementsAndPatterns } from 'typescript';
+import { productViewedState, productViewedValue } from '../../../store/product.atom';
+import { addToListProductViewed } from '../../../utils/product';
 type DataParams = {
     id: string;
 };
@@ -35,6 +39,8 @@ function ProductDetail() {
     const [img, setImage] = useState({ id: 0, img_src: '' });
     const [quantity, setNumberPro] = useState(0);
     const [cart, setCarts] = useRecoilState(cartState);
+    const setProductViewed = useSetRecoilState(productViewedState);
+
     const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([
         {
             id: 0,
@@ -63,6 +69,7 @@ function ProductDetail() {
         },
     ]);
     const info = useRecoilValue(infoValue);
+    const productViewed = useRecoilValue(productViewedValue);
 
     let cartItem: CartItemType;
     const [product, setProduct] = useState<ProductType>({
@@ -100,12 +107,15 @@ function ProductDetail() {
     useEffect(() => {
         async function getProDetail(proId: any, size: any) {
             if (size > 0) {
-                const pro: any = product.productDetails.find((item: ProductDetailType) => {
-                    return item.product_id == proId && item.size == size;
-                });
-                setDetail(pro);
+                try {
+                    const pro: any = product.productDetails.find((item: ProductDetailType) => {
+                        return item.product_id == proId && item.size == size;
+                    });
+                    setDetail(pro);
+                } catch (error) {
+                    console.log(error);
+                }
             } else {
-                console.log('og');
                 setDetail({ id: 0, quantity: 0, product_id: 0, size: 0 });
             }
         }
@@ -135,13 +145,44 @@ function ProductDetail() {
 
     useEffect(() => {
         async function getProduct(id: any) {
-            const product = await getProductById(id);
-            setProduct(product);
-            console.log(product);
+            try {
+                const product = await getProductById(id);
+                setProduct(product);
+                addToListProductViewed(product, setProductViewed, productViewed.productVieweds);
+            } catch (err) {
+                console.log(err);
+            }
         }
-
+        async function CreateProductViews() {
+            try {
+                const date = new Date();
+                const month =
+                    Number(date.getMonth() + 1) < 10 ? '0' + Number(date.getMonth() + 1) : Number(date.getMonth() + 1);
+                const day = Number(date.getDate()) < 10 ? '0' + Number(date.getDate()) : Number(date.getDate());
+                const date_view = date.getFullYear() + '-' + month + '-' + day;
+                const data = {
+                    count: 1,
+                    product_id: id,
+                    date_view: date_view,
+                };
+                const res = await createProductViews(data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        CreateProductViews();
         getProduct(id);
+        function getListProductViewed() {
+            try {
+                const listProductViewed = JSON.parse(localStorage.getItem('productViewed') || '[]');
+                setProductViewed(listProductViewed);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        getListProductViewed();
     }, [id]);
+
     useEffect(() => {
         async function getRelated(cateId: any, styleId: any, collectionId: any, gender: any) {
             if (product.id > 0) {
@@ -421,7 +462,7 @@ function ProductDetail() {
                     <div className="container">
                         <h3 className="heading ">Sản phẩm đã xem</h3>
                         <div className="pro-list">
-                            <SlickSlideProductViewed />
+                            <SlickSlideProductViewed data={productViewed.productVieweds} />
                         </div>
                     </div>
                 </div>

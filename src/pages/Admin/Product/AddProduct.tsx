@@ -18,7 +18,7 @@ import {
     checkSizeError,
     checkSizeIsNumber,
 } from '../../../utils/validation_product';
-import { handleFocusInput } from '../../../utils/global';
+import { handleFocusInput, showSuccess } from '../../../utils/global';
 import { checkEmptyError } from '../../../utils/global';
 import { ImageGalleryType, ProductDetailType, ProductPriceType, ProductType } from '../../../types';
 import { hostServerAdmin } from '../../../constant/api';
@@ -73,7 +73,10 @@ type DataParams = {
     id: string;
 };
 export const AddProduct = () => {
-    let listInput: any;
+    let listInputText: any;
+    let listInputDate: any;
+    let listInputFile: any;
+
     let inputEndSize: any;
     let inputStartSize: any;
     let inputPrice: any;
@@ -81,31 +84,7 @@ export const AddProduct = () => {
     let inputStartDate: any;
     let inputEndDate: any;
     let inputQuantity: any;
-    const [product, setProduct] = useState<ProductType>({
-        id: 0,
-        pro_name: '',
-        color_id: 0,
-        style_id: 0,
-        amountOfSale: 0,
-        cate_id: 0,
-        status_id: 0,
-        out_sole: '',
-        gender: '',
-        material_id: 0,
-        collection_id: 0,
-        created_at: '',
-        imageGallery: { id: 0, img_src: '', product_id: 0, feature: false },
-        priceModel: {
-            id: 0,
-            price: 0,
-            product_id: 0,
-            start_date: '',
-            end_date: '',
-            created_at: '',
-            updated_at: '',
-        },
-        productDetails: [{ id: 0, quantity: 0, product_id: 0, size: 0 }],
-    });
+
     const { id } = useParams<DataParams>();
     const genders = ['unisex', 'man', 'woman'];
     const navigate = useNavigate();
@@ -156,7 +135,10 @@ export const AddProduct = () => {
         create_at: '',
     });
     useEffect(() => {
-        listInput = document.querySelectorAll(`${id === undefined ? '.form-add input' : '.form-add input[text]'}`);
+        listInputText = document.querySelectorAll('.form-control input[type="text"]');
+        listInputDate = document.querySelectorAll('.form-add input[type="date"]');
+        listInputFile = document.querySelectorAll('.form-add input[type="file"]');
+
         inputEndSize = document.querySelector('#endSize');
         inputStartSize = document.querySelector('#startSize');
         inputPrice = document.querySelector('#price');
@@ -266,14 +248,19 @@ export const AddProduct = () => {
         getCollection();
         getMaterial();
         getColor();
-        handleFocusInput(listInput);
+        handleFocusInput(listInputDate);
+        handleFocusInput(listInputText);
+        handleFocusInput(listInputFile);
 
         getProduct(id);
     }, [id]);
 
     const handleCreateProduct = async () => {
-        const isEmpty = checkEmptyError(listInput);
-        if (!isEmpty) {
+        console.log(id);
+        const isInputTextEmpty = checkEmptyError(listInputText);
+        const isInputFileEmpty = id == undefined ? checkEmptyError(listInputFile) : false;
+        const isInputDateEmpty = checkEmptyError(listInputDate);
+        if (!isInputTextEmpty && !isInputDateEmpty && !isInputFileEmpty) {
             const isOutSoleError = checkOutSoleNotIsNumber(inputOutSole);
             const isPriceError = checkPriceIsNumber(inputPrice);
             const isEndSizeError = checkSizeIsNumber(inputEndSize);
@@ -326,6 +313,7 @@ export const AddProduct = () => {
                             },
                             imageGallery: imageGallery,
                         };
+                        console.log(data);
                         Create(data);
                     } else {
                         let tmpDetails: any = [];
@@ -372,8 +360,6 @@ export const AddProduct = () => {
                                         return { ...detail, status: 2 };
                                     } else return detail;
                                 });
-
-                                console.log('oge1');
                             }
                             if (inputProduct.endSize > oldMaxSize) {
                                 for (var j = oldMaxSize + 1; j <= inputProduct.endSize; j++) {
@@ -399,7 +385,6 @@ export const AddProduct = () => {
                                         } else return detail;
                                     });
                                 }
-                                console.log('oge2');
                             }
                             data = {
                                 id: inputProduct.proId,
@@ -833,6 +818,7 @@ export const AddProduct = () => {
                                             type="date"
                                             className="form-control"
                                             id="startDate"
+                                            onFocus={(e) => showSuccess(e.target)}
                                             onChange={(e) =>
                                                 setInputProduct({ ...inputProduct, startDate: e.target.value })
                                             }
@@ -846,6 +832,7 @@ export const AddProduct = () => {
                                             type="date"
                                             className="form-control"
                                             id="endDate"
+                                            onFocus={(e) => showSuccess(e.target)}
                                             onChange={(e) =>
                                                 setInputProduct({ ...inputProduct, endDate: e.target.value })
                                             }

@@ -9,10 +9,13 @@ export const BarChart = () => {
     const [maxTotalOrder, setMaxTotalOrder] = useState(0);
     useEffect(() => {
         async function loadData() {
-            const res = await CountOrderYear();
-            console.log(res);
-            getMaxTotal(res);
-            setData(res);
+            try {
+                const res = await CountOrderYear();
+                getMaxTotal(res);
+                setData(res);
+            } catch (err) {
+                console.log(err);
+            }
         }
         loadData();
     }, []);

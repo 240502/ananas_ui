@@ -5,6 +5,7 @@ import NextArrow from './NextArrow';
 import PrevArrow from './PrevArrow';
 import ProductColor from '../../../pages/Shop/ProductDetail/ProductColor';
 import { hostServerAdmin } from '../../../constant/api';
+import { Link } from 'react-router-dom';
 
 export default function SlickSlideProductRef({ data }: any) {
     var settings = {
@@ -27,7 +28,7 @@ export default function SlickSlideProductRef({ data }: any) {
                 return (
                     <div className="thumbnail">
                         <div className="cont-item">
-                            <a href="#">
+                            <Link to={'/product-detail/' + item.id}>
                                 <img
                                     className="main-img"
                                     src={
@@ -36,7 +37,7 @@ export default function SlickSlideProductRef({ data }: any) {
                                             : 'http://localhost:3000/' + item.imageGallery.img_src
                                     }
                                 />
-                            </a>
+                            </Link>
                         </div>
                         <div className="caption">
                             <h3 className="name" style={{ textTransform: 'capitalize' }}>

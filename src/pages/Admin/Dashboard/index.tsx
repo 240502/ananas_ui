@@ -9,10 +9,12 @@ import { hostServerAdmin } from '../../../constant/api';
 import { Link } from 'react-router-dom';
 import { getTop5ProductBestSale } from '../../../services/product.servies';
 import { BarChart } from './BarChart';
+import { getTotalView } from '../../../services/productviews.services';
 function Dashboard() {
     const [totalPrice, setTotalPrice] = useState(0);
     const [totalOrder, setTotalOrder] = useState(0);
     const [totalUser, setTotalUser] = useState(0);
+    const [totalView, setTotalView] = useState(0);
     const [products, setProducts] = useState<ProductType[]>([
         {
             id: 0,
@@ -42,6 +44,15 @@ function Dashboard() {
     ]);
 
     useEffect(() => {
+        async function GetTotalView() {
+            try {
+                const res = await getTotalView();
+                setTotalView(res);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        GetTotalView();
         async function getTop5Product() {
             const date = new Date();
             const data = {
@@ -52,7 +63,6 @@ function Dashboard() {
             try {
                 const res = await getTop5ProductBestSale(data);
                 setProducts(res);
-                console.log(res);
             } catch (err) {
                 console.log(err);
             }
@@ -139,7 +149,7 @@ function Dashboard() {
                     <h6 className="box-title">
                         <span>
                             <p> Lượt xem sản phẩm</p>
-                            <span className="data total-view">0</span>
+                            <span className="data total-view">{totalView}</span>
                         </span>
                         <span className="box-icon">
                             <i className="fa-solid fa-shoe-prints"></i>

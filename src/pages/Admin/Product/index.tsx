@@ -8,8 +8,24 @@ import { ProductType } from '../../../types';
 import { hostServerAdmin } from '../../../constant/api';
 import { DeleteFile } from '../../../services/image_product.services';
 import path from 'path';
+import { ConfimDelete } from './ConfirmDelete';
 
 export const ProductAdmin = () => {
+    const [displayConfirmationModal, setDisplayConfirmationModal] = useState(false);
+    const [deleteMessage, setDeleteMessage] = useState('');
+    const [id, setId] = useState(null);
+    const [img, setImg] = useState('');
+    const showDeleteModal = (id: any, img: any) => {
+        setDeleteMessage('Bạn chắc chắn muốn xóa sản phẩm có mã ' + id);
+        setId(id);
+        setDisplayConfirmationModal(true);
+        setImg(img);
+    };
+
+    const hideConfirmationModal = () => {
+        setDisplayConfirmationModal(false);
+    };
+
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [pageCount, setPageCount] = useState(0);
@@ -83,6 +99,8 @@ export const ProductAdmin = () => {
             if (res.status === 200) {
                 const newList = products.filter((pro) => pro.id !== id);
                 setProducts(newList);
+                setDisplayConfirmationModal(false);
+
                 toast.success('Xóa thành công', {
                     position: 'top-right',
                     autoClose: 3000,
@@ -105,6 +123,8 @@ export const ProductAdmin = () => {
                 progress: undefined,
                 theme: 'light',
             });
+            setDisplayConfirmationModal(false);
+
             console.log(err);
         }
     };
@@ -154,7 +174,7 @@ export const ProductAdmin = () => {
                         </Link>
                         <button
                             className="btn btn-danger"
-                            onClick={() => handleDelete(row.id, row.imageGallery.img_src)}
+                            onClick={() => showDeleteModal(row.id, row.imageGallery.img_src)}
                         >
                             Xóa
                         </button>
@@ -201,6 +221,14 @@ export const ProductAdmin = () => {
                     </section>
                 </div>
             </div>
+            <ConfimDelete
+                hideConfirmationModal={hideConfirmationModal}
+                deleteMessage={deleteMessage}
+                displayConfirmationModal={displayConfirmationModal}
+                id={id}
+                img={img}
+                handleDelete={handleDelete}
+            />
         </>
     );
 };

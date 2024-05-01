@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
 import { Delete, getListUsers, getUserById } from '../../../services/user.services';
 import axios from 'axios';
+import { ConfimDelete } from './ConfirmDelete';
 type ProvinceType = {
     id: number;
     name: string;
@@ -15,7 +16,9 @@ export const Users = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [pageCount, setPageCount] = useState(0);
-
+    const [displayConfirmationModal, setDisplayConfirmationModal] = useState(false);
+    const [deleteMessage, setDeleteMessage] = useState('');
+    const [id, setId] = useState(null);
     const [users, setUsers] = useState<UsersType[]>([
         {
             id: 0,
@@ -34,6 +37,15 @@ export const Users = () => {
             token: '',
         },
     ]);
+    const showDeleteModal = (id: any) => {
+        setDeleteMessage('Bạn chắc chắn muốn xóa khách hàng có mã ' + id);
+        setId(id);
+        setDisplayConfirmationModal(true);
+    };
+
+    const hideConfirmationModal = () => {
+        setDisplayConfirmationModal(false);
+    };
 
     const handlePageClick = (event: any) => {
         setPage(event.selected + 1);
@@ -71,6 +83,7 @@ export const Users = () => {
                 progress: undefined,
                 theme: 'light',
             });
+            hideConfirmationModal();
         } catch (err) {
             toast.success('Xóa thất bại', {
                 position: 'top-right',
@@ -82,6 +95,8 @@ export const Users = () => {
                 progress: undefined,
                 theme: 'light',
             });
+            hideConfirmationModal();
+
             console.log(err);
         }
     };
@@ -120,7 +135,7 @@ export const Users = () => {
                         >
                             Sửa
                         </Link>
-                        <button className="btn btn-danger" onClick={() => handleDelete(row.id)}>
+                        <button className="btn btn-danger" onClick={() => showDeleteModal(row.id)}>
                             Xóa
                         </button>
                     </>
@@ -167,6 +182,13 @@ export const Users = () => {
                     </section>
                 </div>
             </div>
+            <ConfimDelete
+                hideConfirmationModal={hideConfirmationModal}
+                deleteMessage={deleteMessage}
+                displayConfirmationModal={displayConfirmationModal}
+                id={id}
+                handleDelete={handleDelete}
+            />
         </>
     );
 };
