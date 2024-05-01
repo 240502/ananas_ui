@@ -17,8 +17,8 @@ import {
     checkQuantityIsNumber,
     checkSizeError,
     checkSizeIsNumber,
-    handleFocusInput,
 } from '../../../utils/validation_product';
+import { handleFocusInput } from '../../../utils/global';
 import { checkEmptyError } from '../../../utils/global';
 import { ImageGalleryType, ProductDetailType, ProductPriceType, ProductType } from '../../../types';
 import { hostServerAdmin } from '../../../constant/api';

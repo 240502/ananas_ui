@@ -54,9 +54,9 @@ function Header() {
                             </Link>
                         </li>
                         <li>
-                            <Link to={userInfo.user.token !== undefined ? '/admin/dashboard' : '/login'}>
+                            <Link to={userInfo.user.token !== '' ? '/admin/dashboard' : '/login'}>
                                 <i className="fa-solid fa-user" />
-                                <span>{userInfo.user.token !== undefined ? 'Tài khoản' : 'Đăng nhập'}</span>
+                                <span>{userInfo.user.token !== '' ? 'Tài khoản' : 'Đăng nhập'}</span>
                             </Link>
                         </li>
                         <li>

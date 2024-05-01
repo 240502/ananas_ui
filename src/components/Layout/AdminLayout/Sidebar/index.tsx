@@ -1,7 +1,32 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../../../assets/css/Admin/sidebar.css';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { userState, userValue } from '../../../../store/user.atom';
 export const Sidebar = () => {
+    const userInfo = useRecoilValue(userValue);
+    const setUser = useSetRecoilState(userState);
+    const navigate = useNavigate();
+    const handleLogOut = async () => {
+        setUser({
+            id: 0,
+            passowrd: '',
+            role: 0,
+            active: false,
+            us_name: '',
+            email: '',
+            phone_number: '',
+            birthday: '',
+            created_at: '',
+            updated_at: '',
+            province: '',
+            district: '',
+            ward: '',
+            token: '',
+        });
+        navigate('/');
+    };
+
     return (
         <div className="sidebar active">
             <div className="top">
@@ -22,55 +47,57 @@ export const Sidebar = () => {
                 </div>
             </div>
             <ul>
-                <li className="">
-                    <Link to="/admin/dashboard">
-                        <i className="fa-solid fa-list"></i>
-                        <span className="nav-item">Dashboard</span>
-                    </Link>
-                    <span className="tooltip">Dashboard</span>
-                </li>
-                <li className="">
-                    <Link to="/admin/category">
-                        <i className="fa-solid fa-list"></i>
-                        <span className="nav-item"> Loại sản phẩm</span>
-                    </Link>
-                    <span className="tooltip">Loại sản phẩm</span>
-                </li>
-                <li className="">
-                    <Link to="/admin/product">
-                        <i className="fa-solid fa-shoe-prints"></i>
-                        <span className="nav-item">Sản phẩm</span>
-                    </Link>
-                    <span className="tooltip">Sản phẩm</span>
-                </li>
-                <li className="giangvien">
-                    <Link to="/admin/user">
-                        <i className="fa-regular fa-user"></i>
-                        <span className="nav-item"> Người dùng</span>
-                    </Link>
-                    <span className="tooltip">Người dùng</span>
-                </li>
-                <li className="giangvien">
-                    <a href="#">
-                        <i className="fa-solid fa-people-arrows" />
-                        <span className="nav-item"> Giao đề thi</span>
-                    </a>
-                    <span className="tooltip">Giao đề thi</span>
-                </li>
-                <li className="giangvien">
-                    <a href="./QLLop.html">
-                        <i className="fa-solid fa-person-shelter" />
-                        <span className="nav-item"> Lớp</span>
-                    </a>
-                    <span className="tooltip">Lớp</span>
-                </li>
-                <li className="admin">
-                    <a href="./QuanLyUsers.html">
-                        <i className="fa-solid fa-users" />
-                        <span className="nav-item">Quản lý users</span>
-                    </a>
-                    <span className="tooltip">Quản lý users</span>
-                </li>
+                {userInfo.user.role === 1 && (
+                    <>
+                        <li className="">
+                            <Link to="/admin/dashboard">
+                                <i className="fa-solid fa-list"></i>
+                                <span className="nav-item">Dashboard</span>
+                            </Link>
+                            <span className="tooltip">Dashboard</span>
+                        </li>
+                        <li className="">
+                            <Link to="/admin/category">
+                                <i className="fa-solid fa-list"></i>
+                                <span className="nav-item"> Loại sản phẩm</span>
+                            </Link>
+                            <span className="tooltip">Loại sản phẩm</span>
+                        </li>
+                        <li className="">
+                            <Link to="/admin/product">
+                                <i className="fa-solid fa-shoe-prints"></i>
+                                <span className="nav-item">Sản phẩm</span>
+                            </Link>
+                            <span className="tooltip">Sản phẩm</span>
+                        </li>
+                        <li className="giangvien">
+                            <Link to="/admin/user">
+                                <i className="fa-regular fa-user"></i>
+                                <span className="nav-item"> Khách hàng</span>
+                            </Link>
+                            <span className="tooltip">Khách hàng</span>
+                        </li>
+                    </>
+                )}
+
+                {userInfo.user.role === 3 && (
+                    <>
+                        <li className="">
+                            <Link to="/admin/dashboard">
+                                <i className="fa-solid fa-list"></i>
+                                <span className="nav-item">Dashboard</span>
+                            </Link>
+                            <span className="tooltip">Dashboard</span>
+                        </li>
+                        <li className="">
+                            <Link to="/admin/category">
+                                <i className="fa-solid fa-list"></i>
+                                <span className="nav-item"> Nhân viên</span>
+                            </Link>
+                            <span className="tooltip">Nhân viên</span>
+                        </li>
+                    </>
+                )}
                 <li>
                     <a href="./TaiKhoan.html">
                         <i className="fa-regular fa-circle-user" />
@@ -79,7 +106,7 @@ export const Sidebar = () => {
                     <span className="tooltip">Tài khoản</span>
                 </li>
                 <li>
-                    <a href="#" className="btnLogoff">
+                    <a href="#" className="btnLogoff" onClick={handleLogOut}>
                         <span style={{ transform: 'rotate(-180deg)' }}>
                             <i className="fa-solid fa-arrow-right-from-bracket" />
                         </span>

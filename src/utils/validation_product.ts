@@ -62,13 +62,6 @@ export const checkSizeIsNumber = (input: any) => {
     }
     return true;
 };
-export const handleFocusInput = (listInput: any) => {
-    listInput.forEach((input: any) => {
-        input.onfocus = () => {
-            showSuccess(input);
-        };
-    });
-};
 
 export const checkQuantityIsNumber = (input: any) => {
     const quantity = input.value.trim();

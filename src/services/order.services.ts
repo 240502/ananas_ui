@@ -1,7 +1,7 @@
-import { apiClient } from '../constant/api';
+import { apiClient, config } from '../constant/api';
 
 export const CreateOrder = async (data: any): Promise<any> => {
-    const res = await apiClient.post('/api-admin/Order/create', data);
+    const res = await apiClient.post('/api-admin/Order/create', data, config);
     return res?.data;
 };
 
@@ -11,10 +11,10 @@ export const getTrackingOrder = async (id: number, option: string): Promise<any>
 };
 
 export const getTotalOrderToday = async (): Promise<any> => {
-    const res = await apiClient.get(`/api-admin/Order/getTotalOrder`);
+    const res = await apiClient.get(`/api-admin/Order/getTotalOrder`, config);
     return res?.data;
 };
 export const CountOrderYear = async (): Promise<any> => {
-    const res = await apiClient.get(`/api-admin/Order/countOrderYear`);
+    const res = await apiClient.get(`/api-admin/Order/countOrderYear`, config);
     return res?.data;
 };

@@ -30,3 +30,11 @@ export const checkEmptyError = (listInput: any[]) => {
 export const isNumber = (char: any) => {
     return !isNaN(parseInt(char));
 };
+
+export const handleFocusInput = (listInput: any) => {
+    listInput.forEach((input: any) => {
+        input.onfocus = () => {
+            showSuccess(input);
+        };
+    });
+};

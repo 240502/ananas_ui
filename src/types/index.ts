@@ -52,7 +52,7 @@ export type UsersType = {
     us_name: string;
     email: string;
     phone_number: string;
-    birhtday: string;
+    birthday: string;
     created_at: string;
     updated_at: string;
     province: string;

@@ -17,8 +17,9 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { CartItemType, cartState, infoValue } from '../../../store/cart.atom';
 
 import { addToCart } from '../../../utils/cart';
-import { ProductType } from '../../../types';
+import { ProductDetailType, ProductType } from '../../../types';
 import { hostServerAdmin } from '../../../constant/api';
+import { render } from '@testing-library/react';
 type DataParams = {
     id: string;
 };
@@ -30,7 +31,7 @@ function ProductDetail() {
     const [status, setStatus] = useState({ id: 0, status_name: '' });
     const [style, setStyle] = useState({ id: 0, name_style: '' });
     const [size, setSize] = useState(0);
-    const [detail, setDetail] = useState({ id: 0, quantity: 1 });
+    const [detail, setDetail] = useState<ProductDetailType>({ id: 0, quantity: 0, product_id: 0, size: 0 });
     const [img, setImage] = useState({ id: 0, img_src: '' });
     const [quantity, setNumberPro] = useState(0);
     const [cart, setCarts] = useRecoilState(cartState);
@@ -99,24 +100,38 @@ function ProductDetail() {
     useEffect(() => {
         async function getProDetail(proId: any, size: any) {
             if (size > 0) {
-                const pro = await getProDetailByProIdAndSize(proId, size);
+                const pro: any = product.productDetails.find((item: ProductDetailType) => {
+                    return item.product_id == proId && item.size == size;
+                });
                 setDetail(pro);
+            } else {
+                console.log('og');
+                setDetail({ id: 0, quantity: 0, product_id: 0, size: 0 });
             }
         }
         getProDetail(id, size);
     }, [size]);
-    renderListNumberPro();
-    function renderListNumberPro() {
-        if (detail.quantity > 1) {
-            var selectElement = document.getElementById('select_number');
-            for (let index = 1; index <= detail.quantity; index++) {
-                let option = document.createElement('option');
-                option.innerHTML = `${index}`;
-                option.setAttribute('value', `${index}`);
-                selectElement?.appendChild(option);
+    useEffect(() => {
+        function renderListNumberPro() {
+            if (detail.quantity > 1) {
+                var selectElement = document.getElementById('select_number');
+                var option: any = selectElement?.querySelectorAll('#select_number option:not(.inital)');
+                console.log(detail.quantity);
+                option.forEach((item: any) => selectElement?.removeChild(item));
+                for (let index = 1; index <= detail.quantity; index++) {
+                    let option = document.createElement('option');
+                    option.innerHTML = `${index}`;
+                    option.setAttribute('value', `${index}`);
+                    selectElement?.appendChild(option);
+                }
+            } else {
+                var selectElement = document.getElementById('select_number');
+                var option: any = selectElement?.querySelectorAll('#select_number option:not(.inital)');
+                option.forEach((item: any) => selectElement?.removeChild(item));
             }
         }
-    }
+        renderListNumberPro();
+    }, [detail]);
 
     useEffect(() => {
         async function getProduct(id: any) {
@@ -243,12 +258,7 @@ function ProductDetail() {
                                     <option value={0}>Chọn size</option>
                                     {product.productDetails.map((detail) => {
                                         return (
-                                            <option
-                                                value={detail.id}
-                                                onChange={() => {
-                                                    console.log(detail.id);
-                                                }}
-                                            >
+                                            <option value={detail.size} onChange={() => {}}>
                                                 {detail.size}
                                             </option>
                                         );
@@ -263,7 +273,9 @@ function ProductDetail() {
                                     id="select_number"
                                     className=" form-select selectpicker bs-select-hidden"
                                 >
-                                    <option value={0}>Chọn số lượng</option>
+                                    <option className="inital" value={0}>
+                                        Chọn số lượng
+                                    </option>
                                 </select>
                             </div>
                         </div>

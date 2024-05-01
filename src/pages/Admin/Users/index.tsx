@@ -25,7 +25,7 @@ export const Users = () => {
             us_name: '',
             email: '',
             phone_number: '',
-            birhtday: '',
+            birthday: '',
             created_at: '',
             updated_at: '',
             province: '',
@@ -136,7 +136,7 @@ export const Users = () => {
                     Thêm người dùng +
                 </Link>
             </div>
-            <div className="card">
+            <div className="card card-data">
                 <div className="card-header">
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách người dùng</h3>
                 </div>

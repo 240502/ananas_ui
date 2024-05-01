@@ -4,7 +4,14 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { CreateUser, UpdateUser, getUserById } from '../../../services/user.services';
 import { ToastContainer, toast } from 'react-toastify';
 import { UsersType } from '../../../types';
-
+import { checkEmptyError, handleFocusInput } from '../../../utils/global';
+import {
+    checkBirthDayError,
+    checkEmailError,
+    checkNameError,
+    checkPasswordError,
+    checkPhoneError,
+} from '../../../utils/validation_user';
 type InputUser = {
     id: number;
     password: string;
@@ -25,8 +32,13 @@ type DataParams = {
 };
 
 export const AddUser = () => {
+    let listInput: any;
+    let inputEmail: any;
+    let inputPhone: any;
+    let inputPassword: any;
+    let inputBirthday: any;
+    let inputName: any;
     const navigate = useNavigate();
-
     const { id } = useParams<DataParams>();
     const [provinces, setProvinces] = useState([{ id: 0, name: '' }]);
 
@@ -59,7 +71,7 @@ export const AddUser = () => {
         us_name: '',
         email: '',
         phone_number: '',
-        birhtday: '',
+        birthday: '',
         created_at: '',
         updated_at: '',
         province: '',
@@ -67,7 +79,14 @@ export const AddUser = () => {
         ward: '',
         token: '',
     });
-
+    useEffect(() => {
+        listInput = document.querySelectorAll(`${id === undefined ? '.form-add input' : '.form-add input[text]'}`);
+        inputEmail = document.querySelector('#email');
+        inputPhone = document.querySelector('#phonenumber');
+        inputPassword = document.querySelector('#password');
+        inputName = document.querySelector('#pro_name');
+        inputBirthday = document.querySelector('#birthday');
+    });
     useEffect(() => {
         const getProvinces = async () => {
             try {
@@ -80,6 +99,7 @@ export const AddUser = () => {
             }
         };
         getProvinces();
+        handleFocusInput(listInput);
     }, []);
     const getListDistrct = async (provinceId: any) => {
         try {
@@ -102,22 +122,32 @@ export const AddUser = () => {
         }
     };
     const handleCreateProduct = () => {
-        const province = provinces.find((p) => p.id == Number(inputUser.province));
-        const district = districts.find((d) => d.id == Number(inputUser.district));
-        const ward = wards.find((d) => d.id == Number(inputUser.ward));
-        const data = {
-            password: inputUser.password,
-            us_name: inputUser.us_name,
-            email: inputUser.email,
-            phone_number: inputUser.phonenumber,
-            birthday: inputUser.birthday,
-            province: province?.name,
-            district: district?.name,
-            ward: ward?.name,
-            token: '',
-        };
-        console.log(data);
-        Create(data);
+        const isEmpty = checkEmptyError(listInput);
+        if (!isEmpty) {
+            const isEmailError = checkEmailError(inputEmail);
+            const isPhoneError = checkPhoneError(inputPhone);
+            const isBirthDayError = checkBirthDayError(inputBirthday);
+            const isPasswordError = checkPasswordError(inputPassword);
+            const isNameError = checkNameError(inputName);
+            if (!isEmailError && !isPhoneError && !isPasswordError && !isBirthDayError && !isNameError) {
+                const province = provinces.find((p) => p.id == Number(inputUser.province));
+                const district = districts.find((d) => d.id == Number(inputUser.district));
+                const ward = wards.find((d) => d.id == Number(inputUser.ward));
+                const data = {
+                    password: inputUser.password,
+                    us_name: inputUser.us_name,
+                    email: inputUser.email,
+                    phone_number: inputUser.phonenumber,
+                    birthday: inputUser.birthday,
+                    province: province?.name,
+                    district: district?.name,
+                    ward: ward?.name,
+                    token: '',
+                };
+                console.log(data);
+                Create(data);
+            }
+        }
     };
     useEffect(() => {
         async function getUser() {

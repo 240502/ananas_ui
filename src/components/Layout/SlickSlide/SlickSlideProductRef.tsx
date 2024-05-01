@@ -20,9 +20,7 @@ export default function SlickSlideProductRef({ data }: any) {
         nextArrow: <NextArrow />,
         prevArrow: <PrevArrow />,
     };
-    data.map((item: any) => {
-        console.log(item.color_id);
-    });
+
     return (
         <Slider {...settings}>
             {data.map((item: any) => {
