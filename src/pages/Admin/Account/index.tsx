@@ -1,10 +1,9 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { CreateUser, UpdateUser, getUserById } from '../../../services/user.services';
-import { ToastContainer, toast } from 'react-toastify';
+import { UpdateUser, getUserById } from '../../../services/user.services';
 import { UsersType } from '../../../types';
+import axios from 'axios';
 import { checkEmptyError, handleFocusInput } from '../../../utils/global';
+import { Link } from 'react-router-dom';
 import {
     checkBirthDayError,
     checkEmailError,
@@ -12,10 +11,11 @@ import {
     checkPasswordError,
     checkPhoneError,
 } from '../../../utils/validation_user';
+import { ToastContainer, toast } from 'react-toastify';
+import { FALSE } from 'sass';
 type InputUser = {
     id: number;
     password: string;
-    role: number;
     active: boolean;
     us_name: string;
     email: string;
@@ -26,12 +26,9 @@ type InputUser = {
     province: string;
     district: string;
     ward: string;
+    role_id: number;
 };
-type DataParams = {
-    id: string;
-};
-
-export const AddUser = () => {
+export const Account = () => {
     let inputEmail: any;
     let inputPhone: any;
     let inputPassword: any;
@@ -39,33 +36,7 @@ export const AddUser = () => {
     let inputName: any;
     let listInputText: any;
     let listInputDate: any;
-    let listInputFile: any;
-
-    const navigate = useNavigate();
-    const { id } = useParams<DataParams>();
-    const [provinces, setProvinces] = useState([{ id: 0, name: '' }]);
-
-    const [districts, setDistricts] = useState([{ id: 0, name: '' }]);
-    const [wards, setWards] = useState([{ id: 0, name: '' }]);
-    // const [province, setProvince] = useState<any>({});
-    // const [ward, setWard] = useState({ id: 0, name: '' });
-    // const [district, setDistrict] = useState({ id: 0, name: '' });
-
-    const [inputUser, setInputUser] = useState<InputUser>({
-        id: 0,
-        password: '',
-        role: 0,
-        active: false,
-        us_name: '',
-        email: '',
-        phonenumber: '',
-        birthday: '',
-        created_at: '',
-        updated_at: '',
-        province: '',
-        district: '',
-        ward: '',
-    });
+    let listInputPassword: any;
     const [user, setUser] = useState<UsersType>({
         id: 0,
         passowrd: '',
@@ -82,10 +53,32 @@ export const AddUser = () => {
         ward: '',
         token: '',
     });
+    const [inputUser, setInputUser] = useState<InputUser>({
+        id: 0,
+        password: '',
+        active: false,
+        us_name: '',
+        email: '',
+        phonenumber: '',
+        birthday: '',
+        created_at: '',
+        updated_at: '',
+        province: '',
+        district: '',
+        ward: '',
+        role_id: 0,
+    });
+
+    const [provinces, setProvinces] = useState([{ id: 0, name: '' }]);
+
+    const [districts, setDistricts] = useState([{ id: 0, name: '' }]);
+    const [wards, setWards] = useState([{ id: 0, name: '' }]);
+    const [showPassword, setShowPassword] = useState(false);
+
     useEffect(() => {
         listInputText = document.querySelectorAll('.form-control input[type="text"]');
         listInputDate = document.querySelectorAll('.form-add input[type="date"]');
-        listInputFile = document.querySelectorAll('.form-add input[type="file"]');
+        listInputPassword = document.querySelectorAll('.form-add input[type="password"]');
         inputEmail = document.querySelector('#email');
         inputPhone = document.querySelector('#phonenumber');
         inputPassword = document.querySelector('#password');
@@ -106,7 +99,7 @@ export const AddUser = () => {
         getProvinces();
         handleFocusInput(listInputDate);
         handleFocusInput(listInputText);
-        handleFocusInput(listInputFile);
+        handleFocusInput(listInputPassword);
     }, []);
     const getListDistrct = async (provinceId: any) => {
         try {
@@ -130,13 +123,14 @@ export const AddUser = () => {
     };
     useEffect(() => {
         async function getUser() {
-            if (id !== undefined) {
+            const accountLocal = await JSON.parse(localStorage.getItem('user') || '{}');
+            if (accountLocal['id'] !== undefined) {
                 try {
-                    const res = await getUserById(id);
+                    const res = await getUserById(accountLocal['id']);
+                    setUser(res);
                     setInputUser({
                         id: res['id'],
                         password: res['password'],
-                        role: res['role'],
                         active: res['active'],
                         us_name: res['us_name'],
                         email: res['email'],
@@ -147,15 +141,16 @@ export const AddUser = () => {
                         province: '',
                         district: '',
                         ward: '',
+                        role_id: res['role_id'],
                     });
-                    setUser(res);
                 } catch (e) {
                     console.error(e);
                 }
             }
         }
         getUser();
-    }, [id]);
+    }, []);
+
     useEffect(() => {
         if (user.id !== 0) {
             let province: any = provinces.find((item) => {
@@ -176,40 +171,12 @@ export const AddUser = () => {
             }
         }
     }, [districts.length]);
-    const handleCreateProduct = () => {
-        const isInputTextEmpty = checkEmptyError(listInputText);
-        const isInputFileEmpty = id == undefined ? checkEmptyError(listInputFile) : false;
-        const isInputDateEmpty = checkEmptyError(listInputDate);
-        if (!isInputTextEmpty && !isInputDateEmpty && !isInputFileEmpty) {
-            const isEmailError = checkEmailError(inputEmail);
-            const isPhoneError = checkPhoneError(inputPhone);
-            const isBirthDayError = checkBirthDayError(inputBirthday);
-            const isPasswordError = checkPasswordError(inputPassword);
-            const isNameError = checkNameError(inputName);
-            if (!isEmailError && !isPhoneError && !isPasswordError && !isBirthDayError && !isNameError) {
-                const province = provinces.find((p) => p.id == Number(inputUser.province));
-                const district = districts.find((d) => d.id == Number(inputUser.district));
-                const ward = wards.find((d) => d.id == Number(inputUser.ward));
-                const data = {
-                    password: inputUser.password,
-                    us_name: inputUser.us_name,
-                    email: inputUser.email,
-                    phone_number: inputUser.phonenumber,
-                    birthday: inputUser.birthday,
-                    province: province?.name,
-                    district: district?.name,
-                    ward: ward?.name,
-                    token: '',
-                };
-                Create(data);
-            }
-        }
-    };
     const handleUpdate = () => {
+        console.log(listInputDate);
         const isInputTextEmpty = checkEmptyError(listInputText);
-        const isInputFileEmpty = id == undefined ? checkEmptyError(listInputFile) : false;
         const isInputDateEmpty = checkEmptyError(listInputDate);
-        if (!isInputTextEmpty && !isInputDateEmpty && !isInputFileEmpty) {
+        const isInputPasswordEmpty = checkEmptyError(listInputPassword);
+        if (!isInputTextEmpty && !isInputDateEmpty && !isInputPasswordEmpty) {
             const isEmailError = checkEmailError(inputEmail);
             const isPhoneError = checkPhoneError(inputPhone);
             const isBirthDayError = checkBirthDayError(inputBirthday);
@@ -226,6 +193,7 @@ export const AddUser = () => {
                     email: inputUser.email,
                     phone_number: inputUser.phonenumber,
                     birthday: inputUser.birthday,
+                    created_at: inputUser.created_at,
                     province: province?.name === undefined ? user.province : province?.name,
                     district: district?.name === undefined ? user.district : district?.name,
                     ward: ward?.name == undefined ? user.ward : ward?.name,
@@ -236,39 +204,9 @@ export const AddUser = () => {
         }
     };
 
-    const Create = async (data: any) => {
-        try {
-            const res = await CreateUser(data);
-            navigate('/admin/user');
-            toast.success('Thêm thành công', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
-        } catch (err) {
-            console.log(err);
-            toast.error('Có lỗi', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
-        }
-    };
-
     const Update = async (data: any) => {
         try {
             const res = await UpdateUser(data);
-            navigate('/admin/user');
             toast.success('Sửa thành công', {
                 position: 'top-right',
                 autoClose: 3000,
@@ -297,24 +235,16 @@ export const AddUser = () => {
         <div id="form">
             <div className="card form-add">
                 <div className="card-header">
-                    <h1>{id === undefined ? 'Thêm người dùng' : `Sửa thông tin người dùng có mã ${id}`} </h1>
+                    <h1>Thông tin người dùng </h1>
                 </div>
                 <div className="card-body">
                     <form>
                         <div className="row">
-                            <h3 className="title">Thông tin người dùng</h3>
+                            <h3 className="title">Thông tin khách hàng</h3>
                             <div className="col-lg-6">
-                                {id !== undefined && (
-                                    <>
-                                        <input
-                                            id="product_id"
-                                            className="form-control"
-                                            value={inputUser.id}
-                                            hidden
-                                        ></input>
-                                        <div className="error_message" style={{ display: 'none' }}></div>
-                                    </>
-                                )}
+                                <input id="product_id" className="form-control" value={inputUser.id} hidden></input>
+                                <div className="error_message" style={{ display: 'none' }}></div>
+
                                 <div className="form-group">
                                     <label htmlFor="pro_name">Tên người dùng:</label>
                                     <input
@@ -443,10 +373,10 @@ export const AddUser = () => {
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
-                                    <div className="form-group">
+                                    <div className="form-group" style={{ position: 'relative' }}>
                                         <label htmlFor="password">Mật khẩu:</label>
                                         <input
-                                            type="password"
+                                            type={showPassword === true ? 'text' : 'password'}
                                             name="password"
                                             id="password"
                                             className="form-control"
@@ -458,6 +388,21 @@ export const AddUser = () => {
                                             }
                                             value={inputUser.password}
                                         ></input>
+                                        <i
+                                            style={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                right: '5%',
+                                                transform: 'translateY(50%)',
+                                                cursor: 'pointer',
+                                            }}
+                                            onClick={() => {
+                                                setShowPassword(!showPassword);
+                                            }}
+                                            className={
+                                                showPassword === true ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'
+                                            }
+                                        ></i>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
 
@@ -478,28 +423,24 @@ export const AddUser = () => {
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
-                                    {id !== undefined && (
-                                        <div
-                                            className="form-group"
-                                            style={{ display: `${id !== undefined ? 'block' : 'none'}` }}
-                                        >
-                                            <label htmlFor="create_at">Ngày tạo:</label>
-                                            <input
-                                                type="date"
-                                                name="create_at"
-                                                id="create_at"
-                                                className="form-control"
-                                                onChange={(e) => {
-                                                    setInputUser({
-                                                        ...inputUser,
-                                                        created_at: e.target.value,
-                                                    });
-                                                }}
-                                                value={inputUser.created_at.slice(0, 10)}
-                                            ></input>
-                                            <div className="error_message" style={{ display: 'none' }}></div>
-                                        </div>
-                                    )}
+
+                                    <div className="form-group">
+                                        <label htmlFor="create_at">Ngày tạo:</label>
+                                        <input
+                                            type="date"
+                                            name="create_at"
+                                            id="create_at"
+                                            className="form-control"
+                                            onChange={(e) => {
+                                                setInputUser({
+                                                    ...inputUser,
+                                                    created_at: e.target.value,
+                                                });
+                                            }}
+                                            value={inputUser.created_at.slice(0, 10)}
+                                        ></input>
+                                        <div className="error_message" style={{ display: 'none' }}></div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -509,9 +450,9 @@ export const AddUser = () => {
                                     style={{ width: '20%', padding: '10px 0px' }}
                                     name="cmd"
                                     className="btn btn-primary btn-add"
-                                    onClick={() => (id === undefined ? handleCreateProduct() : handleUpdate())}
+                                    onClick={() => handleUpdate()}
                                 >
-                                    {id !== undefined ? 'Lưu Lại' : 'Thêm mới'}
+                                    Lưu lại
                                     <i className="fa-solid fa-plus" style={{ marginLeft: '10px' }}></i>
                                 </button>
                                 <Link

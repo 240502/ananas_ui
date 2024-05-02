@@ -56,7 +56,7 @@ export const Users = () => {
     useEffect(() => {
         async function loadData() {
             try {
-                const res = await getListUsers({ pageIndex: page, pageSize: pageSize });
+                const res = await getListUsers({ pageIndex: page, pageSize: pageSize, role_id: 2 });
                 setUsers(res.data);
                 setPageCount(Math.ceil(res.totalItems / pageSize));
             } catch (e) {

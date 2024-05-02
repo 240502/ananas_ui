@@ -20,7 +20,13 @@ const USER_ADMIN_PATH = 'admin/user';
 const CREATE_USER_PATH = 'admin/user/create';
 const UPDATE_USER_PATH = 'admin/user/update/:id';
 const DASHBOARD_PATH = 'admin/dashboard';
+const ACCOUNT_PATH = 'admin/account';
+const ORDER_ADMIN_PATH = 'admin/order';
+const ORDER_DETAIL_PATH = 'admin/order/order-detail/:id';
 export {
+    ORDER_ADMIN_PATH,
+    ORDER_DETAIL_PATH,
+    ACCOUNT_PATH,
     DASHBOARD_PATH,
     HOME_PATH,
     PRODUCT_PATH,

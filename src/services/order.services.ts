@@ -18,3 +18,13 @@ export const CountOrderYear = async (): Promise<any> => {
     const res = await apiClient.get(`/api-admin/Order/countOrderYear`, config);
     return res?.data;
 };
+
+export const GetListOrderWaitConfirmation = async (data: any): Promise<any> => {
+    const res = await apiClient.post(`/api-admin/Order/getListOrderWaitConfirmation`, data, config);
+    return res?.data;
+};
+
+export const GetOrderById = async (id: any): Promise<any> => {
+    const res = await apiClient.get(`/api-customer/Order/GetById?id=${id}`);
+    return res?.data;
+};

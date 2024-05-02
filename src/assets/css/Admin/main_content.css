@@ -36,6 +36,7 @@
 }
 .rdt_TableHead {
 }
+
 .card-data .rdt_TableHeadRow div:nth-child(2) {
     width: 10%;
     flex-grow: 0;
@@ -50,6 +51,16 @@
 }
 .form-add .card-body {
     padding: 50px 50px;
+}
+.table_order_detail .rdt_TableHeadRow .rdt_TableCol:first-child {
+    width: 10%;
+    flex-grow: 0;
+}
+.table_order_detail .rdt_TableRow .rdt_TableCell:first-child {
+    width: 10%;
+    flex-grow: 0;
+}
+.table_order_detail .rdt_TableRow .rdt_TableCell {
 }
 .form-add .card-header {
     background-color: #009688;

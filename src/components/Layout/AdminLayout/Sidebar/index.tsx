@@ -51,7 +51,7 @@ export const Sidebar = () => {
                     <>
                         <li className="">
                             <Link to="/admin/dashboard">
-                                <i className="fa-solid fa-list"></i>
+                                <i className="fa-solid fa-chart-line"></i>
                                 <span className="nav-item">Dashboard</span>
                             </Link>
                             <span className="tooltip">Dashboard</span>
@@ -70,12 +70,20 @@ export const Sidebar = () => {
                             </Link>
                             <span className="tooltip">Sản phẩm</span>
                         </li>
-                        <li className="giangvien">
+                        <li className="">
                             <Link to="/admin/user">
                                 <i className="fa-regular fa-user"></i>
                                 <span className="nav-item"> Khách hàng</span>
                             </Link>
                             <span className="tooltip">Khách hàng</span>
+                        </li>
+
+                        <li className="">
+                            <Link to="/admin/order">
+                                <i className="fa-solid fa-cart-shopping"></i>
+                                <span className="nav-item"> Đơn hàng</span>
+                            </Link>
+                            <span className="tooltip">Đơn hàng</span>
                         </li>
                     </>
                 )}
@@ -99,10 +107,10 @@ export const Sidebar = () => {
                     </>
                 )}
                 <li>
-                    <a href="./TaiKhoan.html">
+                    <Link to="/admin/account">
                         <i className="fa-regular fa-circle-user" />
                         <span className="nav-item"> Tài khoản</span>
-                    </a>
+                    </Link>
                     <span className="tooltip">Tài khoản</span>
                 </li>
                 <li>

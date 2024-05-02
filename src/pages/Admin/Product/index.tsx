@@ -142,8 +142,8 @@ export const ProductAdmin = () => {
                         style={{ width: '50%', padding: '10px 0' }}
                         src={
                             row.imageGallery.img_src.includes('uploads')
-                                ? hostServerAdmin + row.imageGallery.img_src
-                                : 'http://localhost:3000/' + row.imageGallery.img_src
+                            ? hostServerAdmin + row.imageGallery.img_src
+                            : 'http://localhost:3000/' + row.imageGallery.img_src
                         }
                         alt=""
                     />

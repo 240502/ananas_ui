@@ -26,6 +26,9 @@ import {
     CREATE_USER_PATH,
     UPDATE_USER_PATH,
     DASHBOARD_PATH,
+    ACCOUNT_PATH,
+    ORDER_ADMIN_PATH,
+    ORDER_DETAIL_PATH,
 } from './paths';
 import Cart from '../pages/Shop/Cart';
 import ProductDetail from '../pages/Shop/ProductDetail';
@@ -41,8 +44,12 @@ import { AddCategory } from '../pages/Admin/Category/AddCategory';
 import { UpdateCategory } from '../pages/Admin/Category/UpdateCategory';
 import { ProductAdmin } from '../pages/Admin/Product';
 import { AddProduct } from '../pages/Admin/Product/AddProduct';
-import { Users } from '../pages/Admin/Users';
-import { AddUser } from '../pages/Admin/Users/AddUser';
+import { Users } from '../pages/Admin/Customer';
+import { AddUser } from '../pages/Admin/Customer/AddUser';
+import path from 'path';
+import { Account } from '../pages/Admin/Account';
+import { Order } from '../pages/Admin/Order';
+import { OrderDetail } from '../pages/Admin/Order/OrderDetail';
 export const publicRoutes = [
     { path: HOME_PATH, component: Home, layout: undefined },
     { path: PRODUCT_PATH, component: Product, layout: undefined },
@@ -59,7 +66,6 @@ export const publicRoutes = [
 ];
 
 export const privateRoutes = [
-    { path: '/admin', component: Home, layout: undefined },
     { path: DASHBOARD_PATH, component: Dashboard, layout: AdminLayout },
     { path: CATEGORY_PATH, component: Category, layout: AdminLayout },
     { path: CREATE_CATEGORY_PATH, component: AddCategory, layout: AdminLayout },
@@ -70,4 +76,7 @@ export const privateRoutes = [
     { path: USER_ADMIN_PATH, component: Users, layout: AdminLayout },
     { path: CREATE_USER_PATH, component: AddUser, layout: AdminLayout },
     { path: UPDATE_USER_PATH, component: AddUser, layout: AdminLayout },
+    { path: ACCOUNT_PATH, component: Account, layout: AdminLayout },
+    { path: ORDER_ADMIN_PATH, component: Order, layout: AdminLayout },
+    { path: ORDER_DETAIL_PATH, component: OrderDetail, layout: AdminLayout },
 ];

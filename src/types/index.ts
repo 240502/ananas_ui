@@ -60,3 +60,29 @@ export type UsersType = {
     ward: string;
     token: string;
 };
+export type OrderDetails = {
+    id: number;
+    product_id: number;
+    order_id: number;
+    quantity: number;
+    price: number;
+    size_id: number;
+    color_id: number;
+    style_id: number;
+};
+export type OrderType = {
+    id: number;
+    user_id: number;
+    receiving_address: string;
+    phone_number: string;
+    money_total: number;
+    order_date: string;
+    update_at: string;
+    status_id: number;
+    paymentType_id: number;
+    shippingType_id: number;
+    email: string;
+    full_name: string;
+    orderDetails: OrderDetails[];
+    totalProduct: number;
+};
