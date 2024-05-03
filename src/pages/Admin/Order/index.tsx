@@ -71,7 +71,7 @@ export const Order = () => {
         }
 
         loadData();
-    }, [statusId]);
+    }, [statusId, page, pageSize]);
     const handlePageClick = (event: any) => {
         setPage(event.selected + 1);
     };

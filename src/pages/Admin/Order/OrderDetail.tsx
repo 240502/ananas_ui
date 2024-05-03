@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import '../../../assets/css/Admin/modal_add.css';
+
 import { Link, useParams } from 'react-router-dom';
-import { OrderDetails, OrderType, ProductType } from '../../../types';
+import { OrderDetails, OrderType, PaymentType, ProductType, ShippingType } from '../../../types';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { OrderDetailType } from '../../../store/order.atom';
 import { GetOrderById } from '../../../services/order.services';
@@ -8,6 +10,9 @@ import { getProductById } from '../../../services/product.servies';
 import ReactPaginate from 'react-paginate';
 import { hostServerAdmin } from '../../../constant/api';
 import { userState } from '../../../store/user.atom';
+import { getListPaymentType } from '../../../services/paymentType.services';
+import { getListShippingType } from '../../../services/shippingType.services';
+import { AddProduct } from './AddProduct';
 
 type DataParams = {
     id: string;
@@ -42,6 +47,11 @@ type InputOrder = {
 
 export const OrderDetail = () => {
     const { id } = useParams<DataParams>();
+    const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([
+        { id: 0, paymentType_name: '', price: 0, thumbnail: '' },
+    ]);
+    const [shippingTypes, setShippingTypes] = useState<ShippingType[]>([{ id: 0, shippingType_name: '', price: 0 }]);
+
     const [inputOrder, setInputOrder] = useState<InputOrder>({
         id: 0,
         user_id: 0,
@@ -96,91 +106,115 @@ export const OrderDetail = () => {
         ],
         totalProduct: 0,
     });
+
     const [products, setProducts] = useState([]);
+    const [displayConfirmationModal, setDisplayAddModal] = useState(false);
+    const showAddProductModal = (id: any) => {
+        setDisplayAddModal(true);
+    };
+    const hideConfirmationModal = () => {
+        setDisplayAddModal(false);
+    };
+    const getOrder = async () => {
+        try {
+            const res = await GetOrderById(id);
+            setOrder(res);
+            setInputOrder({
+                id: res['id'],
+                user_id: res['user_id'],
+                receiving_address: res['receiving_address'],
+                phone_number: res['phone_number'],
+                money_total: res['money_total'],
+                order_date: res['order_date'],
+                update_at: res['update_at'],
+                status_id: res['status_id'],
+                paymentType_id: res['paymentType_id'],
+                shippingType_id: res['shippingType_id'],
+                email: res['email'],
+                full_name: res['full_name'],
+                orderDetails: res['orderDetails'],
+            });
+        } catch (e) {
+            console.log(e);
+            setOrder({
+                id: 0,
+                user_id: 0,
+                receiving_address: '',
+                phone_number: '',
+                money_total: 0,
+                order_date: '',
+                update_at: '',
+                status_id: 0,
+                paymentType_id: 0,
+                shippingType_id: 0,
+                email: '',
+                full_name: '',
+                orderDetails: [
+                    {
+                        id: 0,
+                        product_id: 0,
+                        order_id: 0,
+                        quantity: 0,
+                        price: 0,
+                        size_id: 0,
+                        color_id: 0,
+                        style_id: 0,
+                    },
+                ],
+                totalProduct: 0,
+            });
+        }
+    };
+    const getProduct = (id: any) => {
+        if (order.id !== 0) {
+            const res = getProductById(id);
+            return res;
+        }
+    };
+    const handleGetProduct = () => {
+        if (order.id !== 0) {
+            const res = order.orderDetails.map(async (detail) => {
+                return getProduct(detail.product_id);
+            });
+            let newProduct: any = [];
+            res.map((item) => {
+                item.then((product) => {
+                    if (newProduct.length > 0) {
+                        newProduct = [...newProduct, product];
+                    } else {
+                        newProduct = [product];
+                    }
+                    setProducts(newProduct);
+                });
+            });
+        }
+    };
 
     useEffect(() => {
-        async function getOrder() {
-            try {
-                const res = await GetOrderById(id);
-
-                setOrder(res);
-                setInputOrder({
-                    id: res['id'],
-                    user_id: res['user_id'],
-                    receiving_address: res['receiving_address'],
-                    phone_number: res['phone_number'],
-                    money_total: res['money_total'],
-                    order_date: res['order_date'],
-                    update_at: res['update_at'],
-                    status_id: res['status_id'],
-                    paymentType_id: res['paymentType_id'],
-                    shippingType_id: res['shippingType_id'],
-                    email: res['email'],
-                    full_name: res['full_name'],
-                    orderDetails: res['orderDetails'],
-                });
-            } catch (e) {
-                console.log(e);
-                setOrder({
-                    id: 0,
-                    user_id: 0,
-                    receiving_address: '',
-                    phone_number: '',
-                    money_total: 0,
-                    order_date: '',
-                    update_at: '',
-                    status_id: 0,
-                    paymentType_id: 0,
-                    shippingType_id: 0,
-                    email: '',
-                    full_name: '',
-                    orderDetails: [
-                        {
-                            id: 0,
-                            product_id: 0,
-                            order_id: 0,
-                            quantity: 0,
-                            price: 0,
-                            size_id: 0,
-                            color_id: 0,
-                            style_id: 0,
-                        },
-                    ],
-                    totalProduct: 0,
-                });
-            }
-        }
         getOrder();
+        const getShippingTypes = async () => {
+            try {
+                const listShippingTypes = await getListShippingType();
+                setShippingTypes(listShippingTypes);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        const getPaymentTypes = async () => {
+            try {
+                const listPaymentTypes = await getListPaymentType();
+                setPaymentTypes(listPaymentTypes);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getPaymentTypes();
+        getShippingTypes();
     }, [id]);
+
     useEffect(() => {
-        function getProduct(id: any) {
-            if (order.id !== 0) {
-                const res = getProductById(id);
-                return res;
-            }
-        }
-        function handleGetProduct() {
-            if (order.id !== 0) {
-                const res = order.orderDetails.map(async (detail) => {
-                    return getProduct(detail.product_id);
-                });
-                let newProduct: any = [];
-                res.map((item) => {
-                    item.then((product) => {
-                        if (newProduct.length > 0) {
-                            newProduct = [...newProduct, product];
-                        } else {
-                            newProduct = [product];
-                        }
-                        localStorage.setItem('productOrder', JSON.stringify(newProduct));
-                    });
-                });
-            }
-        }
         handleGetProduct();
-        let productOrder: any = JSON.parse(localStorage.getItem('productOrder') || '[]');
-        setProducts(productOrder)
-    }, [order.id]);
+    }, [order]);
     const columns: TableColumn<OrderDetails>[] = [
         {
             name: 'ID',
@@ -199,7 +233,6 @@ export const OrderDetail = () => {
             selector: (row): any => {
                 if (products.length > 0) {
                     const product: any = products.find((p: any) => p['id'] === row.product_id);
-                    console.log(product);
                     if (product !== undefined) {
                         return (
                             <img
@@ -255,7 +288,7 @@ export const OrderDetail = () => {
             <div id="form">
                 <div className="card form-add">
                     <div className="card-header">
-                        <h1>Chi tiết đơn hàng {id}</h1>
+                        <h1 style={{ textTransform: 'uppercase', fontWeight: '600' }}>Chi tiết đơn hàng</h1>
                     </div>
                     <div className="card-body">
                         <form>
@@ -323,7 +356,23 @@ export const OrderDetail = () => {
                                             onChange={(e) =>
                                                 setInputOrder({ ...inputOrder, paymentType_id: Number(e.target.value) })
                                             }
-                                        ></select>
+                                        >
+                                            {paymentTypes.map((paymentType) => {
+                                                if (paymentType.id === inputOrder.paymentType_id) {
+                                                    return (
+                                                        <option value={paymentType.id} selected>
+                                                            {paymentType.paymentType_name}
+                                                        </option>
+                                                    );
+                                                } else {
+                                                    return (
+                                                        <option value={paymentType.id} selected>
+                                                            {paymentType.paymentType_name}
+                                                        </option>
+                                                    );
+                                                }
+                                            })}
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
@@ -409,7 +458,23 @@ export const OrderDetail = () => {
                                                         shippingType_id: Number(e.target.value),
                                                     })
                                                 }
-                                            ></select>
+                                            >
+                                                {shippingTypes.map((shippingType) => {
+                                                    if (shippingType.id === inputOrder.shippingType_id) {
+                                                        return (
+                                                            <option value={shippingType.id} selected>
+                                                                {shippingType.shippingType_name}
+                                                            </option>
+                                                        );
+                                                    } else {
+                                                        return (
+                                                            <option value={shippingType.id} selected>
+                                                                {shippingType.shippingType_name}
+                                                            </option>
+                                                        );
+                                                    }
+                                                })}
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -430,6 +495,9 @@ export const OrderDetail = () => {
                                     </button>
                                     <Link
                                         to={'/admin/order'}
+                                        onClick={() => {
+                                            setProducts([]);
+                                        }}
                                         className="btn btn-secondary btn-return"
                                         style={{ width: '20%', padding: '10px 0px' }}
                                     >
@@ -442,15 +510,31 @@ export const OrderDetail = () => {
                     </div>
                 </div>
             </div>
-            <div className="card  ">
+            <div className="card  " style={{ marginTop: '20px' }}>
                 <div className="card-header">
-                    <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách đơn hàng</h3>
+                    <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách sản phẩm</h3>
                 </div>
-
+                <div className="text-start container">
+                    <button
+                        className="btn btn-primary"
+                        style={{ width: '200px' }}
+                        type="button"
+                        onClick={showAddProductModal}
+                    >
+                        Thêm sản phẩm +
+                    </button>
+                </div>
                 <div className="card-body table_order_detail">
                     <DataTable columns={columns} data={order.orderDetails} />
                 </div>
             </div>
+            <AddProduct
+                hideConfirmationModal={hideConfirmationModal}
+                displayConfirmationModal={displayConfirmationModal}
+                orderId={order.id}
+                getOrder={getOrder}
+                handleGetProduct={handleGetProduct}
+            />
         </>
     );
 };

@@ -8,6 +8,10 @@ export const getList = async (data: any): Promise<any> => {
     const res = await apiClient.post(`/api-customer/ProductCategory/getList`, data);
     return res?.data;
 };
+export const getCateById = async (id: any): Promise<any> => {
+    const res = await apiClient.get(`/api-customer/ProductCategory/getById?id=${id}`);
+    return res?.data;
+};
 export const Create = async (data: any): Promise<any> => {
     const res = await apiClient.post(`/api-admin/ProductCategory/create`, data, config);
     return res;

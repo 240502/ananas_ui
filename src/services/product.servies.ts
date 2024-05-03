@@ -14,8 +14,8 @@ export const getProductById = async (id: any): Promise<any> => {
     return res?.data;
 };
 
-export const getProductCateById = async (id: any): Promise<any> => {
-    const res = await apiClient.get(`/api-customer/ProductCategory/getById?id=${id}`);
+export const getProductByCateId = async (id: any): Promise<any> => {
+    const res = await apiClient.get(`/api-customer/Product/getByCateId?cateId=${id}`);
     return res?.data;
 };
 

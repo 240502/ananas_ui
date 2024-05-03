@@ -229,6 +229,7 @@ a {
 }
 .header .navbar-form .form-search {
     position: relative;
+    margin-bottom: 0;
 }
 .header .navbar-form i {
     position: absolute;

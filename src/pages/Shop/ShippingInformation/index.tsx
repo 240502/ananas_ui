@@ -11,30 +11,8 @@ import { ShippingTypeItem } from './ShippingTypeItem';
 import { PaymentTypeItem } from './PaymentTypeItem';
 import { userValue } from '../../../store/user.atom';
 import { useNavigate } from 'react-router-dom';
-type ShippingType = {
-    id: number;
-    shippingType_name: string;
-    price: number;
-};
+import { PaymentType, ShippingType } from '../../../types';
 
-type PaymentType = {
-    id: number;
-    paymentType_name: string;
-    price: number;
-    thumbnail: string;
-};
-type ProvinceType = {
-    id: number;
-    name: string;
-};
-type DistrictType = {
-    id: number;
-    name: string;
-};
-type WardType = {
-    id: number;
-    name: string;
-};
 export const ShippingInformation = () => {
     const navigate = useNavigate();
     const info = useRecoilValue(infoValue);

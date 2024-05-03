@@ -256,7 +256,6 @@ export const AddProduct = () => {
     }, [id]);
 
     const handleCreateProduct = async () => {
-        console.log(id);
         const isInputTextEmpty = checkEmptyError(listInputText);
         const isInputFileEmpty = id == undefined ? checkEmptyError(listInputFile) : false;
         const isInputDateEmpty = checkEmptyError(listInputDate);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getProductCateById } from '../../../services/product.servies';
+
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Update } from '../../../services/category.services';
+import { Update, getCateById } from '../../../services/category.services';
 import { ToastContainer, toast } from 'react-toastify';
 
 type ProductCategoryType = {
@@ -26,7 +26,7 @@ export const UpdateCategory = () => {
     const { id } = useParams<DataParams>();
     useEffect(() => {
         const getCategoryById = async (id: any) => {
-            const data = await getProductCateById(id);
+            const data = await getCateById(id);
             setCategory(data);
             setCateName(data['cate_name']);
             setCreateAt(data['created_at']);

@@ -1,10 +1,6 @@
 import React from 'react';
-type PaymentType = {
-    id: number;
-    paymentType_name: string;
-    price: number;
-    thumbnail: string;
-};
+import { PaymentType } from '../../../types';
+
 export const PaymentTypeItem = ({ paymentTypes, setPaymentTypeId }: any) => {
     return (
         <>

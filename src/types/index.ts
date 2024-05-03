@@ -86,3 +86,16 @@ export type OrderType = {
     orderDetails: OrderDetails[];
     totalProduct: number;
 };
+
+export type ShippingType = {
+    id: number;
+    shippingType_name: string;
+    price: number;
+};
+
+export type PaymentType = {
+    id: number;
+    paymentType_name: string;
+    price: number;
+    thumbnail: string;
+};
