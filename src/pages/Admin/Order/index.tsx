@@ -5,7 +5,6 @@ import DataTable, { TableColumn } from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { GetAll } from '../../../services/statusorder.services';
-import { optionSearch } from '../../../store/order.atom';
 
 export const Order = () => {
     const [page, setPage] = useState(1);
@@ -42,6 +41,7 @@ export const Order = () => {
             totalProduct: 0,
         },
     ]);
+    
     useEffect(() => {
         async function getListStatus() {
             try {

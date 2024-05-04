@@ -28,3 +28,8 @@ export const GetOrderById = async (id: any): Promise<any> => {
     const res = await apiClient.get(`/api-customer/Order/GetById?id=${id}`);
     return res?.data;
 };
+
+export const UpdateOrder = async (data: any): Promise<any> => {
+    const res = await apiClient.put(`/api-admin/Order/update`, data, config);
+    return res;
+};

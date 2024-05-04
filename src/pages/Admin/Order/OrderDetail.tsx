@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import '../../../assets/css/Admin/modal_add.css';
 
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { OrderDetails, OrderType, PaymentType, ProductType, ShippingType } from '../../../types';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { OrderDetailType } from '../../../store/order.atom';
-import { GetOrderById } from '../../../services/order.services';
+import { GetOrderById, UpdateOrder } from '../../../services/order.services';
 import { getProductById } from '../../../services/product.servies';
 import ReactPaginate from 'react-paginate';
 import { hostServerAdmin } from '../../../constant/api';
-import { userState } from '../../../store/user.atom';
 import { getListPaymentType } from '../../../services/paymentType.services';
 import { getListShippingType } from '../../../services/shippingType.services';
 import { AddProduct } from './AddProduct';
+
+import { GetAll } from '../../../services/statusorder.services';
+import { toast } from 'react-toastify';
+import { deleteOrderDetail } from '../../../services/orderdetail.services';
+import { ConfimDelete } from './ConfirmDelete';
 
 type DataParams = {
     id: string;
@@ -47,6 +51,13 @@ type InputOrder = {
 
 export const OrderDetail = () => {
     const { id } = useParams<DataParams>();
+    const [displayConfirmationModal, setDisplayConfirmationModal] = useState(false);
+    const [deleteMessage, setDeleteMessage] = useState('');
+    const navigate = useNavigate();
+    const [productId, setProductId] = useState(0);
+    const [size, setSize] = useState(0);
+    const [quantity, setQuantity] = useState(0);
+    const [orderDetailId, setOrderDetailId] = useState(0);
     const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([
         { id: 0, paymentType_name: '', price: 0, thumbnail: '' },
     ]);
@@ -106,14 +117,23 @@ export const OrderDetail = () => {
         ],
         totalProduct: 0,
     });
-
+    const [statusOrders, setStatusOrders] = useState([{ id: 0, status_name: '' }]);
     const [products, setProducts] = useState([]);
-    const [displayConfirmationModal, setDisplayAddModal] = useState(false);
-    const showAddProductModal = (id: any) => {
+    const [displayAddModal, setDisplayAddModal] = useState(false);
+    const showAddProductModal = () => {
         setDisplayAddModal(true);
     };
-    const hideConfirmationModal = () => {
+    const hideAddModal = () => {
         setDisplayAddModal(false);
+    };
+    const showDeleteModal = (id: any) => {
+        setDeleteMessage('Bạn chắc chắn muốn xóa sản phẩm có mã ' + id);
+        setDisplayConfirmationModal(true);
+        setOrderDetailId(id);
+    };
+
+    const hideConfirmationModal = () => {
+        setDisplayConfirmationModal(false);
     };
     const getOrder = async () => {
         try {
@@ -189,7 +209,71 @@ export const OrderDetail = () => {
             });
         }
     };
+    const handleUpdateOrder = async () => {
+        const data = inputOrder;
+        try {
+            const res = await UpdateOrder(data);
+            if (res.status === 200) {
+                navigate('/admin/order');
 
+                toast.success('Sửa thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+            toast.error('Có lỗi', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
+        }
+    };
+    const handleDelete = async (id: any) => {
+        try {
+            const res = await deleteOrderDetail(id);
+            if (res.status === 200) {
+                toast.success('Xóa thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+                getOrder();
+                setDisplayConfirmationModal(false);
+            }
+        } catch (err) {
+            console.log(err);
+            toast.error('Xóa thất bại', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
+            setDisplayConfirmationModal(false);
+        }
+    };
     useEffect(() => {
         getOrder();
         const getShippingTypes = async () => {
@@ -208,13 +292,23 @@ export const OrderDetail = () => {
                 console.log(error);
             }
         };
+        const getStatusOrder = async () => {
+            try {
+                const res = await GetAll();
+                setStatusOrders(res);
+            } catch (err) {
+                console.log(err);
+            }
+        };
         getPaymentTypes();
         getShippingTypes();
+        getStatusOrder();
     }, [id]);
 
     useEffect(() => {
         handleGetProduct();
     }, [order]);
+
     const columns: TableColumn<OrderDetails>[] = [
         {
             name: 'ID',
@@ -280,6 +374,36 @@ export const OrderDetail = () => {
             name: 'Số lượng',
             selector: (row): any => row.quantity,
             sortable: true,
+        },
+        {
+            name: 'Chức năng',
+            selector: (row): any => {
+                return (
+                    <>
+                        <button
+                            className="btnUpdate btn btn-warning"
+                            onClick={(e) => {
+                                showAddProductModal();
+                                setProductId(row.product_id);
+                                setSize(row.size_id);
+                                setQuantity(row.quantity);
+                                setOrderDetailId(row.id);
+                            }}
+                        >
+                            <i style={{ color: '#fff' }} className="fa-regular fa-pen-to-square"></i>
+                        </button>
+                        {products.length > 1 && (
+                            <button
+                                style={{ marginLeft: '10px' }}
+                                className="btnDelete btn btn-danger"
+                                onClick={() => showDeleteModal(row.id)}
+                            >
+                                <i className="fa-solid fa-trash-can"></i>
+                            </button>
+                        )}
+                    </>
+                );
+            },
         },
     ];
 
@@ -353,9 +477,12 @@ export const OrderDetail = () => {
                                             id="paymentType_id"
                                             className="form-control"
                                             value={inputOrder.paymentType_id}
-                                            onChange={(e) =>
-                                                setInputOrder({ ...inputOrder, paymentType_id: Number(e.target.value) })
-                                            }
+                                            onChange={(e) => {
+                                                setInputOrder({
+                                                    ...inputOrder,
+                                                    paymentType_id: Number(e.target.value),
+                                                });
+                                            }}
                                         >
                                             {paymentTypes.map((paymentType) => {
                                                 if (paymentType.id === inputOrder.paymentType_id) {
@@ -442,7 +569,23 @@ export const OrderDetail = () => {
                                                     });
                                                 }}
                                                 value={inputOrder.status_id}
-                                            ></select>
+                                            >
+                                                {statusOrders.length > 0 &&
+                                                    statusOrders.map((statusOrder) => {
+                                                        if (statusOrder.id === inputOrder.status_id) {
+                                                            return (
+                                                                <option value={statusOrder.id} selected>
+                                                                    {statusOrder.status_name}
+                                                                </option>
+                                                            );
+                                                        } else
+                                                            return (
+                                                                <option value={statusOrder.id}>
+                                                                    {statusOrder.status_name}
+                                                                </option>
+                                                            );
+                                                    })}
+                                            </select>
                                             <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
                                         <div className="form-group">
@@ -452,12 +595,26 @@ export const OrderDetail = () => {
                                                 id="shippingType_id"
                                                 className="form-control"
                                                 value={inputOrder.shippingType_id}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
+                                                    const prvId = Number(inputOrder.shippingType_id);
+                                                    const prvShippingType: any = shippingTypes.find(
+                                                        (shippingType) => shippingType.id === prvId,
+                                                    );
+                                                    const newShippingType: any = shippingTypes.find(
+                                                        (shippingType) => shippingType.id === Number(e.target.value),
+                                                    );
+
+                                                    const newMoneyTotal =
+                                                        inputOrder.money_total -
+                                                        prvShippingType?.price +
+                                                        newShippingType?.price;
+                                                    console.log('money=' + newMoneyTotal);
                                                     setInputOrder({
                                                         ...inputOrder,
                                                         shippingType_id: Number(e.target.value),
-                                                    })
-                                                }
+                                                        money_total: newMoneyTotal,
+                                                    });
+                                                }}
                                             >
                                                 {shippingTypes.map((shippingType) => {
                                                     if (shippingType.id === inputOrder.shippingType_id) {
@@ -488,7 +645,7 @@ export const OrderDetail = () => {
                                         style={{ width: '20%', padding: '10px 0px' }}
                                         name="cmd"
                                         className="btn btn-primary btn-add"
-                                        // onClick={() => (id === undefined ? handleCreateProduct() : handleUpdate())}
+                                        onClick={() => handleUpdateOrder()}
                                     >
                                         {id !== undefined ? 'Lưu Lại' : 'Thêm mới'}
                                         <i className="fa-solid fa-plus" style={{ marginLeft: '10px' }}></i>
@@ -519,7 +676,12 @@ export const OrderDetail = () => {
                         className="btn btn-primary"
                         style={{ width: '200px' }}
                         type="button"
-                        onClick={showAddProductModal}
+                        onClick={() => {
+                            showAddProductModal();
+                            setProductId(0);
+                            setSize(0);
+                            setQuantity(0);
+                        }}
                     >
                         Thêm sản phẩm +
                     </button>
@@ -529,11 +691,21 @@ export const OrderDetail = () => {
                 </div>
             </div>
             <AddProduct
-                hideConfirmationModal={hideConfirmationModal}
-                displayConfirmationModal={displayConfirmationModal}
+                hideConfirmationModal={hideAddModal}
+                displayAddModal={displayAddModal}
                 orderId={order.id}
                 getOrder={getOrder}
-                handleGetProduct={handleGetProduct}
+                productId={productId}
+                size_id={size}
+                quantity={quantity}
+                orderDetailId={orderDetailId}
+            />
+            <ConfimDelete
+                hideConfirmationModal={hideConfirmationModal}
+                deleteMessage={deleteMessage}
+                displayConfirmationModal={displayConfirmationModal}
+                id={orderDetailId}
+                handleDelete={handleDelete}
             />
         </>
     );
