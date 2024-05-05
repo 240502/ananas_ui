@@ -14,7 +14,7 @@ export const BreadCrumb = ({ cateId, proName, style }: any) => {
                 }
             }
         }
-        getCateById(cateId);
+        getCate(cateId);
     }, [cateId, proName]);
     return (
         <nav aria-label="breadcrumb">

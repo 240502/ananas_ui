@@ -43,3 +43,8 @@ export const getTop5ProductBestSale = async (data: any): Promise<any> => {
     const res = await apiClient.post(`/api-admin/Product/getTop5ProductBestSale`, data, config);
     return res?.data;
 };
+
+export const getTop5ProductBestView = async (data: any): Promise<any> => {
+    const res = await apiClient.post(`/api-admin/Product/getTop5ProductBestView`, data, config);
+    return res?.data;
+};

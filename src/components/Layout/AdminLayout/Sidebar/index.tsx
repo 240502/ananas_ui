@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../../../assets/css/Admin/sidebar.css';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userState, userValue } from '../../../../store/user.atom';
+import { getRoleById } from '../../../../services/role.services';
 export const Sidebar = () => {
     const userInfo = useRecoilValue(userValue);
     const setUser = useSetRecoilState(userState);
     const navigate = useNavigate();
+    const [role, setRole] = useState({ id: 0, role_name: '' });
     const handleLogOut = async () => {
         setUser({
             id: 0,
@@ -29,25 +31,32 @@ export const Sidebar = () => {
     const hideConfirmationModal = () => {
         setActiveModalConfirm(false);
     };
+    useEffect(() => {
+        const getRole = async (id: any) => {
+            try {
+                const res = await getRoleById(id);
+                setRole(res);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getRole(userInfo.user.role);
+    }, []);
     const [activeModalConfirm, setActiveModalConfirm] = useState(false);
     return (
         <>
             <div className="sidebar active">
                 <div className="top">
-                    <div className="logo">
+                    <Link to="/" className="logo" style={{ cursor: 'pointer' }}>
                         <i className="fa-brands fa-codepen" />
                         <span>Ananas</span>
-                    </div>
+                    </Link>
                     <i className="fa-solid fa-bars" id="btn" />
                 </div>
-                <div className="user">
-                    <img
-                        src="https://scontent.fhan3-2.fna.fbcdn.net/v/t39.30808-6/373658815_1239626233412960_2893644615644052814_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeH4uhilOpPHjX84-F8MW6PW7zBD8G69ZlTvMEPwbr1mVM0BS1ZHGYyDy0CWwLui4umPZ5jdVi6zEmg5RqRYXOzD&_nc_ohc=h8lKptMZRx8Ab6MXBQ-&_nc_ht=scontent.fhan3-2.fna&oh=00_AfBmQ1w0r80yx4oPU4dpg9xjh6JQNeP9WI2ZI5yd1Vmt3w&oe=66307A12"
-                        className="user-img"
-                    />
+                <div className="user" style={{ marginLeft: ' 11.235px' }}>
                     <div>
-                        <p className="bole">Nguyễn Văn Sang</p>
-                        <p>Admin</p>
+                        <p className="bole">{userInfo.user.us_name}</p>
+                        <p style={{ textTransform: 'capitalize' }}>{role.role_name}</p>
                     </div>
                 </div>
                 <ul>
@@ -102,7 +111,7 @@ export const Sidebar = () => {
                                 <span className="tooltip">Dashboard</span>
                             </li>
                             <li className="">
-                                <Link to="/admin/category">
+                                <Link to="/admin/user">
                                     <i className="fa-solid fa-list"></i>
                                     <span className="nav-item"> Nhân viên</span>
                                 </Link>
@@ -110,6 +119,7 @@ export const Sidebar = () => {
                             </li>
                         </>
                     )}
+
                     <li>
                         <Link to="/admin/account">
                             <i className="fa-regular fa-circle-user" />

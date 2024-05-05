@@ -14,17 +14,20 @@ export function showError(input: any, message: string) {
 
 export const checkEmptyError = (listInput: any[]) => {
     let isEmpty = false;
-    listInput.forEach((input: any) => {
-        if (input.type === 'text') {
-            input.value = input.value.trim();
-        }
-        if (!input.value) {
-            isEmpty = true;
-            showError(input, 'Không được để trống ô này !');
-        } else {
-            showSuccess(input);
-        }
-    });
+    console.log(listInput);
+    if (listInput !== undefined) {
+        listInput.forEach((input: any) => {
+            if (input.type === 'text') {
+                input.value = input.value.trim();
+            }
+            if (!input.value) {
+                isEmpty = true;
+                showError(input, 'Không được để trống ô này !');
+            } else {
+                showSuccess(input);
+            }
+        });
+    }
     return isEmpty;
 };
 export const isNumber = (char: any) => {

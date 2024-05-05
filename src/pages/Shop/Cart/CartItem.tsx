@@ -2,6 +2,7 @@ import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { CartItemType, cartState, infoValue } from '../../../store/cart.atom';
 import { clearCart, increaseQty, reduceQty, removeCartItem } from '../../../utils/cart';
+import { hostServerAdmin } from '../../../constant/api';
 
 function CartItem() {
     const info = useRecoilValue(infoValue);
@@ -13,7 +14,13 @@ function CartItem() {
                     <div className="product-info" key={cart['id']}>
                         <div className="pro-img">
                             <a href="#">
-                                <img src={cart.thumbnail} />
+                                <img
+                                    src={
+                                        cart.thumbnail.includes('uploads')
+                                            ? hostServerAdmin + cart.thumbnail
+                                            : 'http://localhost:3000/' + cart.thumbnail
+                                    }
+                                />
                             </a>
                         </div>
                         <div className="pro-detail">

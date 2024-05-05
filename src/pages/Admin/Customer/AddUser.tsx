@@ -12,6 +12,8 @@ import {
     checkPasswordError,
     checkPhoneError,
 } from '../../../utils/validation_user';
+import { useRecoilValue } from 'recoil';
+import { userValue } from '../../../store/user.atom';
 type InputUser = {
     id: number;
     password: string;
@@ -46,6 +48,7 @@ export const AddUser = () => {
 
     const [districts, setDistricts] = useState([{ id: 0, name: '' }]);
     const [wards, setWards] = useState([{ id: 0, name: '' }]);
+    const userInfo = useRecoilValue(userValue);
 
     const [inputUser, setInputUser] = useState<InputUser>({
         id: 0,
@@ -187,18 +190,35 @@ export const AddUser = () => {
                 const province = provinces.find((p) => p.id == Number(inputUser.province));
                 const district = districts.find((d) => d.id == Number(inputUser.district));
                 const ward = wards.find((d) => d.id == Number(inputUser.ward));
-                const data = {
-                    password: inputUser.password,
-                    us_name: inputUser.us_name,
-                    email: inputUser.email,
-                    phone_number: inputUser.phonenumber,
-                    birthday: inputUser.birthday,
-                    province: province?.name,
-                    district: district?.name,
-                    ward: ward?.name,
-                    token: '',
-                    role_id: 2,
-                };
+                let data = {};
+                if (userInfo.user.role === 1) {
+                    data = {
+                        password: inputUser.password,
+                        us_name: inputUser.us_name,
+                        email: inputUser.email,
+                        phone_number: inputUser.phonenumber,
+                        birthday: inputUser.birthday,
+                        province: province?.name,
+                        district: district?.name,
+                        ward: ward?.name,
+                        token: '',
+                        role_id: 2,
+                    };
+                } else {
+                    data = {
+                        password: inputUser.password,
+                        us_name: inputUser.us_name,
+                        email: inputUser.email,
+                        phone_number: inputUser.phonenumber,
+                        birthday: inputUser.birthday,
+                        province: province?.name,
+                        district: district?.name,
+                        ward: ward?.name,
+                        token: '',
+                        role_id: 1,
+                    };
+                }
+                console.log(data);
                 Create(data);
             }
         }

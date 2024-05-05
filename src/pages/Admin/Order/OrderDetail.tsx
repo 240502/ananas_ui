@@ -17,6 +17,8 @@ import { GetAll } from '../../../services/statusorder.services';
 import { toast } from 'react-toastify';
 import { deleteOrderDetail } from '../../../services/orderdetail.services';
 import { ConfimDelete } from './ConfirmDelete';
+import { checkEmptyError, handleFocusInput } from '../../../utils/global';
+import { checkEmailError, checkNameError, checkPhoneError } from '../../../utils/validation_order';
 
 type DataParams = {
     id: string;
@@ -50,6 +52,11 @@ type InputOrder = {
 };
 
 export const OrderDetail = () => {
+    let inputEmail: any;
+    let inputPhone: any;
+    let inputName: any;
+    let listInputText: any;
+    let listInputDate: any;
     const { id } = useParams<DataParams>();
     const [displayConfirmationModal, setDisplayConfirmationModal] = useState(false);
     const [deleteMessage, setDeleteMessage] = useState('');
@@ -209,37 +216,52 @@ export const OrderDetail = () => {
             });
         }
     };
+    useEffect(() => {
+        listInputText = document.querySelectorAll('.form-add input[type="text"]');
+        inputEmail = document.querySelector('#email');
+        inputPhone = document.querySelector('#phone_number');
+        inputName = document.querySelector('#full_name');
+    });
     const handleUpdateOrder = async () => {
-        const data = inputOrder;
-        try {
-            const res = await UpdateOrder(data);
-            if (res.status === 200) {
-                navigate('/admin/order');
+        const isInputTextEmpty = checkEmptyError(listInputText);
+        const isInputDateEmpty = checkEmptyError(listInputDate);
+        if (!isInputTextEmpty && !isInputDateEmpty) {
+            const isEmailError = checkEmailError(inputEmail);
+            const isPhoneError = checkPhoneError(inputPhone);
+            const isNameError = checkNameError(inputName);
+            if (!isEmailError && !isPhoneError && !isNameError) {
+                const data = inputOrder;
+                try {
+                    const res = await UpdateOrder(data);
+                    if (res.status === 200) {
+                        navigate('/admin/order');
 
-                toast.success('Sửa thành công', {
-                    position: 'top-right',
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'light',
-                });
+                        toast.success('Sửa thành công', {
+                            position: 'top-right',
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: 'light',
+                        });
+                    }
+                    console.log(res);
+                } catch (err) {
+                    console.log(err);
+                    toast.error('Có lỗi', {
+                        position: 'top-right',
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'light',
+                    });
+                }
             }
-            console.log(res);
-        } catch (err) {
-            console.log(err);
-            toast.error('Có lỗi', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
         }
     };
     const handleDelete = async (id: any) => {
@@ -274,6 +296,7 @@ export const OrderDetail = () => {
             setDisplayConfirmationModal(false);
         }
     };
+
     useEffect(() => {
         getOrder();
         const getShippingTypes = async () => {
@@ -303,6 +326,7 @@ export const OrderDetail = () => {
         getPaymentTypes();
         getShippingTypes();
         getStatusOrder();
+        handleFocusInput(listInputText);
     }, [id]);
 
     useEffect(() => {
@@ -437,6 +461,7 @@ export const OrderDetail = () => {
                                     <div className="form-group">
                                         <label htmlFor="full_name">Tên khách hàng:</label>
                                         <input
+                                            type="text"
                                             name="full_name"
                                             id="full_name"
                                             className="form-control"
@@ -450,6 +475,7 @@ export const OrderDetail = () => {
                                     <div className="form-group">
                                         <label htmlFor="phone_number">Số điện thoại:</label>
                                         <input
+                                            type="text"
                                             name="phone_number"
                                             id="phone_number"
                                             className="form-control"
@@ -469,6 +495,7 @@ export const OrderDetail = () => {
                                             value={inputOrder.money_total}
                                             readOnly
                                         />
+                                        <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="paymentType_id">Kiểu thanh toán</label>
@@ -500,6 +527,7 @@ export const OrderDetail = () => {
                                                 }
                                             })}
                                         </select>
+                                        <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
@@ -632,6 +660,7 @@ export const OrderDetail = () => {
                                                     }
                                                 })}
                                             </select>
+                                            <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
                                     </div>
                                 </div>

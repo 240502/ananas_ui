@@ -7,17 +7,30 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactPaginate from 'react-paginate';
 import { ProductCategoryType } from '../../../types';
+import { ConfirmDelete } from './ConfirmDelete';
 
 export const Category = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [pageCount, setPageCount] = useState(0);
     const [cates, setCates] = useState<ProductCategoryType[]>([]);
+    const [displayConfirmationModal, setDisplayConfirmationModal] = useState(false);
+    const [deleteMessage, setDeleteMessage] = useState('');
+    const [id, setId] = useState(null);
     const handlePageClick = (event: any) => {
         setPage(event.selected + 1);
     };
     const changeInputValue = (e: any) => {
         setPageSize(+e.target.value);
+    };
+    const showDeleteModal = (id: any) => {
+        setDeleteMessage('Bạn chắc chắn muốn xóa loại sản phẩm có mã ' + id);
+        setId(id);
+        setDisplayConfirmationModal(true);
+    };
+
+    const hideConfirmationModal = () => {
+        setDisplayConfirmationModal(false);
     };
     useEffect(() => {
         async function loadData() {
@@ -94,7 +107,7 @@ export const Category = () => {
                         >
                             Sửa
                         </Link>
-                        <button className="btn btn-danger" onClick={() => handleDelete(row.id)}>
+                        <button className="btn btn-danger" onClick={() => showDeleteModal(row.id)}>
                             Xóa
                         </button>
                     </>
@@ -141,6 +154,13 @@ export const Category = () => {
                     </section>
                 </div>
             </div>
+            <ConfirmDelete
+                hideConfirmationModal={hideConfirmationModal}
+                deleteMessage={deleteMessage}
+                displayConfirmationModal={displayConfirmationModal}
+                id={id}
+                handleDelete={handleDelete}
+            />
         </>
     );
 };

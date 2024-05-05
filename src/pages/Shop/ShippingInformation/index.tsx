@@ -55,7 +55,6 @@ export const ShippingInformation = () => {
                 color_id: cart.colorId,
                 size_id: cart.size,
                 style_id: cart.styleId,
-                status: 0,
             });
         });
         const data = {
@@ -67,7 +66,7 @@ export const ShippingInformation = () => {
             phone_number: phoneNumber == '' ? userInfo.user.phone_number : phoneNumber,
             shippingType_id: shippingTypeId,
             paymentType_id: paymentTypeId,
-            status_id: 1,
+            status_id: 3,
             email: userInfo.user.email,
             full_name: userInfo.user.us_name,
             orderDetails: listdetail,

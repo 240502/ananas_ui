@@ -20,7 +20,7 @@ export type ProductDetailType = {
     size: number;
     product_id: number;
 };
-export type ProductType = {
+export type ProductStatisticsType = {
     id: number;
     pro_name: string;
     color_id: number;
@@ -36,6 +36,23 @@ export type ProductType = {
     priceModel: ProductPriceType;
     productDetails: ProductDetailType[];
     amountOfSale: number;
+    amount_view: number;
+};
+export type ProductType = {
+    id: number;
+    pro_name: string;
+    color_id: number;
+    style_id: number;
+    cate_id: number;
+    status_id: number;
+    out_sole: string;
+    gender: string;
+    material_id: number;
+    collection_id: number;
+    created_at: string;
+    imageGallery: ImageGalleryType;
+    priceModel: ProductPriceType;
+    productDetails: ProductDetailType[];
 };
 export type ProductCategoryType = {
     id: number;

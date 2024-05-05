@@ -7,12 +7,16 @@ import ReactPaginate from 'react-paginate';
 import { Delete, getListUsers, getUserById } from '../../../services/user.services';
 import axios from 'axios';
 import { ConfimDelete } from './ConfirmDelete';
+import { useRecoilValue } from 'recoil';
+import { userValue } from '../../../store/user.atom';
 type ProvinceType = {
     id: number;
     name: string;
 };
 
 export const Users = () => {
+    const userInfo = useRecoilValue(userValue);
+
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [pageCount, setPageCount] = useState(0);
@@ -56,9 +60,18 @@ export const Users = () => {
     useEffect(() => {
         async function loadData() {
             try {
-                const res = await getListUsers({ pageIndex: page, pageSize: pageSize, role_id: 2 });
-                setUsers(res.data);
-                setPageCount(Math.ceil(res.totalItems / pageSize));
+                let data = {};
+                if (userInfo.user.role === 1) {
+                    data = { pageIndex: page, pageSize: pageSize, role_id: 2 };
+                    const res = await getListUsers(data);
+                    setUsers(res.data);
+                    setPageCount(Math.ceil(res.totalItems / pageSize));
+                } else {
+                    data = { pageIndex: page, pageSize: pageSize, role_id: 1 };
+                    const res = await getListUsers(data);
+                    setUsers(res.data);
+                    setPageCount(Math.ceil(res.totalItems / pageSize));
+                }
             } catch (e) {
                 console.error(e);
                 setPageCount(0);

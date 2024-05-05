@@ -4,11 +4,13 @@ const ProductColor = ({ id }: any) => {
     const [colorName, setColorName] = useState('');
     useEffect(() => {
         async function getColorById(id: any) {
-            try {
-                let res = await getColor(id);
-                setColorName(res.color_name);
-            } catch (e) {
-                console.log(e);
+            if (id !== 0) {
+                try {
+                    let res = await getColor(id);
+                    setColorName(res.color_name);
+                } catch (e) {
+                    console.log(e);
+                }
             }
         }
         getColorById(id);
