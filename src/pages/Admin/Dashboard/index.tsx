@@ -71,6 +71,7 @@ function Dashboard() {
             productDetails: [{ id: 0, quantity: 0, product_id: 0, size: 0 }],
         },
     ]);
+    const date = new Date();
 
     useEffect(() => {
         async function GetTotalView() {
@@ -83,7 +84,6 @@ function Dashboard() {
         }
         GetTotalView();
         async function getTop5Product() {
-            const date = new Date();
             const data = {
                 month: date.getMonth() + 1,
                 year: date.getFullYear(),
@@ -231,7 +231,7 @@ function Dashboard() {
                 <div className=" box-item">
                     <h6 className="box-title">
                         <span>
-                            <p> Lượt xem sản phẩm</p>
+                            <p> Lượt xem sản phẩm trong ngày</p>
                             <span className="data total-view">{totalView}</span>
                         </span>
                         <span className="box-icon">
@@ -270,7 +270,9 @@ function Dashboard() {
             </div>
             <div className="card block-product">
                 <div className="card-header">
-                    <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Top 5 sản phẩm bán chạy nhất</h3>
+                    <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>
+                        Top 5 sản phẩm bán chạy nhất tháng {date.getMonth() + 1}
+                    </h3>
                 </div>
 
                 <div className="card-body">
@@ -281,7 +283,7 @@ function Dashboard() {
             <div className="card block-product">
                 <div className="card-header">
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>
-                        Top 5 sản phẩm có lượt xem cao nhất
+                        Top 5 sản phẩm có lượt xem cao nhất tháng {date.getMonth() + 1}
                     </h3>
                 </div>
 

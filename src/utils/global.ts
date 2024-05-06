@@ -14,7 +14,6 @@ export function showError(input: any, message: string) {
 
 export const checkEmptyError = (listInput: any[]) => {
     let isEmpty = false;
-    console.log(listInput);
     if (listInput !== undefined) {
         listInput.forEach((input: any) => {
             if (input.type === 'text') {
@@ -34,6 +33,21 @@ export const isNumber = (char: any) => {
     return !isNaN(parseInt(char));
 };
 
+export const checkSelectEmptyError = (listSelect: any[]) => {
+    let isEmpty = false;
+    if (listSelect !== undefined) {
+        listSelect.forEach((input: any) => {
+            console.log('value', input.value);
+            if (input.value == 0) {
+                isEmpty = true;
+                showError(input, 'Vui lòng chọn !');
+            } else {
+                showSuccess(input);
+            }
+        });
+    }
+    return isEmpty;
+};
 export const handleFocusInput = (listInput: any) => {
     listInput.forEach((input: any) => {
         input.onfocus = () => {

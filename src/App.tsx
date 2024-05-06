@@ -10,17 +10,21 @@ import './assets/bootstrap-5.0.2-dist/css/bootstrap.min.css';
 import { useSetRecoilState } from 'recoil';
 import { userState } from './store/user.atom';
 import { cartState } from './store/cart.atom';
+import { productViewedState } from './store/product.atom';
 function App() {
     const setUser = useSetRecoilState(userState);
     const setCarts = useSetRecoilState(cartState);
+    const setProductViewed = useSetRecoilState(productViewedState);
     useEffect(() => {
-        async function loadData() {
+        async function getCart() {
             try {
                 const cart = JSON.parse(localStorage.getItem('cart') || '[]');
                 setCarts(cart);
             } catch (error) {
                 console.log(error);
             }
+        }
+        async function getUser() {
             try {
                 const user = JSON.parse(localStorage.getItem('user') || '{}');
                 setUser(user);
@@ -28,7 +32,17 @@ function App() {
                 console.log(error);
             }
         }
-        loadData();
+        async function getProductViewed() {
+            try {
+                const listProductViewed = await JSON.parse(localStorage.getItem('productViewed') || '[]');
+                setProductViewed(listProductViewed);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        getCart();
+        getUser();
+        getProductViewed();
     }, []);
 
     return (

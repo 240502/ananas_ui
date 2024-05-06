@@ -4,19 +4,56 @@ import { login } from '../../../services/login.servies';
 import { redirect, Navigate, useNavigate } from 'react-router-dom';
 import { userState } from '../../../store/user.atom';
 import { useRecoilState } from 'recoil';
+import { toast } from 'react-toastify';
 function Login() {
     const [usename, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const [user, setUser] = useRecoilState(userState);
+    const [showPassword, setShowPassword] = useState(false);
+
     async function handleLogin() {
-        const res = await login({ UserName: usename, password: password });
-        if (res) {
-            setUser(res);
-            localStorage.setItem('user', JSON.stringify(res));
-            navigate('/');
+        try {
+            const res = await login({ UserName: usename, password: password });
+
+            if (res) {
+                toast.success('Đăng nhập thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+                setUser(res);
+                localStorage.setItem('user', JSON.stringify(res));
+                navigate('/');
+            } else {
+                toast.error('Đăng nhập không thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
+        } catch (err) {
+            toast.error('Đăng nhập không thành công', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
         }
-        console.log(user);
     }
     return (
         <div className="frame">
@@ -43,13 +80,28 @@ function Login() {
                                 </div>
                                 <div className="form-item">
                                     <input
-                                        type="password"
+                                        type={showPassword === true ? 'text' : 'password'}
                                         id="password"
                                         className="password"
                                         required
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
                                     <label htmlFor="">Password</label>
+                                    <i
+                                        style={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            right: '5%',
+                                            transform: 'translateY(-50%)',
+                                            cursor: 'pointer',
+                                        }}
+                                        onClick={() => {
+                                            setShowPassword(!showPassword);
+                                        }}
+                                        className={
+                                            showPassword === true ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'
+                                        }
+                                    ></i>
                                 </div>
                                 <button type="button" id="btnLogin" className="btnLogin" onClick={handleLogin}>
                                     {' '}

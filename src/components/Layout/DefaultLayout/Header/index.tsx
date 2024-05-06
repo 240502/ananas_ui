@@ -54,7 +54,15 @@ function Header() {
                             </Link>
                         </li>
                         <li>
-                            <Link to={userInfo.user.token !== '' ? '/admin/dashboard' : '/login'}>
+                            <Link
+                                to={
+                                    userInfo.user.token !== ''
+                                        ? userInfo.user.role === 2
+                                            ? '/admin/account'
+                                            : '/admin/dashboard'
+                                        : '/login'
+                                }
+                            >
                                 <i className="fa-solid fa-user" />
                                 <span>{userInfo.user.token !== '' ? 'Tài khoản' : 'Đăng nhập'}</span>
                             </Link>

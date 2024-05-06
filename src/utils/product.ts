@@ -35,7 +35,11 @@ export const addToListProductViewed = (
     setProductViewed: any,
     listProductViewed: ProductType[],
 ) => {
+    console.log(product);
+    console.log(listProductViewed);
+
     let newList;
+    console.log(listProductViewed.length);
     if (listProductViewed.length > 0) {
         const currentProduct = listProductViewed.find((pro: ProductType) => pro.id === product.id);
         if (currentProduct) {

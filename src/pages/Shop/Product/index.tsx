@@ -65,7 +65,6 @@ function Product() {
                 });
                 setProducts(items.data);
                 setPageCount(Math.ceil(items.totalItems / pageSize));
-                console.log(products);
             } catch (err) {
                 console.log(err);
                 setPageCount(0);

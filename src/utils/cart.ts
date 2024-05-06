@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { CartItemType } from '../store/cart.atom';
 export const addToCart = (cartItem: CartItemType, listCart: CartItemType[], setCarts: any) => {
     const product = {
@@ -14,7 +15,16 @@ export const addToCart = (cartItem: CartItemType, listCart: CartItemType[], setC
     };
     let newCarts;
     if (cartItem.qty === 0 || cartItem.size === 0) {
-        alert('Không được để trống số lượng sản phẩm hoặc size!');
+        toast.error('Không được để trống số lượng sản phẩm hoặc size!', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
     } else {
         if (listCart.length > 0) {
             const currentCartItem = listCart.find((item: CartItemType) => item.id === product.id);
@@ -40,7 +50,17 @@ export const addToCart = (cartItem: CartItemType, listCart: CartItemType[], setC
             newCarts = [product];
             setCarts(newCarts);
         }
-        alert('Đã thêm giỏ hàng thành công!');
+        toast.success('Đã thêm giỏ hàng thành công', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
+
         localStorage.setItem('cart', JSON.stringify(newCarts));
     }
 };
@@ -49,7 +69,16 @@ export const reduceQty = (id: number, setCarts: any, listCart: CartItemType[]) =
     const cartItem = listCart.find((item: CartItemType) => item.id === id);
     if (cartItem) {
         if (cartItem.qty === 1) {
-            alert('Sản phẩm đã đạt số lượng nhỏ nhất để có thể đặt hàng !');
+            toast.success('Sản phẩm đã đạt số lượng nhỏ nhất để có thể đặt hàng !', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
             return;
         } else {
             const newCarts: CartItemType[] = listCart.map((item: CartItemType) => {
@@ -83,6 +112,5 @@ export const removeCartItem = (id: number, listCart: CartItemType[], setCarts: a
 };
 export const clearCart = (setCarts: any) => {
     localStorage.setItem('cart', JSON.stringify([]));
-
     setCarts([]);
 };

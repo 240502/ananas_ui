@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { CreateUser, UpdateUser, getUserById } from '../../../services/user.services';
 import { ToastContainer, toast } from 'react-toastify';
 import { UsersType } from '../../../types';
-import { checkEmptyError, handleFocusInput } from '../../../utils/global';
+import { checkEmptyError, checkSelectEmptyError, handleFocusInput } from '../../../utils/global';
 import {
     checkBirthDayError,
     checkEmailError,
@@ -42,6 +42,7 @@ export const AddUser = () => {
     let listInputText: any;
     let listInputDate: any;
     let listInputPassword: any;
+    let listSelect: any;
     const navigate = useNavigate();
     const { id } = useParams<DataParams>();
     const [provinces, setProvinces] = useState([{ id: 0, name: '' }]);
@@ -81,10 +82,13 @@ export const AddUser = () => {
         ward: '',
         token: '',
     });
+    const [showPassword, setShowPassword] = useState(false);
+
     useEffect(() => {
-        listInputText = document.querySelectorAll('.form-control input[type="text"]');
+        listInputText = document.querySelectorAll('.form-add input[type="text"]');
         listInputDate = document.querySelectorAll('.form-add input[type="date"]');
         listInputPassword = document.querySelectorAll('.form-add input[type="password"]');
+        listSelect = document.querySelectorAll('.form-add select');
         inputEmail = document.querySelector('#email');
         inputPhone = document.querySelector('#phonenumber');
         inputPassword = document.querySelector('#password');
@@ -106,6 +110,7 @@ export const AddUser = () => {
         handleFocusInput(listInputDate);
         handleFocusInput(listInputText);
         handleFocusInput(listInputPassword);
+        handleFocusInput(listSelect);
     }, []);
     const getListDistrct = async (provinceId: any) => {
         try {
@@ -180,6 +185,9 @@ export const AddUser = () => {
         const isInputTextEmpty = checkEmptyError(listInputText);
         const isInputDateEmpty = checkEmptyError(listInputDate);
         const isInputPasswordEmpty = checkEmptyError(listInputPassword);
+        console.log(listSelect);
+        const isSelectEmpty = checkSelectEmptyError(listSelect);
+        console.log(isSelectEmpty);
         if (!isInputTextEmpty && !isInputDateEmpty && !isInputPasswordEmpty) {
             const isEmailError = checkEmailError(inputEmail);
             const isPhoneError = checkPhoneError(inputPhone);
@@ -337,6 +345,7 @@ export const AddUser = () => {
                                 <div className="form-group">
                                     <label htmlFor="pro_name">Tên người dùng:</label>
                                     <input
+                                        type="text"
                                         name="pro_name"
                                         id="pro_name"
                                         className="form-control"
@@ -436,6 +445,7 @@ export const AddUser = () => {
                                     <input
                                         name="phonenumber"
                                         id="phonenumber"
+                                        type="text"
                                         className="form-control"
                                         onChange={(e) => setInputUser({ ...inputUser, phonenumber: e.target.value })}
                                         value={inputUser.phonenumber}
@@ -462,10 +472,10 @@ export const AddUser = () => {
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
-                                    <div className="form-group">
+                                    <div className="form-group" style={{ position: 'relative' }}>
                                         <label htmlFor="password">Mật khẩu:</label>
                                         <input
-                                            type="password"
+                                            type={showPassword === true ? 'text' : 'password'}
                                             name="password"
                                             id="password"
                                             className="form-control"
@@ -477,13 +487,28 @@ export const AddUser = () => {
                                             }
                                             value={inputUser.password}
                                         ></input>
+                                        <i
+                                            style={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                right: '5%',
+                                                transform: 'translateY(50%)',
+                                                cursor: 'pointer',
+                                            }}
+                                            onClick={() => {
+                                                setShowPassword(!showPassword);
+                                            }}
+                                            className={
+                                                showPassword === true ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'
+                                            }
+                                        ></i>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
 
                                     <div className="form-group">
                                         <label htmlFor="password">Email:</label>
                                         <input
-                                            type="email"
+                                            type="text"
                                             name="email"
                                             id="email"
                                             className="form-control"
