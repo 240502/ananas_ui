@@ -6,6 +6,7 @@ import ReactPaginate from 'react-paginate';
 import { Color } from './Color';
 import { Type } from './Type';
 import { ProductType } from '../../../types';
+import { hostServerAdmin } from '../../../constant/api';
 
 type DataParams = {
     value: string;
@@ -148,7 +149,11 @@ export const SearchProduct = () => {
                                                 }}
                                             >
                                                 <img
-                                                    src={'http://localhost:3000/' + product.imageGallery.img_src}
+                                                    src={
+                                                        product.imageGallery.img_src.includes('uploads')
+                                                            ? hostServerAdmin + product.imageGallery.img_src
+                                                            : 'http://localhost:3000/' + product.imageGallery.img_src
+                                                    }
                                                     alt=""
                                                     style={{
                                                         display: 'block',

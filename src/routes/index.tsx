@@ -11,7 +11,7 @@ import {
     PRODUCT_PATH,
     ADMIN_PATH,
     PRODUCT_GENDER_PATH,
-    SHIPPING_INFORMATION_PATTH,
+    SHIPPING_INFORMATION_PATH,
     THANKYOU_PATH,
     SEARCH_ORDER_PATH,
     SEARCH_PRODUCT_PATH,
@@ -29,6 +29,8 @@ import {
     ACCOUNT_PATH,
     ORDER_ADMIN_PATH,
     ORDER_DETAIL_PATH,
+    REVENUE_STATISTICS_PATH,
+    NEWS_ADMIN_PATH,
 } from './paths';
 import Cart from '../pages/Shop/Cart';
 import ProductDetail from '../pages/Shop/ProductDetail';
@@ -46,10 +48,11 @@ import { ProductAdmin } from '../pages/Admin/Product';
 import { AddProduct } from '../pages/Admin/Product/AddProduct';
 import { Users } from '../pages/Admin/Customer';
 import { AddUser } from '../pages/Admin/Customer/AddUser';
-import path from 'path';
 import { Account } from '../pages/Admin/Account';
 import { Order } from '../pages/Admin/Order';
 import { OrderDetail } from '../pages/Admin/Order/OrderDetail';
+import { Revenue } from '../pages/Admin/Revenue';
+import { News } from '../pages/Admin/News';
 export const publicRoutes = [
     { path: HOME_PATH, component: Home, layout: undefined },
     { path: PRODUCT_PATH, component: Product, layout: undefined },
@@ -57,7 +60,7 @@ export const publicRoutes = [
     { path: CART_PATH, component: Cart, layout: undefined },
     { path: DETAIL_PATH, component: ProductDetail, layout: undefined },
     { path: PRODUCT_GENDER_PATH, component: Product, layout: undefined },
-    { path: SHIPPING_INFORMATION_PATTH, component: ShippingInformation, layout: undefined },
+    { path: SHIPPING_INFORMATION_PATH, component: ShippingInformation, layout: undefined },
     { path: LOGIN_PATH, component: Login, layout: LoginLayout },
     { path: THANKYOU_PATH, component: ThankYou, layout: ThankYouLayout },
     { path: SEARCH_ORDER_PATH, component: SearchOrder, layout: undefined },
@@ -79,4 +82,7 @@ export const privateRoutes = [
     { path: ACCOUNT_PATH, component: Account, layout: AdminLayout },
     { path: ORDER_ADMIN_PATH, component: Order, layout: AdminLayout },
     { path: ORDER_DETAIL_PATH, component: OrderDetail, layout: AdminLayout },
+    { path: REVENUE_STATISTICS_PATH, component: Revenue, layout: AdminLayout },
+    { path: NEWS_ADMIN_PATH, component: News, layout: AdminLayout },
+
 ];

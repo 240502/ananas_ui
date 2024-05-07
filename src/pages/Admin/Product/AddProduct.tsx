@@ -845,12 +845,12 @@ export const AddProduct = () => {
                                             type="file"
                                             className="form-control"
                                             id="image"
-                                            onChange={(e) =>
+                                            onChange={(e) => {
                                                 setInputProduct({
                                                     ...inputProduct,
                                                     file: e.target.files?.[0],
-                                                })
-                                            }
+                                                });
+                                            }}
                                         />
                                         <img
                                             style={{

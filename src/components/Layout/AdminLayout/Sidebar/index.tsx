@@ -98,6 +98,14 @@ export const Sidebar = () => {
                                 </Link>
                                 <span className="tooltip">Đơn hàng</span>
                             </li>
+
+                            <li className="">
+                                <Link to="/admin/statistics/revenue">
+                                    <i className="fa-solid fa-chart-simple"></i>
+                                    <span className="nav-item">Thống kê</span>
+                                </Link>
+                                <span className="tooltip">Thống kê</span>
+                            </li>
                         </>
                     )}
 
