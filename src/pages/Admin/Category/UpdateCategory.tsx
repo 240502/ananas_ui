@@ -3,19 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Update, getCateById } from '../../../services/category.services';
 import { ToastContainer, toast } from 'react-toastify';
+import { ProductCategoryType } from '../../../types';
 
-type ProductCategoryType = {
-    id: number;
-    cate_name: string;
-    created_at: string;
-    updated_at: string;
-};
 type DataParams = {
     id: string;
 };
 export const UpdateCategory = () => {
-    const [cateName, setCateName] = useState('');
-    const [createAt, setCreateAt] = useState('');
     const [category, setCategory] = useState<ProductCategoryType>({
         id: 0,
         cate_name: '',
@@ -28,16 +21,14 @@ export const UpdateCategory = () => {
         const getCategoryById = async (id: any) => {
             const data = await getCateById(id);
             setCategory(data);
-            setCateName(data['cate_name']);
-            setCreateAt(data['created_at']);
         };
         getCategoryById(id);
     }, [id]);
     const handleUpdate = async () => {
         const data = {
             id: category.id,
-            cate_name: cateName,
-            created_at: createAt,
+            cate_name: category.cate_name,
+            created_at: category.created_at,
         };
         try {
             const res = await Update(data);
@@ -53,6 +44,18 @@ export const UpdateCategory = () => {
                     theme: 'light',
                 });
                 navigate('/admin/category');
+            } else {
+                toast.error('Sửa thất bại', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+                console.log(res);
             }
         } catch (err) {
             toast.error('Sửa thất bại', {
@@ -86,8 +89,8 @@ export const UpdateCategory = () => {
                                 name="cate_name"
                                 id="cate_name"
                                 className="form-control"
-                                onChange={(e) => setCateName(e.target.value)}
-                                value={cateName}
+                                onChange={(e) => setCategory({ ...category, cate_name: e.target.value })}
+                                value={category.cate_name}
                             ></input>
                         </div>
                         <div className="form-group">
@@ -97,8 +100,8 @@ export const UpdateCategory = () => {
                                 name="create_at"
                                 id="create_at"
                                 className="form-control"
-                                onChange={(e) => setCreateAt(e.target.value)}
-                                value={createAt.slice(0, 10)}
+                                onChange={(e) => setCategory({ ...category, created_at: e.target.value })}
+                                value={category.created_at.slice(0, 10)}
                             ></input>
                         </div>
                         <div className="form-group" style={{ display: 'flex', justifyContent: 'space-between' }}>

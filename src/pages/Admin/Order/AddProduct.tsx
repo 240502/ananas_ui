@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProductCategoryType, ProductDetailType, ProductType } from '../../../types';
 import { getCategories } from '../../../services/category.services';
 import { getProductByCateId, getProductById } from '../../../services/product.servies';
 import { createOrderDetail, updateOrderDetail } from '../../../services/orderdetail.services';
 import { toast } from 'react-toastify';
-import { getListSizeByProId, getProDetailByProIdAndSize } from '../../../services/product_detail.services';
+import { getListSizeByProId } from '../../../services/product_detail.services';
 import { getAllColor } from '../../../services/color.services';
 import { getAllStyle } from '../../../services/style.services';
 
@@ -224,7 +224,7 @@ export const AddProduct = ({ ...props }: any) => {
         }
     };
 
-    async function getProDetail(proId: any, size: any) {
+    const getProDetail = async (proId: any, size: any) => {
         if (size > 0) {
             try {
                 const pro: any = productDetails.find((item: ProductDetailType) => {
@@ -237,7 +237,7 @@ export const AddProduct = ({ ...props }: any) => {
         } else {
             setDetail({ id: 0, quantity: 0, product_id: 0, size: 0 });
         }
-    }
+    };
 
     useEffect(() => {
         if (props.productId !== 0) {
@@ -288,7 +288,6 @@ export const AddProduct = ({ ...props }: any) => {
         };
         try {
             const res = await createOrderDetail(data);
-            console.log(res);
             if (res.status == 200) {
                 toast.success('Thêm sản phẩm thành công', {
                     position: 'top-right',
@@ -302,6 +301,19 @@ export const AddProduct = ({ ...props }: any) => {
                 });
                 props.getOrder();
                 props.hideConfirmationModal();
+            }
+            else{
+                console.log(res)
+                toast.error('Thêm sản phẩm thất bại', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
             }
         } catch (err) {
             console.log(err);
@@ -330,7 +342,6 @@ export const AddProduct = ({ ...props }: any) => {
         };
         try {
             const res = await updateOrderDetail(data);
-            console.log(res);
             if (res.status == 200) {
                 toast.success('Sửa thành công', {
                     position: 'top-right',
@@ -344,6 +355,19 @@ export const AddProduct = ({ ...props }: any) => {
                 });
                 props.getOrder();
                 props.hideConfirmationModal();
+            }
+            else{
+                console.log(res);
+                toast.error('Sửa thất bại', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
             }
         } catch (err) {
             console.log(err);

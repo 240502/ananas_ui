@@ -1,5 +1,5 @@
 import React from 'react';
-import { CartItemType } from '../../../store/cart.atom';
+import { CartItemType } from '../../../types';
 export const CartItem = ({ cartlist, totalPriceItem }: any) => {
     return (
         <>

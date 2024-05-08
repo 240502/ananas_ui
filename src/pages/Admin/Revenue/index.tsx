@@ -6,7 +6,7 @@ export const Revenue = () => {
     const [quarter, setQuarter] = useState('');
     return (
         <>
-            <div className="text-start container">
+            <div className="text-start container" style={{ marginLeft: '0' }}>
                 <select
                     className="form-control"
                     style={{ width: '200px' }}

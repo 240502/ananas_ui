@@ -1,4 +1,3 @@
-import SlickSlideProductDetail from '../../../components/Layout/SlickSlide/SlickSlideProductDetail';
 import SlickSlideProductRef from '../../../components/Layout/SlickSlide/SlickSlideProductRef';
 import { toggleInfo } from '../../../utils/product-detail';
 import SlickSlideProductViewed from '../../../components/Layout/SlickSlide/SlickSlideProductViewed';
@@ -6,22 +5,17 @@ import '../../../assets/css/Shop/product_detail.css';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getProductById, getRelatedProduct } from '../../../services/product.servies';
-import { getProDetailByProIdAndSize, getListSizeByProId } from '../../../services/product_detail.services';
 import { getStyleById } from '../../../services/style.services';
 import { getColor } from '../../../services/color.services';
 import { getProductStatus } from '../../../services/product_status.services';
-import { getProductPrice } from '../../../services/price.services';
 
 import { BreadCrumb } from './BreadCrumb';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { CartItemType, cartState, infoValue } from '../../../store/cart.atom';
-
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { cartState, infoValue } from '../../../store/cart.atom';
 import { addToCart } from '../../../utils/cart';
-import { ProductDetailType, ProductType } from '../../../types';
+import { ProductDetailType, ProductType, CartItemType } from '../../../types';
 import { hostServerAdmin } from '../../../constant/api';
-import { render } from '@testing-library/react';
 import { createProductViews } from '../../../services/productviews.services';
-import { walkUpBindingElementsAndPatterns } from 'typescript';
 import { productViewedState, productViewedValue } from '../../../store/product.atom';
 import { addToListProductViewed } from '../../../utils/product';
 type DataParams = {
@@ -35,9 +29,8 @@ function ProductDetail() {
     const [size, setSize] = useState(0);
     const [detail, setDetail] = useState<ProductDetailType>({ id: 0, quantity: 0, product_id: 0, size: 0 });
     const [quantity, setNumberPro] = useState(0);
-    const [cart, setCarts] = useRecoilState(cartState);
+    const setCarts = useSetRecoilState(cartState);
     const setProductViewed = useSetRecoilState(productViewedState);
-
     const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([
         {
             id: 0,

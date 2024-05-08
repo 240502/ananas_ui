@@ -4,9 +4,8 @@ import '../../../assets/css/Admin/main_content.css';
 import { getTotalOrderToday } from '../../../services/order.services';
 import { getTotalUser } from '../../../services/user.services';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { ProductStatisticsType, ProductType } from '../../../types';
+import { ProductStatisticsType } from '../../../types';
 import { hostServerAdmin } from '../../../constant/api';
-import { Link } from 'react-router-dom';
 import { getTop5ProductBestSale, getTop5ProductBestView } from '../../../services/product.servies';
 import { BarChart } from './BarChart';
 import { getTotalView } from '../../../services/productviews.services';
@@ -72,7 +71,6 @@ function Dashboard() {
         },
     ]);
     const date = new Date();
-
     useEffect(() => {
         async function GetTotalView() {
             try {
@@ -82,7 +80,6 @@ function Dashboard() {
                 console.log(err);
             }
         }
-        GetTotalView();
         async function getTop5Product() {
             const data = {
                 month: date.getMonth() + 1,
@@ -108,8 +105,7 @@ function Dashboard() {
                 console.log(err);
             }
         }
-        getTop5ProBestView();
-        getTop5Product();
+
         async function getTotalOrder() {
             try {
                 const res = await getTotalOrderToday();
@@ -127,6 +123,9 @@ function Dashboard() {
                 console.log(err);
             }
         }
+        GetTotalView();
+        getTop5ProBestView();
+        getTop5Product();
         GetTotalUser();
         getTotalOrder();
     }, []);
@@ -169,7 +168,6 @@ function Dashboard() {
             sortable: true,
         },
     ];
-
     const columns_best_view: TableColumn<ProductStatisticsType>[] = [
         {
             name: 'ID',
@@ -209,7 +207,6 @@ function Dashboard() {
             sortable: true,
         },
     ];
-
     return (
         <>
             <div className="heading">
@@ -262,7 +259,6 @@ function Dashboard() {
                     </h6>
                 </div>
             </div>
-
             <div className="card block-line-chart" style={{ marginTop: '50px' }}>
                 <div className="card-body">
                     <BarChart />
@@ -274,12 +270,10 @@ function Dashboard() {
                         Top 5 sản phẩm bán chạy nhất tháng {date.getMonth() + 1}
                     </h3>
                 </div>
-
                 <div className="card-body">
                     <DataTable columns={columns_best_sale} data={productsSale} />
                 </div>
             </div>
-
             <div className="card block-product">
                 <div className="card-header">
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>
@@ -294,5 +288,4 @@ function Dashboard() {
         </>
     );
 }
-
 export default Dashboard;

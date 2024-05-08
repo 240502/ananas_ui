@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../../../assets/css/Shop/shippinginformation.css';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { CartItemType, cartState, infoValue } from '../../../store/cart.atom';
+import { cartState, infoValue } from '../../../store/cart.atom';
 import { CartItem } from './CartItem';
 import { CreateOrder } from '../../../services/order.services';
 import { getListPaymentType } from '../../../services/paymentType.services';
@@ -12,11 +12,12 @@ import { PaymentTypeItem } from './PaymentTypeItem';
 import { userValue } from '../../../store/user.atom';
 import { useNavigate } from 'react-router-dom';
 import { PaymentType, ShippingType } from '../../../types';
-
+import { OrderDetailsType,CartItemType } from '../../../types';
 export const ShippingInformation = () => {
     const navigate = useNavigate();
-    const info = useRecoilValue(infoValue);
+    const cartInfo = useRecoilValue(infoValue);
     const setCarts = useSetRecoilState(cartState);
+    const userInfo = useRecoilValue(userValue);
     const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([]);
     const [shippingTypes, setShippingTypes] = useState<ShippingType[]>([]);
     const [provinces, setProvince] = useState('');
@@ -29,37 +30,58 @@ export const ShippingInformation = () => {
     const [paymentTypeId, setPaymentTypeId] = useState(0);
     const [shippingTypeId, setShippingTypeId] = useState(0);
     const [shippingTypePrice, setShippingTypePrice] = useState(0);
-    const userInfo = useRecoilValue(userValue);
     useEffect(() => {
-        async function loadData() {
+        const getPaymentTypes = async () => {
             try {
                 const listPaymentTypes = await getListPaymentType();
                 setPaymentTypes(listPaymentTypes);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        const getShippingTypes = async () => {
+            try {
                 const listShippingTypes = await getListShippingType();
                 setShippingTypes(listShippingTypes);
             } catch (error) {
                 console.log(error);
             }
-        }
-        loadData();
+        };
+        getPaymentTypes();
+        getShippingTypes();
     }, []);
 
     const handleCreateOrder = () => {
-        const listdetail: any[] = [];
+        const list_orderDetail: OrderDetailsType[] = [
+            {
+                product_id: 0,
+                quantity: 0,
+                order_id: 0,
+                color_id: 0,
+                size_id: 0,
+                style_id: 0,
+                id: 0,
+                price: 0,
+            },
+        ];
 
-        info.carts.forEach((cart: CartItemType) => {
-            listdetail.push({
+        cartInfo.carts.forEach((cart: CartItemType) => {
+            let orderDetail: OrderDetailsType = {
+                id: 0,
+                order_id: 0,
                 product_id: cart.id,
                 quantity: cart.qty,
                 price: cart.price,
                 color_id: cart.colorId,
                 size_id: cart.size,
                 style_id: cart.styleId,
-            });
+            };
+
+            list_orderDetail.push(orderDetail);
         });
         const data = {
             user_id: userInfo.user.id,
-            money_total: info.totalPrice + shippingTypePrice,
+            money_total: cartInfo.totalPrice + shippingTypePrice,
             receiving_address: `${village} - ${ward == '' ? userInfo.user.ward : ward} - ${
                 district == '' ? userInfo.user.district : district
             } - ${provinces == '' ? userInfo.user.province : provinces}`,
@@ -69,11 +91,11 @@ export const ShippingInformation = () => {
             status_id: 3,
             email: userInfo.user.email,
             full_name: userInfo.user.us_name,
-            orderDetails: listdetail,
+            orderDetails: list_orderDetail,
         };
         createOrder(data);
     };
-    const getShippingType = (shippingId: number): any => {
+    const getShippingType = (shippingId: number): ShippingType => {
         const shippingType: any = shippingTypes.find((item: ShippingType) => item.id === shippingId);
         return shippingType;
     };
@@ -203,11 +225,11 @@ export const ShippingInformation = () => {
                         <ul className="list-group">
                             <li className="list-group-item title">Đơn hàng</li>
                             <li className="list-group-item divider" />
-                            <CartItem cartlist={info.carts} totalPriceItem={info.totalPriceItem} />
+                            <CartItem cartlist={cartInfo.carts} totalPriceItem={cartInfo.totalPriceItem} />
                             <li className="list-group-item divider-1"></li>
                             <li className="list-group-item text-1">
                                 <span className="title-3">Đơn hàng</span>
-                                <span className="title-3-1 ">{info.totalPrice.toLocaleString(undefined)} VND</span>
+                                <span className="title-3-1 ">{cartInfo.totalPrice.toLocaleString(undefined)} VND</span>
                             </li>
                             <li className="list-group-item text-2-2">
                                 <span className="title-3 lb-discount">Giảm</span>
@@ -231,7 +253,7 @@ export const ShippingInformation = () => {
                                 <span className="title-5 lb-total-price">Tổng Cộng</span>
                                 <span className="title-5-2">
                                     <span className="total-price">
-                                        {(info.totalPrice + shippingTypePrice).toLocaleString(undefined)} VND
+                                        {(cartInfo.totalPrice + shippingTypePrice).toLocaleString(undefined)} VND
                                     </span>
                                 </span>
                             </li>

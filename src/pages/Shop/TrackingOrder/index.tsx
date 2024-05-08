@@ -2,15 +2,11 @@ import React, { useEffect, useState } from 'react';
 import '../../../assets/css/Shop/tracking_order.css';
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { OrderDetailType, OrderType, searchOption } from '../../../store/order.atom';
+import { searchOption } from '../../../store/order.atom';
+import { OrderDetailsType, OrderType, ShippingType } from '../../../types';
 import { getTrackingOrder } from '../../../services/order.services';
 import { getShippingTypeById } from '../../../services/shippingType.services';
-import ProductImage from '../Product/ProductImage';
-type ShippingType = {
-    id: number;
-    shippingType_name: string;
-    price: number;
-};
+import { ProductImage } from './ProductImage';
 export const TrackingOrder = () => {
     const option = useRecoilValue(searchOption);
     const [order, setOrder] = useState<OrderType>({
@@ -26,11 +22,23 @@ export const TrackingOrder = () => {
         update_at: '',
         user_id: 0,
         status_id: 0,
-        orderDetails: [],
+        orderDetails: [
+            {
+                id: 0,
+                product_id: 0,
+                order_id: 0,
+                quantity: 0,
+                price: 0,
+                size_id: 0,
+                color_id: 0,
+                style_id: 0,
+            },
+        ],
+        totalProduct: 0,
     });
     const [shippingType, setShippingType] = useState<ShippingType>({ id: 0, shippingType_name: '', price: 0 });
     useEffect(() => {
-        async function loadData(orderId: number, optionSearch: string) {
+        async function getOrder(orderId: number, optionSearch: string) {
             try {
                 const data = await getTrackingOrder(orderId, optionSearch);
                 setOrder(data);
@@ -47,7 +55,7 @@ export const TrackingOrder = () => {
                 console.log(err);
             }
         }
-        loadData(option.orderId, option.optionSearch);
+        getOrder(option.orderId, option.optionSearch);
     }, []);
 
     return (
@@ -118,7 +126,7 @@ export const TrackingOrder = () => {
 
                         <li className="list-group-item divider"></li>
                         <li className="list-group-item items">
-                            {order?.orderDetails.map((item: OrderDetailType) => {
+                            {order?.orderDetails.map((item: OrderDetailsType) => {
                                 return (
                                     <div className="pro-info" key={item.id} style={{ marginBottom: '20px' }}>
                                         <div className="group-info-left">

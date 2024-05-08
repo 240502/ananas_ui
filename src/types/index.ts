@@ -77,7 +77,7 @@ export type UsersType = {
     ward: string;
     token: string;
 };
-export type OrderDetails = {
+export type OrderDetailsType = {
     id: number;
     product_id: number;
     order_id: number;
@@ -100,7 +100,7 @@ export type OrderType = {
     shippingType_id: number;
     email: string;
     full_name: string;
-    orderDetails: OrderDetails[];
+    orderDetails: OrderDetailsType[];
     totalProduct: number;
 };
 
@@ -115,4 +115,17 @@ export type PaymentType = {
     paymentType_name: string;
     price: number;
     thumbnail: string;
+};
+
+export type CartItemType = {
+    id: number;
+    name: string;
+    qty: number;
+    size: number;
+    thumbnail: string;
+    colorName: string;
+    price: number;
+    styleName: string;
+    colorId: number;
+    styleId: number;
 };

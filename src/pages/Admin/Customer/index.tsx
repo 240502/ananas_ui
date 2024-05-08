@@ -2,21 +2,15 @@ import { useEffect, useState } from 'react';
 import { UsersType } from '../../../types';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { Link } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
-import { Delete, getListUsers, getUserById } from '../../../services/user.services';
-import axios from 'axios';
-import { ConfimDelete } from './ConfirmDelete';
+import { Delete, getListUsers } from '../../../services/user.services';
+import { ConfirmDelete } from './ConfirmDelete';
 import { useRecoilValue } from 'recoil';
 import { userValue } from '../../../store/user.atom';
-type ProvinceType = {
-    id: number;
-    name: string;
-};
 
 export const Users = () => {
     const userInfo = useRecoilValue(userValue);
-
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [pageCount, setPageCount] = useState(0);
@@ -58,7 +52,7 @@ export const Users = () => {
         setPageSize(+e.target.value);
     };
     useEffect(() => {
-        async function loadData() {
+        async function getListCustomer() {
             try {
                 let data = {};
                 if (userInfo.user.role === 1) {
@@ -79,23 +73,37 @@ export const Users = () => {
             }
         }
 
-        loadData();
+        getListCustomer();
     }, [pageSize, page]);
     const handleDelete = async (id: number) => {
         try {
             const res = await Delete(id);
-            const newList = users.filter((user) => user.id !== id);
-            setUsers(newList);
-            toast.success('Xóa thành công', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
+            if (res.status === 200) {
+                const newList = users.filter((user) => user.id !== id);
+                setUsers(newList);
+                toast.success('Xóa thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            } else {
+                toast.success('Xóa thất bại', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+                console.log(res);
+            }
             hideConfirmationModal();
         } catch (err) {
             toast.success('Xóa thất bại', {
@@ -114,7 +122,7 @@ export const Users = () => {
         }
     };
 
-    const columns: TableColumn<UsersType>[] = [
+    const columns_table_cus: TableColumn<UsersType>[] = [
         {
             name: 'ID',
             selector: (row): any => row.id,
@@ -168,9 +176,8 @@ export const Users = () => {
                 <div className="card-header">
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách người dùng</h3>
                 </div>
-
                 <div className="card-body">
-                    <DataTable columns={columns} data={users} selectableRows fixedHeader />
+                    <DataTable columns={columns_table_cus} data={users} selectableRows fixedHeader />
                     <section className="page" style={{ display: `${pageCount > 1 ? 'flex' : 'none'}` }}>
                         <select
                             name="pageSize"
@@ -195,7 +202,7 @@ export const Users = () => {
                     </section>
                 </div>
             </div>
-            <ConfimDelete
+            <ConfirmDelete
                 hideConfirmationModal={hideConfirmationModal}
                 deleteMessage={deleteMessage}
                 displayConfirmationModal={displayConfirmationModal}

@@ -266,7 +266,6 @@ export const Order = () => {
                 <div className="card-header">
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách đơn hàng</h3>
                 </div>
-
                 <div className="card-body">
                     {statusId !== 5 && (
                         <button
@@ -282,7 +281,6 @@ export const Order = () => {
                             Hủy tất cả lựa chọn
                         </button>
                     )}
-
                     <DataTable
                         columns={columns}
                         data={orders}
@@ -296,7 +294,6 @@ export const Order = () => {
                         }}
                         selectableRowsHighlight
                         fixedHeader
-                        
                     />
                     <section className="page" style={{ display: `${pageCount > 1 ? 'flex' : 'none'}` }}>
                         <select

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import '../../../assets/css/Admin/modal_add.css';
 
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { OrderDetails, OrderType, PaymentType, ProductType, ShippingType } from '../../../types';
+import { OrderDetailsType, OrderType, PaymentType, ProductType, ShippingType } from '../../../types';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { OrderDetailType } from '../../../store/order.atom';
 import { GetOrderById, UpdateOrder } from '../../../services/order.services';
 import { getProductById } from '../../../services/product.servies';
 import ReactPaginate from 'react-paginate';
@@ -333,7 +332,7 @@ export const OrderDetail = () => {
         handleGetProduct();
     }, [order]);
 
-    const columns: TableColumn<OrderDetails>[] = [
+    const columns: TableColumn<OrderDetailsType>[] = [
         {
             name: 'ID',
             selector: (row): any => row.id,

@@ -85,15 +85,18 @@ export const AddUser = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
-        listInputText = document.querySelectorAll('.form-add input[type="text"]');
-        listInputDate = document.querySelectorAll('.form-add input[type="date"]');
-        listInputPassword = document.querySelectorAll('.form-add input[type="password"]');
-        listSelect = document.querySelectorAll('.form-add select');
-        inputEmail = document.querySelector('#email');
-        inputPhone = document.querySelector('#phonenumber');
-        inputPassword = document.querySelector('#password');
-        inputName = document.querySelector('#pro_name');
-        inputBirthday = document.querySelector('#birthday');
+        const queryElement = () => {
+            listInputText = document.querySelectorAll('.form-add input[type="text"]');
+            listInputDate = document.querySelectorAll('.form-add input[type="date"]');
+            listInputPassword = document.querySelectorAll('.form-add input[type="password"]');
+            listSelect = document.querySelectorAll('.form-add select');
+            inputEmail = document.querySelector('#email');
+            inputPhone = document.querySelector('#phonenumber');
+            inputPassword = document.querySelector('#password');
+            inputName = document.querySelector('#pro_name');
+            inputBirthday = document.querySelector('#birthday');
+        };
+        queryElement();
     });
     useEffect(() => {
         const getProvinces = async () => {
@@ -106,13 +109,16 @@ export const AddUser = () => {
                 console.log(err);
             }
         };
+        const setEventFocusInput = () => {
+            handleFocusInput(listInputDate);
+            handleFocusInput(listInputText);
+            handleFocusInput(listInputPassword);
+            handleFocusInput(listSelect);
+        };
         getProvinces();
-        handleFocusInput(listInputDate);
-        handleFocusInput(listInputText);
-        handleFocusInput(listInputPassword);
-        handleFocusInput(listSelect);
+        setEventFocusInput();
     }, []);
-    const getListDistrct = async (provinceId: any) => {
+    const getListDistrict = async (provinceId: any) => {
         try {
             const res = await axios.get(
                 `https://vnprovinces.pythonanywhere.com/api/districts/?province_id=${provinceId}&basic=true&limit=100`,
@@ -167,7 +173,7 @@ export const AddUser = () => {
                 return item.name === user.province;
             });
             if (province !== undefined) {
-                getListDistrct(province.id);
+                getListDistrict(province.id);
             }
         }
     }, [provinces.length]);
@@ -363,7 +369,7 @@ export const AddUser = () => {
                                         className="form-control"
                                         onChange={(e) => {
                                             setInputUser({ ...inputUser, province: e.target.value });
-                                            getListDistrct(e.target.value);
+                                            getListDistrict(e.target.value);
                                         }}
                                     >
                                         <option value="0">Chọn tỉnh/thành phố</option>

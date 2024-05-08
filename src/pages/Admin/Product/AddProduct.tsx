@@ -20,12 +20,14 @@ import {
 } from '../../../utils/validation_product';
 import { handleFocusInput, showSuccess } from '../../../utils/global';
 import { checkEmptyError } from '../../../utils/global';
-import { ImageGalleryType, ProductDetailType, ProductPriceType, ProductType } from '../../../types';
+import {
+    ImageGalleryType,
+    ProductCategoryType,
+    ProductDetailType,
+    ProductPriceType,
+    ProductType,
+} from '../../../types';
 import { hostServerAdmin } from '../../../constant/api';
-type CategoryType = {
-    id: number;
-    cate_name: string;
-};
 
 type StatusType = {
     id: number;
@@ -108,7 +110,7 @@ export const AddProduct = () => {
         feature: false,
         product_id: 0,
     });
-    const [cates, setCates] = useState<CategoryType[]>();
+    const [cates, setCates] = useState<ProductCategoryType[]>();
     const [status, setStatus] = useState<StatusType[]>();
     const [styles, setStyles] = useState<StyleType[]>();
     const [collections, setCollections] = useState<CollectionType[]>();
@@ -135,17 +137,20 @@ export const AddProduct = () => {
         create_at: '',
     });
     useEffect(() => {
-        listInputText = document.querySelectorAll('.form-control input[type="text"]');
-        listInputDate = document.querySelectorAll('.form-add input[type="date"]');
-        listInputFile = document.querySelectorAll('.form-add input[type="file"]');
+        const queryElement = () => {
+            listInputText = document.querySelectorAll('.form-control input[type="text"]');
+            listInputDate = document.querySelectorAll('.form-add input[type="date"]');
+            listInputFile = document.querySelectorAll('.form-add input[type="file"]');
 
-        inputEndSize = document.querySelector('#endSize');
-        inputStartSize = document.querySelector('#startSize');
-        inputPrice = document.querySelector('#price');
-        inputOutSole = document.querySelector('#outSole');
-        inputStartDate = document.querySelector('#startDate');
-        inputEndDate = document.querySelector('#endDate');
-        inputQuantity = document.querySelector('#quantity');
+            inputEndSize = document.querySelector('#endSize');
+            inputStartSize = document.querySelector('#startSize');
+            inputPrice = document.querySelector('#price');
+            inputOutSole = document.querySelector('#outSole');
+            inputStartDate = document.querySelector('#startDate');
+            inputEndDate = document.querySelector('#endDate');
+            inputQuantity = document.querySelector('#quantity');
+        };
+        queryElement();
     });
     useEffect(() => {
         async function getCategory() {
@@ -241,18 +246,19 @@ export const AddProduct = () => {
                 console.log('re-render');
             }
         };
-
+        const setEventFocusInput = () => {
+            handleFocusInput(listInputDate);
+            handleFocusInput(listInputText);
+            handleFocusInput(listInputFile);
+        };
         getCategory();
         getStatus();
         getStyle();
         getCollection();
         getMaterial();
         getColor();
-        handleFocusInput(listInputDate);
-        handleFocusInput(listInputText);
-        handleFocusInput(listInputFile);
-
         getProduct(id);
+        setEventFocusInput();
     }, [id]);
 
     const handleCreateProduct = async () => {
@@ -312,7 +318,6 @@ export const AddProduct = () => {
                             },
                             imageGallery: imageGallery,
                         };
-                        console.log(data);
                         Create(data);
                     } else {
                         let tmpDetails: any = [];
@@ -407,7 +412,6 @@ export const AddProduct = () => {
                                 imageGallery: newImage,
                             };
                         }
-                        console.log('update');
                         Update(data);
                     }
                 }
@@ -415,20 +419,33 @@ export const AddProduct = () => {
         }
     };
     const Update = async (data: any) => {
-        console.log(data);
         try {
             const res = await update(data);
-            navigate('/admin/product');
-            toast.success('Sửa thành công', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
+            if (res.status === 200) {
+                navigate('/admin/product');
+                toast.success('Sửa thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            } else {
+                console.log(res);
+                toast.error('Sửa không thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
         } catch (e) {
             console.log(e);
             toast.error('Sửa không thành công', {
@@ -447,17 +464,31 @@ export const AddProduct = () => {
         console.log(data);
         try {
             const res = await create(data);
-            navigate('/admin/product');
-            toast.success('Thêm thành công', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
+            if (res.status === 200) {
+                navigate('/admin/product');
+                toast.success('Thêm thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            } else {
+                console.log(res);
+                toast.error('Thêm không thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
         } catch (e) {
             console.log(e);
             toast.error('Thêm không thành công', {

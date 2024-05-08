@@ -58,7 +58,6 @@ export const SearchProduct = () => {
             } catch (error) {
                 console.log(error);
                 setTotalItems(0);
-
                 setPageCount(0);
                 setProducts([]);
             }

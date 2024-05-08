@@ -1,15 +1,14 @@
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { CartItemType, cartState, infoValue } from '../../../store/cart.atom';
+import { cartState, infoValue } from '../../../store/cart.atom';
 import { clearCart, increaseQty, reduceQty, removeCartItem } from '../../../utils/cart';
 import { hostServerAdmin } from '../../../constant/api';
-
 function CartItem() {
-    const info = useRecoilValue(infoValue);
+    const cartInfo = useRecoilValue(infoValue);
     const [carts, setCarts] = useRecoilState(cartState);
     return (
         <div className="row">
-            {info.carts.map((cart): any => {
+            {cartInfo.carts.map((cart): any => {
                 return (
                     <div className="product-info" key={cart['id']}>
                         <div className="pro-img">
@@ -52,7 +51,7 @@ function CartItem() {
                                             type="button"
                                             className="reduce"
                                             onClick={() => {
-                                                reduceQty(cart.id, setCarts, info.carts);
+                                                reduceQty(cart.id, setCarts, cartInfo.carts);
                                             }}
                                         >
                                             -
@@ -68,7 +67,7 @@ function CartItem() {
                                             type="button"
                                             className="increase"
                                             onClick={() => {
-                                                increaseQty(cart.id, setCarts, info.carts);
+                                                increaseQty(cart.id, setCarts, cartInfo.carts);
                                             }}
                                         >
                                             +
@@ -79,7 +78,7 @@ function CartItem() {
                         </div>
                         <div className="product-info-right">
                             <div className="price">
-                                {Number(info.totalPriceItem(cart.id)).toLocaleString(undefined)} VND
+                                {Number(cartInfo.totalPriceItem(cart.id)).toLocaleString(undefined)} VND
                             </div>
                             <div className="status">Còn hàng</div>
                             <div className="group-btn">
@@ -92,7 +91,7 @@ function CartItem() {
                                     <button
                                         className="btn"
                                         onClick={() => {
-                                            removeCartItem(cart.id, info.carts, setCarts);
+                                            removeCartItem(cart.id, cartInfo.carts, setCarts);
                                         }}
                                     >
                                         <i className="fa-solid fa-trash-can" />

@@ -1,9 +1,6 @@
 import React from 'react';
-type ShippingType = {
-    id: number;
-    shippingType_name: string;
-    price: number;
-};
+import { ShippingType } from '../../../types';
+
 export const ShippingTypeItem = ({ shippingTypes, setShippingTypeId, getShippingType, setShippingTypePrice }: any) => {
     return (
         <>

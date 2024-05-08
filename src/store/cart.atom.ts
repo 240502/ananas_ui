@@ -1,18 +1,8 @@
 import { atom, selector } from 'recoil';
 import CartItem from '../pages/Shop/Cart/CartItem';
+import { CartItemType } from '../types';
 
-export type CartItemType = {
-    id: number;
-    name: string;
-    qty: number;
-    size: number;
-    thumbnail: string;
-    colorName: string;
-    price: number;
-    styleName: string;
-    colorId: number;
-    styleId: number;
-};
+
 
 export const cartState = atom({
     key: 'cartState',

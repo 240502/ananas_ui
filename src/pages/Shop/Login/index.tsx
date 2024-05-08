@@ -6,7 +6,7 @@ import { userState } from '../../../store/user.atom';
 import { useRecoilState } from 'recoil';
 import { toast } from 'react-toastify';
 function Login() {
-    const [usename, setUsername] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const [user, setUser] = useRecoilState(userState);
@@ -14,7 +14,7 @@ function Login() {
 
     async function handleLogin() {
         try {
-            const res = await login({ UserName: usename, password: password });
+            const res = await login({ UserName: username, password: password });
 
             if (res) {
                 toast.success('Đăng nhập thành công', {

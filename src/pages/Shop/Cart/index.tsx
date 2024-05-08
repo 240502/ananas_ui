@@ -7,7 +7,7 @@ import { infoValue } from '../../../store/cart.atom';
 import { Link } from 'react-router-dom';
 import { userValue } from '../../../store/user.atom';
 function Cart() {
-    const info = useRecoilValue(infoValue);
+    const cartInfo = useRecoilValue(infoValue);
     const userInfo = useRecoilValue(userValue);
     return (
         <main>
@@ -45,7 +45,7 @@ function Cart() {
                             <li className="list-group-item divider-1" />
                             <li className="list-group-item text-1">
                                 <span>Đơn hàng</span>
-                                <span>{info.totalPrice.toLocaleString(undefined)} VND</span>
+                                <span>{cartInfo.totalPrice.toLocaleString(undefined)} VND</span>
                             </li>
                             <li className="list-group-item text-2">
                                 <span>Giảm</span>
@@ -54,7 +54,7 @@ function Cart() {
                             <li className="list-group-item divider-1" />
                             <li className="list-group-item totalPrice">
                                 <span>Tạm tính </span>
-                                <span> {info.totalPrice.toLocaleString(undefined)} VND</span>
+                                <span> {cartInfo.totalPrice.toLocaleString(undefined)} VND</span>
                             </li>
                             <li className="list-group-item">
                                 <Link

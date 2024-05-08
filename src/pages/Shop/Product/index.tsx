@@ -53,7 +53,7 @@ function Product() {
     const { gender } = useParams<DataParams>();
     const [index, setIndexGender] = useRecoilState(indexGender);
     useEffect(() => {
-        async function loadData(cateId: any, startPrice: any, endPrice: any, gender: any) {
+        async function getProducts(cateId: any, startPrice: any, endPrice: any, gender: any) {
             try {
                 let items = await getList({
                     pageIndex: page,
@@ -71,9 +71,8 @@ function Product() {
                 setProducts([]);
             }
         }
-        loadData(cateId, startPrice, endPrice, gender);
+        getProducts(cateId, startPrice, endPrice, gender);
     }, [page, pageSize, cateId, startPrice, endPrice, gender]);
-
     const handlePageClick = (event: any) => {
         setPage(event.selected + 1);
     };

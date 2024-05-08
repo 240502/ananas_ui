@@ -76,14 +76,17 @@ export const Account = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
-        listInputText = document.querySelectorAll('.form-control input[type="text"]');
-        listInputDate = document.querySelectorAll('.form-add input[type="date"]');
-        listInputPassword = document.querySelectorAll('.form-add input[type="password"]');
-        inputEmail = document.querySelector('#email');
-        inputPhone = document.querySelector('#phonenumber');
-        inputPassword = document.querySelector('#password');
-        inputName = document.querySelector('#pro_name');
-        inputBirthday = document.querySelector('#birthday');
+        const queryElement = () => {
+            listInputText = document.querySelectorAll('.form-control input[type="text"]');
+            listInputDate = document.querySelectorAll('.form-add input[type="date"]');
+            listInputPassword = document.querySelectorAll('.form-add input[type="password"]');
+            inputEmail = document.querySelector('#email');
+            inputPhone = document.querySelector('#phonenumber');
+            inputPassword = document.querySelector('#password');
+            inputName = document.querySelector('#pro_name');
+            inputBirthday = document.querySelector('#birthday');
+        };
+        queryElement();
     });
     useEffect(() => {
         const getProvinces = async () => {
@@ -96,10 +99,13 @@ export const Account = () => {
                 console.log(err);
             }
         };
+        const setEventFocusInput = () => {
+            handleFocusInput(listInputDate);
+            handleFocusInput(listInputText);
+            handleFocusInput(listInputPassword);
+        };
         getProvinces();
-        handleFocusInput(listInputDate);
-        handleFocusInput(listInputText);
-        handleFocusInput(listInputPassword);
+        setEventFocusInput();
     }, []);
     const getListDistrct = async (provinceId: any) => {
         try {
@@ -152,27 +158,32 @@ export const Account = () => {
     }, []);
 
     useEffect(() => {
-        if (user.id !== 0) {
-            let province: any = provinces.find((item) => {
-                return item.name === user.province;
-            });
-            if (province !== undefined) {
-                getListDistrct(province.id);
+        const getProvinceUser = () => {
+            if (user.id !== 0) {
+                let province: any = provinces.find((item) => {
+                    return item.name === user.province;
+                });
+                if (province !== undefined) {
+                    getListDistrct(province.id);
+                }
             }
-        }
+        };
+        getProvinceUser();
     }, [provinces.length]);
     useEffect(() => {
-        if (districts.length > 0) {
-            let district: any = districts.find((item) => {
-                return item.name === user.district;
-            });
-            if (district !== undefined) {
-                getWards(district.id);
+        const getDistrictUser = () => {
+            if (districts.length > 0) {
+                let district: any = districts.find((item) => {
+                    return item.name === user.district;
+                });
+                if (district !== undefined) {
+                    getWards(district.id);
+                }
             }
-        }
+        };
+        getDistrictUser();
     }, [districts.length]);
     const handleUpdate = () => {
-        console.log(listInputDate);
         const isInputTextEmpty = checkEmptyError(listInputText);
         const isInputDateEmpty = checkEmptyError(listInputDate);
         const isInputPasswordEmpty = checkEmptyError(listInputPassword);
@@ -207,16 +218,29 @@ export const Account = () => {
     const Update = async (data: any) => {
         try {
             const res = await UpdateUser(data);
-            toast.success('Sửa thành công', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
+            if (res.status === 200) {
+                toast.success('Sửa thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            } else {
+                toast.error('Có lỗi', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
         } catch (err) {
             console.log(err);
             toast.error('Có lỗi', {

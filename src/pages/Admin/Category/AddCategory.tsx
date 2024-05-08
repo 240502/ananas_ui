@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Create } from '../../../services/category.services';
 import { Link, useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import { checkEmptyError } from '../../../utils/global';
+import { toast } from 'react-toastify';
 import { checkNameError } from '../../../utils/validation_category';
 
 export const AddCategory = () => {
@@ -10,7 +9,10 @@ export const AddCategory = () => {
     const navigate = useNavigate();
     let inputCateName: any;
     useEffect(() => {
-        inputCateName = document.querySelector('#cate_name') as HTMLInputElement;
+        const queryElement = () => {
+            inputCateName = document.querySelector('#cate_name') as HTMLInputElement;
+        };
+        queryElement();
     });
     const handleCreate = async () => {
         if (inputCateName.value.trim() !== '') {
@@ -20,20 +22,36 @@ export const AddCategory = () => {
                     let result = await Create({
                         cate_name: cateName,
                     });
-                    toast.success('Thêm thành công', {
-                        position: 'top-right',
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: 'light',
-                    });
-                    navigate('/admin/category');
+                    if(result.status === 200){
+                        toast.success('Thêm thành công', {
+                            position: 'top-right',
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: 'light',
+                        });
+                        navigate('/admin/category');
+                    }
+                    else{
+                        toast.error('Thêm không thành công', {
+                            position: 'top-right',
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: 'light',
+                        });
+                        console.log(result);
+                    }
+                  
                 } catch (e) {
                     console.log(e);
-                    toast.error('Thêm thành công', {
+                    toast.error('Thêm không thành công', {
                         position: 'top-right',
                         autoClose: 3000,
                         hideProgressBar: false,

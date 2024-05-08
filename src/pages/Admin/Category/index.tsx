@@ -33,7 +33,7 @@ export const Category = () => {
         setDisplayConfirmationModal(false);
     };
     useEffect(() => {
-        async function loadData() {
+        async function getCategories() {
             try {
                 let items = await getList({
                     pageIndex: page,
@@ -41,30 +41,46 @@ export const Category = () => {
                 });
                 setCates(items.data);
                 setPageCount(Math.ceil(items.totalItems / pageSize));
-                console.log(pageCount);
             } catch (err) {
                 console.log(err);
                 setPageCount(0);
                 setCates([]);
             }
         }
-        loadData();
+        getCategories();
     }, [page, pageSize]);
     const handleDelete = async (id: number) => {
         try {
             const res = await Delete(id);
-            const newList = cates.filter((cate) => cate.id !== id);
-            setCates(newList);
-            toast.success('Xóa thành công', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
+           
+            if(res.status === 200){
+                const newList = cates.filter((cate) => cate.id !== id);
+                setCates(newList);
+                toast.success('Xóa thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
+            else{
+                toast.success('Xóa thất bại', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+                console.log(res);
+            }
+         
         } catch (err) {
             toast.success('Xóa thất bại', {
                 position: 'top-right',
@@ -79,7 +95,7 @@ export const Category = () => {
             console.log(err);
         }
     };
-    const columns: TableColumn<ProductCategoryType>[] = [
+    const columns_table_category: TableColumn<ProductCategoryType>[] = [
         {
             name: 'ID',
             selector: (row): any => row.id,
@@ -127,9 +143,8 @@ export const Category = () => {
                 <div className="card-header">
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách loại sản phẩm</h3>
                 </div>
-
                 <div className="card-body">
-                    <DataTable columns={columns} data={cates} selectableRows fixedHeader />
+                    <DataTable columns={columns_table_category} data={cates} selectableRows fixedHeader />
                     <section className="page" style={{ display: `${pageCount > 1 ? 'flex' : 'none'}` }}>
                         <select
                             name="pageSize"

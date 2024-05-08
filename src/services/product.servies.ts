@@ -10,7 +10,7 @@ export const searchProduct = async (data: any): Promise<any> => {
 };
 
 export const getProductById = async (id: any): Promise<any> => {
-    const res = await apiClient.get(`/api-customer/Product/product/getById?id=${id}`);
+    const res = await apiClient.get(`/api-customer/Product/getById?id=${id}`);
     return res?.data;
 };
 
