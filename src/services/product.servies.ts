@@ -26,7 +26,7 @@ export const getRelatedProduct = async (data: any): Promise<any> => {
 
 export const create = async (data: any): Promise<any> => {
     const res = await apiClient.post(`/api-admin/Product/create`, data, config);
-    return res?.data;
+    return res;
 };
 
 export const Delete = async (id: any): Promise<any> => {

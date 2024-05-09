@@ -138,7 +138,7 @@ export const AddProduct = () => {
     });
     useEffect(() => {
         const queryElement = () => {
-            listInputText = document.querySelectorAll('.form-control input[type="text"]');
+            listInputText = document.querySelectorAll('.form-add input[type="text"]');
             listInputDate = document.querySelectorAll('.form-add input[type="date"]');
             listInputFile = document.querySelectorAll('.form-add input[type="file"]');
 
@@ -263,7 +263,8 @@ export const AddProduct = () => {
 
     const handleCreateProduct = async () => {
         const isInputTextEmpty = checkEmptyError(listInputText);
-        const isInputFileEmpty = id == undefined ? checkEmptyError(listInputFile) : false;
+        console.log(listInputText);
+        const isInputFileEmpty = checkEmptyError(listInputFile);
         const isInputDateEmpty = checkEmptyError(listInputDate);
         if (!isInputTextEmpty && !isInputDateEmpty && !isInputFileEmpty) {
             const isOutSoleError = checkOutSoleNotIsNumber(inputOutSole);
@@ -319,101 +320,126 @@ export const AddProduct = () => {
                             imageGallery: imageGallery,
                         };
                         Create(data);
-                    } else {
-                        let tmpDetails: any = [];
-                        console.log(inputProduct.create_at);
-                        let data: any = {};
-                        let newImage: any = {};
-                        if (inputProduct.file !== imageGallery.img_src) {
-                            var formFile: FormData = new FormData();
-                            if (inputProduct.file != '') {
-                                formFile.append('formFile', inputProduct.file, inputProduct.file['name']);
-                                const path = await upload(formFile);
+                    }
+                }
+            }
+        }
+    };
+    const handleUpdateProduct = async () => {
+        const isInputTextEmpty = checkEmptyError(listInputText);
+        const isInputDateEmpty = checkEmptyError(listInputDate);
+        if (!isInputTextEmpty && !isInputDateEmpty) {
+            const isOutSoleError = checkOutSoleNotIsNumber(inputOutSole);
+            const isPriceError = checkPriceIsNumber(inputPrice);
+            const isEndSizeError = checkSizeIsNumber(inputEndSize);
+            const isStartSizeError = checkSizeIsNumber(inputStartSize);
+            const isEndDateError = checkDateWithCurrentDate(inputEndDate);
+            const isStartDateError = checkDateWithCurrentDate(inputStartDate);
+            const isQuantityError = checkQuantityIsNumber(inputQuantity);
+            if (
+                isOutSoleError &&
+                isPriceError &&
+                isEndSizeError &&
+                isStartSizeError &&
+                !isEndDateError &&
+                !isStartDateError &&
+                isQuantityError
+            ) {
+                const isSizeError = checkSizeError(inputEndSize, inputStartSize);
+                const isDateError = checkDateError(inputEndDate, inputStartDate);
+                if (!isSizeError && !isDateError) {
+                    let tmpDetails: any = [];
+                    let data: any = {};
+                    let newImage: any = {};
+                    if (inputProduct.file !== imageGallery.img_src) {
+                        var formFile: FormData = new FormData();
+                        if (inputProduct.file != '') {
+                            formFile.append('formFile', inputProduct.file, inputProduct.file['name']);
+                            const path = await upload(formFile);
 
-                                newImage = { ...imageGallery, img_src: path.data };
+                            newImage = { ...imageGallery, img_src: path.data };
+                        }
+                    } else newImage = { ...imageGallery };
+                    if (inputProduct.startSize === oldMinSize && inputProduct.endSize == oldMaxSize) {
+                        tmpDetails = productDetails.map((detail) => ({ ...detail, status: 1 }));
+                        data = {
+                            id: inputProduct.proId,
+                            pro_name: inputProduct.proName,
+                            status_id: inputProduct.statusId,
+                            cate_id: inputProduct.cateId,
+                            style_id: inputProduct.styleId,
+                            collection_id: inputProduct.collectionId,
+                            material_id: inputProduct.materialId,
+                            color_id: inputProduct.colorId,
+                            gender: inputProduct.gender,
+                            out_sole: inputProduct.outSole,
+                            created_at: inputProduct.create_at,
+                            productDetails: tmpDetails,
+                            priceModel: {
+                                ...price,
+                                price: inputProduct.price,
+                                start_date: inputProduct.startDate,
+                                end_date: inputProduct.endDate,
+                            },
+                            imageGallery: newImage,
+                        };
+                    } else {
+                        let newdetails: any = [];
+                        if (inputProduct.startSize > oldMinSize) {
+                            tmpDetails = productDetails.map((detail) => {
+                                if (detail.size == oldMinSize) {
+                                    return { ...detail, status: 2 };
+                                } else return detail;
+                            });
+                        }
+                        if (inputProduct.endSize > oldMaxSize) {
+                            for (var j = oldMaxSize + 1; j <= inputProduct.endSize; j++) {
+                                newdetails.push({ quantity: inputProduct.quantity, size: j, status: 1 });
                             }
-                        } else newImage = { ...imageGallery };
-                        if (inputProduct.startSize === oldMinSize && inputProduct.endSize == oldMaxSize) {
-                            tmpDetails = productDetails.map((detail) => ({ ...detail, status: 1 }));
-                            data = {
-                                id: inputProduct.proId,
-                                pro_name: inputProduct.proName,
-                                status_id: inputProduct.statusId,
-                                cate_id: inputProduct.cateId,
-                                style_id: inputProduct.styleId,
-                                collection_id: inputProduct.collectionId,
-                                material_id: inputProduct.materialId,
-                                color_id: inputProduct.colorId,
-                                gender: inputProduct.gender,
-                                out_sole: inputProduct.outSole,
-                                created_at: inputProduct.create_at,
-                                productDetails: tmpDetails,
-                                priceModel: {
-                                    ...price,
-                                    price: inputProduct.price,
-                                    start_date: inputProduct.startDate,
-                                    end_date: inputProduct.endDate,
-                                },
-                                imageGallery: newImage,
-                            };
-                        } else {
-                            let newdetails: any = [];
-                            if (inputProduct.startSize > oldMinSize) {
+                        }
+                        if (inputProduct.startSize < oldMinSize) {
+                            for (var j = inputProduct.startSize; j < oldMinSize; j++) {
+                                newdetails.push({ quantity: inputProduct.quantity, size: j, status: 1 });
+                            }
+                        }
+                        if (inputProduct.endSize < oldMaxSize) {
+                            if (tmpDetails.length > 0) {
+                                tmpDetails = tmpDetails.map((item: any) => {
+                                    if (item['size'] === oldMaxSize) {
+                                        return { ...item, status: 2 };
+                                    } else return item;
+                                });
+                            } else {
                                 tmpDetails = productDetails.map((detail) => {
                                     if (detail.size == oldMinSize) {
                                         return { ...detail, status: 2 };
                                     } else return detail;
                                 });
                             }
-                            if (inputProduct.endSize > oldMaxSize) {
-                                for (var j = oldMaxSize + 1; j <= inputProduct.endSize; j++) {
-                                    newdetails.push({ quantity: inputProduct.quantity, size: j, status: 1 });
-                                }
-                            }
-                            if (inputProduct.startSize < oldMinSize) {
-                                for (var j = inputProduct.startSize; j < oldMinSize; j++) {
-                                    newdetails.push({ quantity: inputProduct.quantity, size: j, status: 1 });
-                                }
-                            }
-                            if (inputProduct.endSize < oldMaxSize) {
-                                if (tmpDetails.length > 0) {
-                                    tmpDetails = tmpDetails.map((item: any) => {
-                                        if (item['size'] === oldMaxSize) {
-                                            return { ...item, status: 2 };
-                                        } else return item;
-                                    });
-                                } else {
-                                    tmpDetails = productDetails.map((detail) => {
-                                        if (detail.size == oldMinSize) {
-                                            return { ...detail, status: 2 };
-                                        } else return detail;
-                                    });
-                                }
-                            }
-                            data = {
-                                id: inputProduct.proId,
-                                pro_name: inputProduct.proName,
-                                status_id: inputProduct.statusId,
-                                cate_id: inputProduct.cateId,
-                                style_id: inputProduct.styleId,
-                                collection_id: inputProduct.collectionId,
-                                material_id: inputProduct.materialId,
-                                color_id: inputProduct.colorId,
-                                gender: inputProduct.gender,
-                                created_at: inputProduct.create_at,
-                                out_sole: inputProduct.outSole,
-                                productDetails: [...tmpDetails, ...newdetails],
-                                priceModel: {
-                                    ...price,
-                                    price: inputProduct.price,
-                                    start_date: inputProduct.startDate,
-                                    end_date: inputProduct.endDate,
-                                },
-                                imageGallery: newImage,
-                            };
                         }
-                        Update(data);
+                        data = {
+                            id: inputProduct.proId,
+                            pro_name: inputProduct.proName,
+                            status_id: inputProduct.statusId,
+                            cate_id: inputProduct.cateId,
+                            style_id: inputProduct.styleId,
+                            collection_id: inputProduct.collectionId,
+                            material_id: inputProduct.materialId,
+                            color_id: inputProduct.colorId,
+                            gender: inputProduct.gender,
+                            created_at: inputProduct.create_at,
+                            out_sole: inputProduct.outSole,
+                            productDetails: [...tmpDetails, ...newdetails],
+                            priceModel: {
+                                ...price,
+                                price: inputProduct.price,
+                                start_date: inputProduct.startDate,
+                                end_date: inputProduct.endDate,
+                            },
+                            imageGallery: newImage,
+                        };
                     }
+                    Update(data);
                 }
             }
         }
@@ -421,6 +447,8 @@ export const AddProduct = () => {
     const Update = async (data: any) => {
         try {
             const res = await update(data);
+            console.log(res);
+
             if (res.status === 200) {
                 navigate('/admin/product');
                 toast.success('Sửa thành công', {
@@ -516,11 +544,12 @@ export const AddProduct = () => {
                             <h3 className="title">Thông tin sản phẩm</h3>
                             <div className="col-lg-6">
                                 {id !== undefined && (
-                                    <div className="form-group">
+                                    <div className="form-group" style={{ margin: '0' }}>
                                         <input
                                             id="product_id"
                                             className="form-control"
                                             value={inputProduct.proId}
+                                            hidden
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
@@ -530,6 +559,7 @@ export const AddProduct = () => {
                                     <input
                                         name="pro_name"
                                         id="pro_name"
+                                        type="text"
                                         className="form-control"
                                         onChange={(e) => setInputProduct({ ...inputProduct, proName: e.target.value })}
                                         value={inputProduct.proName}
@@ -715,6 +745,7 @@ export const AddProduct = () => {
                                     <input
                                         name="out_sole"
                                         id="outSole"
+                                        type="text"
                                         className="form-control"
                                         onChange={(e) => setInputProduct({ ...inputProduct, outSole: e.target.value })}
                                         value={inputProduct.outSole}
@@ -911,7 +942,7 @@ export const AddProduct = () => {
                                     style={{ width: '20%', padding: '10px 0px' }}
                                     name="cmd"
                                     className="btn btn-primary btn-add"
-                                    onClick={() => handleCreateProduct()}
+                                    onClick={() => (id ? handleUpdateProduct() : handleCreateProduct())}
                                 >
                                     {id !== undefined ? 'Lưu Lại' : 'Thêm mới'}
                                     <i className="fa-solid fa-plus" style={{ marginLeft: '10px' }}></i>

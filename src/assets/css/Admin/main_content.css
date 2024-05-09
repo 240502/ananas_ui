@@ -52,6 +52,7 @@
 .form-add .card-body {
     padding: 50px 50px;
 }
+
 .table_order_detail .rdt_TableHeadRow .rdt_TableCol:first-child {
     width: 10%;
     flex-grow: 0;

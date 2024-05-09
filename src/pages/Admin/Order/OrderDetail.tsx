@@ -15,7 +15,7 @@ import { AddProduct } from './AddProduct';
 import { GetAll } from '../../../services/statusorder.services';
 import { toast } from 'react-toastify';
 import { deleteOrderDetail } from '../../../services/orderdetail.services';
-import { ConfimDelete } from './ConfirmDelete';
+import { ConfirmDelete } from './ConfirmDelete';
 import { checkEmptyError, handleFocusInput } from '../../../utils/global';
 import { checkEmailError, checkNameError, checkPhoneError } from '../../../utils/validation_order';
 
@@ -728,7 +728,7 @@ export const OrderDetail = () => {
                 quantity={quantity}
                 orderDetailId={orderDetailId}
             />
-            <ConfimDelete
+            <ConfirmDelete
                 hideConfirmationModal={hideConfirmationModal}
                 deleteMessage={deleteMessage}
                 displayConfirmationModal={displayConfirmationModal}

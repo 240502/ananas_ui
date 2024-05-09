@@ -45,10 +45,10 @@ export const AddUser = () => {
     let listSelect: any;
     const navigate = useNavigate();
     const { id } = useParams<DataParams>();
-    const [provinces, setProvinces] = useState([{ id: 0, name: '' }]);
+    const [provinces, setProvinces] = useState([{ province_id: 0, province_name: '' }]);
 
-    const [districts, setDistricts] = useState([{ id: 0, name: '' }]);
-    const [wards, setWards] = useState([{ id: 0, name: '' }]);
+    const [districts, setDistricts] = useState([{ district_id: 0, district_name: '' }]);
+    const [wards, setWards] = useState([{ ward_id: 0, ward_name: '' }]);
     const userInfo = useRecoilValue(userValue);
 
     const [inputUser, setInputUser] = useState<InputUser>({
@@ -101,9 +101,7 @@ export const AddUser = () => {
     useEffect(() => {
         const getProvinces = async () => {
             try {
-                const res = await axios.get(
-                    'https://vnprovinces.pythonanywhere.com/api/provinces/?basic=true&limit=100',
-                );
+                const res = await axios.get('https://vapi.vnappmob.com/api/province');
                 setProvinces(res.data.results);
             } catch (err) {
                 console.log(err);
@@ -120,9 +118,7 @@ export const AddUser = () => {
     }, []);
     const getListDistrict = async (provinceId: any) => {
         try {
-            const res = await axios.get(
-                `https://vnprovinces.pythonanywhere.com/api/districts/?province_id=${provinceId}&basic=true&limit=100`,
-            );
+            const res = await axios.get(`https://vapi.vnappmob.com//api/province/district/${provinceId}`);
             setDistricts(res.data.results);
         } catch (err) {
             console.log(err);
@@ -130,9 +126,7 @@ export const AddUser = () => {
     };
     const getWards = async (districtId: any) => {
         try {
-            const res = await axios.get(
-                `https://vnprovinces.pythonanywhere.com/api/wards/?district_id=${districtId}&basic=true&limit=100`,
-            );
+            const res = await axios.get(`https://vapi.vnappmob.com//api/province/ward/${districtId}`);
             setWards(res.data.results);
         } catch (err) {
             console.log(err);
@@ -170,20 +164,20 @@ export const AddUser = () => {
     useEffect(() => {
         if (user.id !== 0) {
             let province: any = provinces.find((item) => {
-                return item.name === user.province;
+                return item.province_name.includes(user.province);
             });
             if (province !== undefined) {
-                getListDistrict(province.id);
+                getListDistrict(province.province_id);
             }
         }
     }, [provinces.length]);
     useEffect(() => {
         if (districts.length > 0) {
             let district: any = districts.find((item) => {
-                return item.name === user.district;
+                return item.district_name.includes(user.district);
             });
             if (district !== undefined) {
-                getWards(district.id);
+                getWards(district.district_id);
             }
         }
     }, [districts.length]);
@@ -191,19 +185,17 @@ export const AddUser = () => {
         const isInputTextEmpty = checkEmptyError(listInputText);
         const isInputDateEmpty = checkEmptyError(listInputDate);
         const isInputPasswordEmpty = checkEmptyError(listInputPassword);
-        console.log(listSelect);
         const isSelectEmpty = checkSelectEmptyError(listSelect);
-        console.log(isSelectEmpty);
-        if (!isInputTextEmpty && !isInputDateEmpty && !isInputPasswordEmpty) {
+        if (!isInputTextEmpty && !isInputDateEmpty && !isInputPasswordEmpty && !isSelectEmpty) {
             const isEmailError = checkEmailError(inputEmail);
             const isPhoneError = checkPhoneError(inputPhone);
             const isBirthDayError = checkBirthDayError(inputBirthday);
             const isPasswordError = checkPasswordError(inputPassword);
             const isNameError = checkNameError(inputName);
             if (!isEmailError && !isPhoneError && !isPasswordError && !isBirthDayError && !isNameError) {
-                const province = provinces.find((p) => p.id == Number(inputUser.province));
-                const district = districts.find((d) => d.id == Number(inputUser.district));
-                const ward = wards.find((d) => d.id == Number(inputUser.ward));
+                const province = provinces.find((p) => p.province_id == Number(inputUser.province));
+                const district = districts.find((d) => d.district_id == Number(inputUser.district));
+                const ward = wards.find((d) => d.ward_id == Number(inputUser.ward));
                 let data = {};
                 if (userInfo.user.role === 1) {
                     data = {
@@ -212,9 +204,9 @@ export const AddUser = () => {
                         email: inputUser.email,
                         phone_number: inputUser.phonenumber,
                         birthday: inputUser.birthday,
-                        province: province?.name,
-                        district: district?.name,
-                        ward: ward?.name,
+                        province: province?.province_name,
+                        district: district?.district_name,
+                        ward: ward?.ward_name,
                         token: '',
                         role_id: 2,
                     };
@@ -225,14 +217,14 @@ export const AddUser = () => {
                         email: inputUser.email,
                         phone_number: inputUser.phonenumber,
                         birthday: inputUser.birthday,
-                        province: province?.name,
-                        district: district?.name,
-                        ward: ward?.name,
+                        province: province?.province_name,
+                        district: district?.district_name,
+                        ward: ward?.ward_name,
                         token: '',
                         role_id: 1,
                     };
                 }
-                console.log(data);
+
                 Create(data);
             }
         }
@@ -248,9 +240,9 @@ export const AddUser = () => {
             const isPasswordError = checkPasswordError(inputPassword);
             const isNameError = checkNameError(inputName);
             if (!isEmailError && !isPhoneError && !isPasswordError && !isBirthDayError && !isNameError) {
-                const province = provinces.find((p) => p.id == Number(inputUser.province));
-                const district = districts.find((d) => d.id == Number(inputUser.district));
-                const ward = wards.find((d) => d.id == Number(inputUser.ward));
+                const province = provinces.find((p) => p.province_id == Number(inputUser.province));
+                const district = districts.find((d) => d.district_id == Number(inputUser.district));
+                const ward = wards.find((d) => d.ward_id == Number(inputUser.ward));
                 const data = {
                     id: inputUser.id,
                     password: inputUser.password,
@@ -259,9 +251,9 @@ export const AddUser = () => {
                     phone_number: inputUser.phonenumber,
                     birthday: inputUser.birthday,
                     created_at: inputUser.created_at,
-                    province: province?.name === undefined ? user.province : province?.name,
-                    district: district?.name === undefined ? user.district : district?.name,
-                    ward: ward?.name == undefined ? user.ward : ward?.name,
+                    province: province?.province_name === undefined ? user.province : province?.province_name,
+                    district: district?.district_name === undefined ? user.district : district?.district_name,
+                    ward: ward?.ward_name == undefined ? user.ward : ward?.ward_name,
                     token: '',
                 };
                 Update(data);
@@ -272,17 +264,31 @@ export const AddUser = () => {
     const Create = async (data: any) => {
         try {
             const res = await CreateUser(data);
-            navigate('/admin/user');
-            toast.success('Thêm thành công', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
+            if (res.status === 200) {
+                navigate('/admin/user');
+                toast.success('Thêm thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            } else {
+                console.log(res);
+                toast.error('Có lỗi', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
         } catch (err) {
             console.log(err);
             toast.error('Có lỗi', {
@@ -301,17 +307,32 @@ export const AddUser = () => {
     const Update = async (data: any) => {
         try {
             const res = await UpdateUser(data);
-            navigate('/admin/user');
-            toast.success('Sửa thành công', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
+            if (res.status === 200) {
+                navigate('/admin/user');
+                toast.success('Sửa thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            } else {
+                console.log(res);
+
+                toast.error('Có lỗi', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
         } catch (err) {
             console.log(err);
             toast.error('Có lỗi', {
@@ -374,16 +395,16 @@ export const AddUser = () => {
                                     >
                                         <option value="0">Chọn tỉnh/thành phố</option>
                                         {provinces.map((item: any) => {
-                                            if (item.name === user.province) {
+                                            if (id && item.province_name.includes(user.province)) {
                                                 return (
-                                                    <option value={item.id} key={item.id} selected>
-                                                        {item.name}
+                                                    <option value={item.province_id} key={item.province_id} selected>
+                                                        {item.province_name}
                                                     </option>
                                                 );
                                             } else
                                                 return (
-                                                    <option value={item.id} key={item.id}>
-                                                        {item.name}
+                                                    <option value={item.province_id} key={item.province_id}>
+                                                        {item.province_name}
                                                     </option>
                                                 );
                                         })}
@@ -403,16 +424,16 @@ export const AddUser = () => {
                                     >
                                         <option value="0">Chọn quận/huyện</option>
                                         {districts.map((item: any) => {
-                                            if (item.name === user.district) {
+                                            if (id && item.district_name.includes(user.district)) {
                                                 return (
-                                                    <option value={item.id} key={item.id} selected>
-                                                        {item.name}
+                                                    <option value={item.district_id} key={item.district_id} selected>
+                                                        {item.district_name}
                                                     </option>
                                                 );
                                             } else
                                                 return (
-                                                    <option value={item.id} key={item.id}>
-                                                        {item.name}
+                                                    <option value={item.district_id} key={item.district_id}>
+                                                        {item.district_name}
                                                     </option>
                                                 );
                                         })}
@@ -430,16 +451,16 @@ export const AddUser = () => {
                                     >
                                         <option value="0">Chọn phường/xã</option>
                                         {wards.map((item: any) => {
-                                            if (item.name === user.ward) {
+                                            if (id && item.ward_name.includes(user.ward)) {
                                                 return (
-                                                    <option value={item.id} key={item.id} selected>
-                                                        {item.name}
+                                                    <option value={item.ward_id} key={item.ward_id} selected>
+                                                        {item.ward_name}
                                                     </option>
                                                 );
                                             } else
                                                 return (
-                                                    <option value={item.id} key={item.id}>
-                                                        {item.name}
+                                                    <option value={item.ward_id} key={item.ward_id}>
+                                                        {item.ward_name}
                                                     </option>
                                                 );
                                         })}

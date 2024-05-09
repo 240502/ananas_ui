@@ -1,6 +1,6 @@
 import React from 'react';
-import '../../../assets/css/Admin/confirm_delete.css';
-export const ConfirmDelete = ({ ...props }: any) => {
+
+export const ConfirmCancel = ({ ...props }: any) => {
     return (
         <div
             id="modal-confirm-delete"
@@ -27,7 +27,9 @@ export const ConfirmDelete = ({ ...props }: any) => {
                         type="button"
                         className="btn btnYes"
                         onClick={() => {
-                            props.handleDelete(props.id);
+                            props.id !== 0
+                                ? props.handleCancel(props.id)
+                                : props.handleCancelAll(props.orderCancellations);
                         }}
                     >
                         Đồng ý

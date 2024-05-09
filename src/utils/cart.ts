@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { CartItemType } from '../store/cart.atom';
+import { CartItemType } from '../types';
 export const addToCart = (cartItem: CartItemType, listCart: CartItemType[], setCarts: any) => {
     const product = {
         id: cartItem.id,
@@ -65,7 +65,6 @@ export const addToCart = (cartItem: CartItemType, listCart: CartItemType[], setC
     }
 };
 export const reduceQty = (id: number, setCarts: any, listCart: CartItemType[]) => {
-    console.log('reduceQty =>', id);
     const cartItem = listCart.find((item: CartItemType) => item.id === id);
     if (cartItem) {
         if (cartItem.qty === 1) {
@@ -92,7 +91,6 @@ export const reduceQty = (id: number, setCarts: any, listCart: CartItemType[]) =
     }
 };
 export const increaseQty = (id: number, setCarts: any, listCart: CartItemType[]) => {
-    console.log('increaseQty =>', id);
     const cartItem = listCart.find((item: CartItemType) => item.id === id);
     if (cartItem) {
         const newCarts: CartItemType[] = listCart.map((item: CartItemType) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { toggleNav } from '../../../utils/product';
 import { useEffect, useState } from 'react';
 import { getCategories } from '../../../services/category.services';
-export const SideBarCategory = ({ setCateId }: any) => {
+export const SideBarCategory = ({ setCateId, setPage }: any) => {
     const [indexCate, setIndexCate] = useState(0);
     const [categories, setCategories] = useState([]);
     useEffect(() => {
@@ -31,6 +31,7 @@ export const SideBarCategory = ({ setCateId }: any) => {
                             onClick={() => {
                                 setIndexCate(category['id']);
                                 setCateId(category['id']);
+                                setPage(1);
                             }}
                         >
                             <input value={category['cate_name']}></input>

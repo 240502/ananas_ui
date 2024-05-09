@@ -5,8 +5,9 @@ import DataTable, { TableColumn } from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { GetAll } from '../../../services/statusorder.services';
-import { ConfimDelete } from './ConfirmDelete';
+import { ConfirmDelete } from './ConfirmDelete';
 import { toast } from 'react-toastify';
+import { ConfirmCancel } from './ConfirmCancel';
 
 export const Order = () => {
     const [page, setPage] = useState(1);
@@ -183,7 +184,6 @@ export const Order = () => {
             name: 'ID',
             selector: (row): any => row.id,
             sortable: true,
-        
         },
         {
             name: 'Họ và tên',
@@ -319,7 +319,7 @@ export const Order = () => {
                     </section>
                 </div>
             </div>
-            <ConfimDelete
+            <ConfirmCancel
                 hideConfirmationModal={hideConfirmationModal}
                 deleteMessage={deleteMessage}
                 displayConfirmationModal={displayConfirmationModal}

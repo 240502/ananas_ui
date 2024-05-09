@@ -92,7 +92,7 @@ export const Users = () => {
                     theme: 'light',
                 });
             } else {
-                toast.success('Xóa thất bại', {
+                toast.error('Xóa thất bại', {
                     position: 'top-right',
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -167,12 +167,12 @@ export const Users = () => {
 
     return (
         <>
-            <div className="text-start container">
+            <div className="text-start container" style={{ marginLeft: '0' }}>
                 <Link className="btn btn-primary" style={{ width: '200px' }} to={'/admin/user/create'}>
                     Thêm người dùng +
                 </Link>
             </div>
-            <div className="card card-data">
+            <div className="card card-data user_table">
                 <div className="card-header">
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách người dùng</h3>
                 </div>

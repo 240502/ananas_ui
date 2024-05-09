@@ -37,7 +37,6 @@ export const checkSelectEmptyError = (listSelect: any[]) => {
     let isEmpty = false;
     if (listSelect !== undefined) {
         listSelect.forEach((input: any) => {
-            console.log('value', input.value);
             if (input.value == 0) {
                 isEmpty = true;
                 showError(input, 'Vui lòng chọn !');

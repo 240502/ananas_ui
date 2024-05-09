@@ -3,6 +3,7 @@ import { Create } from '../../../services/category.services';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { checkNameError } from '../../../utils/validation_category';
+import { showError, showSuccess } from '../../../utils/global';
 
 export const AddCategory = () => {
     const [cateName, setCateName] = useState('');
@@ -15,42 +16,25 @@ export const AddCategory = () => {
         queryElement();
     });
     const handleCreate = async () => {
+        console.log(inputCateName.value.trim() === '');
         if (inputCateName.value.trim() !== '') {
-            const isNameError = checkNameError(inputCateName);
-            if (!isNameError) {
-                try {
-                    let result = await Create({
-                        cate_name: cateName,
+            try {
+                let result = await Create({
+                    cate_name: cateName,
+                });
+                if (result.status === 200) {
+                    toast.success('Thêm thành công', {
+                        position: 'top-right',
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'light',
                     });
-                    if(result.status === 200){
-                        toast.success('Thêm thành công', {
-                            position: 'top-right',
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: 'light',
-                        });
-                        navigate('/admin/category');
-                    }
-                    else{
-                        toast.error('Thêm không thành công', {
-                            position: 'top-right',
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: 'light',
-                        });
-                        console.log(result);
-                    }
-                  
-                } catch (e) {
-                    console.log(e);
+                    navigate('/admin/category');
+                } else {
                     toast.error('Thêm không thành công', {
                         position: 'top-right',
                         autoClose: 3000,
@@ -61,8 +45,23 @@ export const AddCategory = () => {
                         progress: undefined,
                         theme: 'light',
                     });
+                    console.log(result);
                 }
+            } catch (e) {
+                console.log(e);
+                toast.error('Thêm không thành công', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
             }
+        } else {
+            showError(inputCateName, 'Không được để trống ô này!');
         }
     };
 
@@ -80,8 +79,10 @@ export const AddCategory = () => {
                                 name="cate_name"
                                 id="cate_name"
                                 className="form-control"
+                                onFocus={(e) => showSuccess(e.target)}
                                 onChange={(e) => setCateName(e.target.value)}
                             ></input>
+                            <div className="error_message" style={{ display: 'none' }}></div>
                         </div>
                         <div className="form-group" style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <button

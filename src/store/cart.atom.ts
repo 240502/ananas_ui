@@ -1,5 +1,4 @@
 import { atom, selector } from 'recoil';
-import CartItem from '../pages/Shop/Cart/CartItem';
 import { CartItemType } from '../types';
 
 

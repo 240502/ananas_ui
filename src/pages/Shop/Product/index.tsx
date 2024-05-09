@@ -127,9 +127,9 @@ function Product() {
 
                         <div className="left-tree">
                             <ul className="nav" style={{ display: 'block' }}>
-                                <SideBarCategory setCateId={setCateId} />
+                                <SideBarCategory setCateId={setCateId} setPage = {setPage} />
                                 <li className="nav-divider" />
-                                <SideBarPrice setStartPrice={setStartPrice} setEndPrice={setEndPrice} />
+                                <SideBarPrice setStartPrice={setStartPrice} setEndPrice={setEndPrice} setPage = {setPage} />
                             </ul>
                         </div>
                     </div>
