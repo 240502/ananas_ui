@@ -217,8 +217,6 @@ export const AddProduct = () => {
                 }
                 setOldMaxSize(maxSize);
                 setOldMinSize(minSize);
-                console.log(maxSize);
-                console.log(minSize);
 
                 setProductDetails(product['productDetails']);
                 setInputProduct({
@@ -334,7 +332,6 @@ export const AddProduct = () => {
             const isEndSizeError = checkSizeIsNumber(inputEndSize);
             const isStartSizeError = checkSizeIsNumber(inputStartSize);
             const isEndDateError = checkDateWithCurrentDate(inputEndDate);
-            const isStartDateError = checkDateWithCurrentDate(inputStartDate);
             const isQuantityError = checkQuantityIsNumber(inputQuantity);
             if (
                 isOutSoleError &&
@@ -342,7 +339,6 @@ export const AddProduct = () => {
                 isEndSizeError &&
                 isStartSizeError &&
                 !isEndDateError &&
-                !isStartDateError &&
                 isQuantityError
             ) {
                 const isSizeError = checkSizeError(inputEndSize, inputStartSize);
@@ -361,7 +357,7 @@ export const AddProduct = () => {
                         }
                     } else newImage = { ...imageGallery };
                     if (inputProduct.startSize === oldMinSize && inputProduct.endSize == oldMaxSize) {
-                        tmpDetails = productDetails.map((detail) => ({ ...detail, status: 1 }));
+                        tmpDetails = productDetails.map((detail) => ({ ...detail, status: 2 }));
                         data = {
                             id: inputProduct.proId,
                             pro_name: inputProduct.proName,
@@ -385,38 +381,50 @@ export const AddProduct = () => {
                         };
                     } else {
                         let newdetails: any = [];
-                        if (inputProduct.startSize > oldMinSize) {
-                            tmpDetails = productDetails.map((detail) => {
-                                if (detail.size == oldMinSize) {
-                                    return { ...detail, status: 2 };
-                                } else return detail;
-                            });
-                        }
-                        if (inputProduct.endSize > oldMaxSize) {
-                            for (var j = oldMaxSize + 1; j <= inputProduct.endSize; j++) {
-                                newdetails.push({ quantity: inputProduct.quantity, size: j, status: 1 });
-                            }
-                        }
-                        if (inputProduct.startSize < oldMinSize) {
-                            for (var j = inputProduct.startSize; j < oldMinSize; j++) {
-                                newdetails.push({ quantity: inputProduct.quantity, size: j, status: 1 });
-                            }
-                        }
-                        if (inputProduct.endSize < oldMaxSize) {
-                            if (tmpDetails.length > 0) {
-                                tmpDetails = tmpDetails.map((item: any) => {
-                                    if (item['size'] === oldMaxSize) {
-                                        return { ...item, status: 2 };
-                                    } else return item;
-                                });
-                            } else {
-                                tmpDetails = productDetails.map((detail) => {
-                                    if (detail.size == oldMinSize) {
-                                        return { ...detail, status: 2 };
-                                    } else return detail;
-                                });
-                            }
-                        }
+                        console.log(oldMinSize);
+                        console.log(oldMaxSize);
+                        console.log(inputProduct.startSize);
+
+                        // if (inputProduct.startSize > oldMinSize) {
+                        //     if (tmpDetails.length === 0) {
+                        //         tmpDetails = productDetails.map((detail) => {
+                        //             if (detail.size == oldMinSize) {
+                        //                 return { ...detail, status: 2 };
+                        //             } else return detail;
+                        //         });
+                        //     } else {
+                        //         tmpDetails = tmpDetails.map((item: any) => {
+                        //             if (item['size'] === oldMaxSize) {
+                        //                 return { ...item, status: 2 };
+                        //             } else return item;
+                        //         });
+                        //     }
+                        // }
+                        // if (inputProduct.endSize > oldMaxSize) {
+                        //     for (var j = oldMaxSize + 1; j <= inputProduct.endSize; j++) {
+                        //         newdetails.push({ quantity: inputProduct.quantity, size: j, status: 1 });
+                        //     }
+                        // }
+                        // if (inputProduct.startSize < oldMinSize) {
+                        //     for (var j = inputProduct.startSize; j < oldMinSize; j++) {
+                        //         newdetails.push({ quantity: inputProduct.quantity, size: j, status: 1 });
+                        //     }
+                        // }
+                        // if (inputProduct.endSize < oldMaxSize) {
+                        //     if (tmpDetails.length > 0) {
+                        //         tmpDetails = tmpDetails.map((item: any) => {
+                        //             if (item['size'] === oldMaxSize) {
+                        //                 return { ...item, status: 2 };
+                        //             } else return item;
+                        //         });
+                        //     } else {
+                        //         tmpDetails = productDetails.map((detail) => {
+                        //             if (detail.size == oldMinSize) {
+                        //                 return { ...detail, status: 2 };
+                        //             } else return detail;
+                        //         });
+                        //     }
+                        // }
                         data = {
                             id: inputProduct.proId,
                             pro_name: inputProduct.proName,
@@ -429,7 +437,7 @@ export const AddProduct = () => {
                             gender: inputProduct.gender,
                             created_at: inputProduct.create_at,
                             out_sole: inputProduct.outSole,
-                            productDetails: [...tmpDetails, ...newdetails],
+                            productDetails: productDetails,
                             priceModel: {
                                 ...price,
                                 price: inputProduct.price,
@@ -439,7 +447,8 @@ export const AddProduct = () => {
                             imageGallery: newImage,
                         };
                     }
-                    Update(data);
+                    console.log(data);
+                    // Update(data);
                 }
             }
         }
