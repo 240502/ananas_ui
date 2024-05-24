@@ -10,12 +10,10 @@ import ReactPaginate from 'react-paginate';
 import { hostServerAdmin } from '../../../constant/api';
 import { getListPaymentType } from '../../../services/paymentType.services';
 import { getListShippingType } from '../../../services/shippingType.services';
-import { AddProduct } from './AddProduct';
 
 import { GetAll } from '../../../services/statusorder.services';
 import { toast } from 'react-toastify';
 import { deleteOrderDetail } from '../../../services/orderdetail.services';
-import { ConfirmDelete } from './ConfirmDelete';
 import { checkEmptyError, handleFocusInput } from '../../../utils/global';
 import { checkEmailError, checkNameError, checkPhoneError } from '../../../utils/validation_order';
 
@@ -125,22 +123,7 @@ export const OrderDetail = () => {
     });
     const [statusOrders, setStatusOrders] = useState([{ id: 0, status_name: '' }]);
     const [products, setProducts] = useState([]);
-    const [displayAddModal, setDisplayAddModal] = useState(false);
-    const showAddProductModal = () => {
-        setDisplayAddModal(true);
-    };
-    const hideAddModal = () => {
-        setDisplayAddModal(false);
-    };
-    const showDeleteModal = (id: any) => {
-        setDeleteMessage('Bạn chắc chắn muốn xóa sản phẩm có mã ' + id);
-        setDisplayConfirmationModal(true);
-        setOrderDetailId(id);
-    };
 
-    const hideConfirmationModal = () => {
-        setDisplayConfirmationModal(false);
-    };
     const getOrder = async () => {
         try {
             const res = await GetOrderById(id);
@@ -398,36 +381,6 @@ export const OrderDetail = () => {
             selector: (row): any => row.quantity,
             sortable: true,
         },
-        {
-            name: 'Chức năng',
-            selector: (row): any => {
-                return (
-                    <>
-                        <button
-                            className="btnUpdate btn btn-warning"
-                            onClick={(e) => {
-                                showAddProductModal();
-                                setProductId(row.product_id);
-                                setSize(row.size_id);
-                                setQuantity(row.quantity);
-                                setOrderDetailId(row.id);
-                            }}
-                        >
-                            <i style={{ color: '#fff' }} className="fa-regular fa-pen-to-square"></i>
-                        </button>
-                        {products.length > 1 && (
-                            <button
-                                style={{ marginLeft: '10px' }}
-                                className="btnDelete btn btn-danger"
-                                onClick={() => showDeleteModal(row.id)}
-                            >
-                                <i className="fa-solid fa-trash-can"></i>
-                            </button>
-                        )}
-                    </>
-                );
-            },
-        },
     ];
 
     return (
@@ -464,6 +417,7 @@ export const OrderDetail = () => {
                                             name="full_name"
                                             id="full_name"
                                             className="form-control"
+                                            readOnly
                                             onChange={(e) =>
                                                 setInputOrder({ ...inputOrder, full_name: e.target.value })
                                             }
@@ -478,6 +432,7 @@ export const OrderDetail = () => {
                                             name="phone_number"
                                             id="phone_number"
                                             className="form-control"
+                                            readOnly
                                             onChange={(e) =>
                                                 setInputOrder({ ...inputOrder, phone_number: e.target.value })
                                             }
@@ -503,6 +458,7 @@ export const OrderDetail = () => {
                                             id="paymentType_id"
                                             className="form-control"
                                             value={inputOrder.paymentType_id}
+                                            style={{ pointerEvents: 'none' }}
                                             onChange={(e) => {
                                                 setInputOrder({
                                                     ...inputOrder,
@@ -538,6 +494,7 @@ export const OrderDetail = () => {
                                                 name="receiving_address"
                                                 id="receiving_address"
                                                 className="form-control"
+                                                readOnly
                                                 onChange={(e) =>
                                                     setInputOrder({
                                                         ...inputOrder,
@@ -553,6 +510,7 @@ export const OrderDetail = () => {
                                             <input
                                                 type="text"
                                                 name="email"
+                                                readOnly
                                                 id="email"
                                                 className="form-control"
                                                 onChange={(e) =>
@@ -572,6 +530,7 @@ export const OrderDetail = () => {
                                                 type="date"
                                                 name="order_date"
                                                 id="order_date"
+                                                readOnly
                                                 className="form-control"
                                                 onChange={(e) =>
                                                     setInputOrder({
@@ -622,6 +581,7 @@ export const OrderDetail = () => {
                                                 id="shippingType_id"
                                                 className="form-control"
                                                 value={inputOrder.shippingType_id}
+                                                style={{ pointerEvents: 'none' }}
                                                 onChange={(e) => {
                                                     const prvId = Number(inputOrder.shippingType_id);
                                                     const prvShippingType: any = shippingTypes.find(
@@ -699,42 +659,11 @@ export const OrderDetail = () => {
                 <div className="card-header">
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách sản phẩm</h3>
                 </div>
-                <div className="text-start container">
-                    <button
-                        className="btn btn-primary"
-                        style={{ width: '200px' }}
-                        type="button"
-                        onClick={() => {
-                            showAddProductModal();
-                            setProductId(0);
-                            setSize(0);
-                            setQuantity(0);
-                        }}
-                    >
-                        Thêm sản phẩm +
-                    </button>
-                </div>
+
                 <div className="card-body table_order_detail">
                     <DataTable columns={columns} data={order.orderDetails} />
                 </div>
             </div>
-            <AddProduct
-                hideConfirmationModal={hideAddModal}
-                displayAddModal={displayAddModal}
-                orderId={order.id}
-                getOrder={getOrder}
-                productId={productId}
-                size_id={size}
-                quantity={quantity}
-                orderDetailId={orderDetailId}
-            />
-            <ConfirmDelete
-                hideConfirmationModal={hideConfirmationModal}
-                deleteMessage={deleteMessage}
-                displayConfirmationModal={displayConfirmationModal}
-                id={orderDetailId}
-                handleDelete={handleDelete}
-            />
         </>
     );
 };

@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export const ThankYou = () => {
     const navigate = useNavigate();
+    const orderId = JSON.parse(localStorage.getItem('orderId') || '');
+    console.log(orderId);
     return (
         <div className="vh-100 d-flex justify-content-center align-items-center">
             <div className="col-md-4">
@@ -23,6 +25,7 @@ export const ThankYou = () => {
                     </div>
                     <div className="text-center">
                         <h1>ĐẶT HÀNG THÀNH CÔNG !</h1>
+                        <p style={{ textAlign: 'start' }}>Mã đơn hàng:{orderId}</p>
                         <p style={{ textAlign: 'justify' }}>
                             Bất cứ lúc nào, bạn có thể tra cứu trạng thái các đơn hàng đã mua tại{' '}
                             <Link to="/search-order">link</Link> bằng cách cung cấp thông tin về đơn hàng theo yêu cầu.

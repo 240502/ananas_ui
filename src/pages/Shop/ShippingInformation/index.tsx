@@ -12,7 +12,8 @@ import { PaymentTypeItem } from './PaymentTypeItem';
 import { userValue } from '../../../store/user.atom';
 import { useNavigate } from 'react-router-dom';
 import { PaymentType, ShippingType } from '../../../types';
-import { OrderDetailsType,CartItemType } from '../../../types';
+import { OrderDetailsType, CartItemType } from '../../../types';
+import { ThankYou } from '../ThankYou';
 export const ShippingInformation = () => {
     const navigate = useNavigate();
     const cartInfo = useRecoilValue(infoValue);
@@ -52,18 +53,7 @@ export const ShippingInformation = () => {
     }, []);
 
     const handleCreateOrder = () => {
-        const list_orderDetail: OrderDetailsType[] = [
-            {
-                product_id: 0,
-                quantity: 0,
-                order_id: 0,
-                color_id: 0,
-                size_id: 0,
-                style_id: 0,
-                id: 0,
-                price: 0,
-            },
-        ];
+        const list_orderDetail: OrderDetailsType[] = [];
 
         cartInfo.carts.forEach((cart: CartItemType) => {
             let orderDetail: OrderDetailsType = {
@@ -93,6 +83,7 @@ export const ShippingInformation = () => {
             full_name: userInfo.user.us_name,
             orderDetails: list_orderDetail,
         };
+        console.log(data);
         createOrder(data);
     };
     const getShippingType = (shippingId: number): ShippingType => {
@@ -103,6 +94,7 @@ export const ShippingInformation = () => {
         try {
             const res = await CreateOrder(order);
             localStorage.setItem('cart', JSON.stringify(undefined));
+            localStorage.setItem('orderId', JSON.stringify(res));
             navigate('/thankyou');
             setCarts([]);
             console.log(res);
