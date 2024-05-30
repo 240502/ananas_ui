@@ -1,0 +1,153 @@
+.main-cart {
+    max-width: 1200px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.wishlist {
+    padding-right: 20px;
+    padding-top: 40px;
+}
+
+.wishlist .title {
+    color: #000;
+    font-family: GeometricExtraBold;
+    font-size: 30px;
+    margin: 10px 0px 40px 0px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.wishlist .item-divider {
+    border-bottom: #000 2px solid;
+    height: 1px;
+    margin: 10px 0px 20px 0px;
+}
+
+.wishlist .infor-bar {
+    float: left;
+    text-align: left;
+    margin-left: -10px;
+    font-family: NunitoSanExtraBold;
+    font-size: 16px;
+    color: #808080;
+    margin-bottom: 0px;
+    font-weight: 700;
+}
+
+.wishlist .infor-bar .number-product {
+    margin-right: 5px;
+}
+.wishlist .item-left {
+    display: flex;
+    margin-left: -10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.wishlist .item-left .media-left {
+    padding-right: 20px;
+    width: 200px;
+    height: 180px;
+}
+.wishlist .item-left .media-left img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    background-color: #cccccc;
+}
+.wishlist .item-left .media-body {
+    width: 500px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+}
+
+.wishlist .media-body .product_name {
+    color: #000;
+    font-family: NunitoSanExtraBold;
+    font-size: 21px;
+    min-height: 50px;
+    font-weight: 700;
+}
+
+.wishlist .media-body .price {
+    color: #808080;
+    font-family: NunitoSanRegular;
+    font-size: 16px;
+    margin-bottom: 20px;
+    margin-top: 0 !important;
+}
+.wishlist .media-body .bottom {
+    flex-grow: 1;
+}
+.wishlist .media-body .bottom h5 {
+    font-size: 16px;
+    font-weight: 700;
+}
+.wishlist .media-body .bottom select {
+    width: 120px;
+    font-weight: 700;
+}
+
+.wishlist .item-right {
+    margin-left: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-right: 0px;
+    text-align: right;
+}
+.wishlist .item-right .price {
+    color: #f15e2c;
+    font-family: GeometricExtraBold;
+    font-size: 23px;
+    margin-bottom: 0px;
+    min-height: 50px;
+}
+.wishlist .item-right .status {
+    color: #f15e2c;
+    font-family: NunitoSanSBoldI;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.wishlist .item-right .button {
+    width: 130px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    float: right;
+}
+.wishlist .item-right .button button {
+    width: 125px;
+    background-color: #fff;
+    margin-bottom: 10px;
+    border: #a3a3a3 1px solid;
+    height: 40px;
+}
+
+.wishlist .item-right .button .btn-delete {
+    background-color: #303030;
+    color: #fff;
+}
+
+.wishlist .group-btn-button {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding: 0;
+}
+.wishlist .group-btn-button button {
+    border-radius: 0px;
+    height: 40px;
+    width: 240px;
+    border: none;
+    background-color: #303030;
+    color: #fff;
+    font-family: GeometricExtraBold;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.wishlist .group-btn-button div:last-child {
+    text-align: end;
+}

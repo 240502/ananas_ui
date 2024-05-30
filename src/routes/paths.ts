@@ -26,8 +26,9 @@ const ORDER_DETAIL_PATH = 'admin/order/order-detail/:id';
 const REVENUE_STATISTICS_PATH = 'admin/statistics/revenue';
 const NEWS_ADMIN_PATH = 'admin/news';
 const ADD_NEWS_PATH = 'admin/news/create';
-
+const YOUR_WISHLIST = 'your-wishlist';
 export {
+    YOUR_WISHLIST,
     REVENUE_STATISTICS_PATH,
     NEWS_ADMIN_PATH,
     ADD_NEWS_PATH,

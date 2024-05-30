@@ -1,11 +1,12 @@
-import React, { Fragment } from 'react'
-import Header from './Header'
+import React, { Fragment } from 'react';
+import Header from './Header';
 
-export const LoginLayout = ({children}:any) => {
-  return (
-    <div>
-      <Header/>
-      {children}
-    </div>
-  )
-}
+const LoginLayout = ({ children }: any) => {
+    return (
+        <div>
+            <Header />
+            {children}
+        </div>
+    );
+};
+export default LoginLayout;

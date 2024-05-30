@@ -48,7 +48,7 @@ function Header() {
                             </Link>
                         </li>
                         <li>
-                            <Link to="#">
+                            <Link to="/your-wishlist">
                                 <i className="fa-solid fa-heart" />
                                 <span>Yêu thích</span>
                             </Link>

@@ -1,7 +1,7 @@
 import Dashboard from '../pages/Admin/Dashboard';
 import Home from '../pages/Shop/Home';
 import Product from '../pages/Shop/Product';
-import { AdminLayout } from '../components/Layout';
+import { AdminLayout, LoginLayout, DefaultLayout } from '../components/Layout';
 import Login from '../pages/Shop/Login';
 import {
     CART_PATH,
@@ -9,7 +9,6 @@ import {
     HOME_PATH,
     LOGIN_PATH,
     PRODUCT_PATH,
-    ADMIN_PATH,
     PRODUCT_GENDER_PATH,
     SHIPPING_INFORMATION_PATH,
     THANKYOU_PATH,
@@ -31,10 +30,10 @@ import {
     ORDER_DETAIL_PATH,
     REVENUE_STATISTICS_PATH,
     NEWS_ADMIN_PATH,
+    YOUR_WISHLIST,
 } from './paths';
 import Cart from '../pages/Shop/Cart';
 import ProductDetail from '../pages/Shop/ProductDetail';
-import { LoginLayout } from '../components/Layout/LoginLayout/index';
 import { ShippingInformation } from '../pages/Shop/ShippingInformation';
 import { ThankYou } from '../pages/Shop/ThankYou';
 import ThankYouLayout from '../components/Layout/ThankYouLayout';
@@ -53,6 +52,7 @@ import { Order } from '../pages/Admin/Order';
 import { OrderDetail } from '../pages/Admin/Order/OrderDetail';
 import { Revenue } from '../pages/Admin/Revenue';
 import { News } from '../pages/Admin/News';
+import { YourWishList } from '../pages/Shop/YourWishList';
 export const publicRoutes = [
     { path: HOME_PATH, component: Home, layout: undefined },
     { path: PRODUCT_PATH, component: Product, layout: undefined },
@@ -66,6 +66,7 @@ export const publicRoutes = [
     { path: SEARCH_ORDER_PATH, component: SearchOrder, layout: undefined },
     { path: SEARCH_PRODUCT_PATH, component: SearchProduct, layout: undefined },
     { path: TRACKING_ORDER_PATH, component: TrackingOrder, layout: undefined },
+    { path: YOUR_WISHLIST, component: YourWishList, layout: undefined },
 ];
 
 export const privateRoutes = [
@@ -84,5 +85,4 @@ export const privateRoutes = [
     { path: ORDER_DETAIL_PATH, component: OrderDetail, layout: AdminLayout },
     { path: REVENUE_STATISTICS_PATH, component: Revenue, layout: AdminLayout },
     { path: NEWS_ADMIN_PATH, component: News, layout: AdminLayout },
-
 ];
