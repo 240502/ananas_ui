@@ -17,19 +17,20 @@ function Login() {
             const res = await login({ UserName: username, password: password });
 
             if (res) {
-                toast.success('Đăng nhập thành công', {
-                    position: 'top-right',
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'light',
-                });
+                // toast.success('Đăng nhập thành công', {
+                //     position: 'top-right',
+                //     autoClose: 3000,
+                //     hideProgressBar: false,
+                //     closeOnClick: true,
+                //     pauseOnHover: true,
+                //     draggable: true,
+                //     progress: undefined,
+                //     theme: 'light',
+                // });
                 setUser(res);
                 localStorage.setItem('user', JSON.stringify(res));
                 navigate('/');
+                window.location.reload();
             } else {
                 toast.error('Đăng nhập không thành công', {
                     position: 'top-right',

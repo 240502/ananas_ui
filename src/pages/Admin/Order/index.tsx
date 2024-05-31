@@ -131,7 +131,6 @@ export const Order = () => {
     ];
     return (
         <>
-            `{' '}
             <div
                 className="text-start container"
                 style={{
@@ -153,7 +152,6 @@ export const Order = () => {
                     </select>
                 </div>
             </div>
-            `
             <div className="card card-data">
                 <div className="card-header">
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách đơn hàng</h3>
