@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { cartState, infoValue } from '../../../store/cart.atom';
 import { clearCart, increaseQty, reduceQty, removeCartItem } from '../../../utils/cart';
@@ -60,7 +61,6 @@ function CartItem() {
                                             name=""
                                             id="quantity"
                                             className="form-control"
-                                            readOnly={true}
                                             value={cart.qty}
                                         ></input>
                                         <button
@@ -111,7 +111,9 @@ function CartItem() {
                     </button>
                 </div>
                 <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 return-home">
-                    <button className="btn btn-returnHome">Quay lại mua hàng</button>
+                    <Link to="/product-list" className="btn btn-returnHome">
+                        Quay lại mua hàng
+                    </Link>
                 </div>
             </div>
         </div>

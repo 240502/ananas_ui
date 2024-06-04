@@ -1,23 +1,27 @@
-import { unstable_batchedUpdates } from 'react-dom';
 import '../../../assets/css/Shop/product.css';
 import { toggleNav, activeItemTree } from '../../../utils/product';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getList } from '../../../services/product.servies';
+import { getList, getProductById } from '../../../services/product.servies';
 import ProductColor from './ProductColor';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { indexGender } from '../../../store/product.atom';
 import ProductStatus from './ProductStatus';
 import ReactPaginate from 'react-paginate';
 import { SideBarCategory } from './SideBarCategory';
 import { SideBarPrice } from './SideBarPrice';
-import { ProductType } from '../../../types';
+import { ProductDetailType, ProductType } from '../../../types';
 import { hostServerAdmin } from '../../../constant/api';
+import { FavoriteProductState, FavoriteProductValue } from '../../../store/favorit_products.atom';
+import { handleAddAndRemoveFavoriteProduct } from '../../../utils/favorite_product';
+import { getListSizeByProId } from '../../../services/product_detail.services';
+import { getStyleById } from '../../../services/style.services';
 
 type DataParams = {
     gender: string;
 };
 function Product() {
+    const [favoriteProducts, setFavoriteProducts] = useRecoilState(FavoriteProductState);
     const [products, setProducts] = useState<ProductType[]>([
         {
             id: 0,
@@ -52,6 +56,7 @@ function Product() {
     const [endPrice, setEndPrice] = useState(0);
     const { gender } = useParams<DataParams>();
     const [index, setIndexGender] = useRecoilState(indexGender);
+
     useEffect(() => {
         async function getProducts(cateId: any, startPrice: any, endPrice: any, gender: any) {
             try {
@@ -127,9 +132,13 @@ function Product() {
 
                         <div className="left-tree">
                             <ul className="nav" style={{ display: 'block' }}>
-                                <SideBarCategory setCateId={setCateId} setPage = {setPage} />
+                                <SideBarCategory setCateId={setCateId} setPage={setPage} />
                                 <li className="nav-divider" />
-                                <SideBarPrice setStartPrice={setStartPrice} setEndPrice={setEndPrice} setPage = {setPage} />
+                                <SideBarPrice
+                                    setStartPrice={setStartPrice}
+                                    setEndPrice={setEndPrice}
+                                    setPage={setPage}
+                                />
                             </ul>
                         </div>
                     </div>
@@ -141,7 +150,11 @@ function Product() {
                             {products.length > 0 ? (
                                 products.map((product): any => {
                                     return (
-                                        <div className="col-xs-6 col-sm-6 col-md-4 col-lg-4 item" key={product['id']}>
+                                        <div
+                                            className="col-xs-6 col-sm-6 col-md-4 col-lg-4 item"
+                                            key={product['id']}
+                                            data-id={product.id}
+                                        >
                                             <div className="thumbnail">
                                                 <div className="cont-item">
                                                     <Link to={'/product-detail/' + product.id}>
@@ -159,8 +172,42 @@ function Product() {
                                                     <button type="button" className="btn btn-addtocart">
                                                         <Link to={'/product-detail/' + product.id}>Mua ngay</Link>
                                                     </button>
-                                                    <button type="button" className="btn btn-like">
-                                                        <i className="fa-regular fa-heart" />
+                                                    <button
+                                                        type="button"
+                                                        className={
+                                                            favoriteProducts.find(
+                                                                (favorite: ProductType) => favorite.id === product.id,
+                                                            )
+                                                                ? 'btn btn-like active'
+                                                                : 'btn btn-like'
+                                                        }
+                                                        onClick={async () => {
+                                                            const res = await getProductById(product.id);
+                                                            const style = await getStyleById(product.style_id);
+                                                            const rowProduct = document.querySelector(
+                                                                `.item[data-id = '${product.id}']`,
+                                                            );
+                                                            const color_name: string =
+                                                                rowProduct?.querySelector('.color')?.textContent || '';
+                                                            handleAddAndRemoveFavoriteProduct(
+                                                                res,
+                                                                color_name,
+                                                                style,
+                                                                favoriteProducts,
+                                                                setFavoriteProducts,
+                                                            );
+                                                        }}
+                                                    >
+                                                        <i
+                                                            className={
+                                                                favoriteProducts.find(
+                                                                    (favorite: ProductType) =>
+                                                                        favorite.id === product.id,
+                                                                )
+                                                                    ? 'fa-solid fa-heart'
+                                                                    : 'fa-regular fa-heart'
+                                                            }
+                                                        />
                                                     </button>
                                                 </div>
                                                 <div className="caption">

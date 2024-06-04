@@ -129,3 +129,21 @@ export type CartItemType = {
     colorId: number;
     styleId: number;
 };
+export type FavoriteProductType = {
+    id: number;
+    pro_name: string;
+    color_id: number;
+    style_id: number;
+    cate_id: number;
+    status_id: number;
+    out_sole: string;
+    gender: string;
+    material_id: number;
+    collection_id: number;
+    created_at: string;
+    imageGallery: ImageGalleryType;
+    priceModel: ProductPriceType;
+    productDetails: ProductDetailType[];
+    color_name: string;
+    style_name: string;
+};

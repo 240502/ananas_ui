@@ -11,8 +11,7 @@ import {
     checkPasswordError,
     checkPhoneError,
 } from '../../../utils/validation_user';
-import { ToastContainer, toast } from 'react-toastify';
-import { FALSE } from 'sass';
+import { toast } from 'react-toastify';
 type InputUser = {
     id: number;
     password: string;

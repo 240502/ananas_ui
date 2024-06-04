@@ -11,10 +11,12 @@ import { useSetRecoilState } from 'recoil';
 import { userState } from './store/user.atom';
 import { cartState } from './store/cart.atom';
 import { productViewedState } from './store/product.atom';
+import { FavoriteProductState } from './store/favorit_products.atom';
 function App() {
     const setUser = useSetRecoilState(userState);
     const setCarts = useSetRecoilState(cartState);
     const setProductViewed = useSetRecoilState(productViewedState);
+    const setFavoriteProducts = useSetRecoilState(FavoriteProductState);
     useEffect(() => {
         async function getCart() {
             try {
@@ -40,14 +42,23 @@ function App() {
                 console.log(err);
             }
         }
+        async function getFavoriteProduct() {
+            try {
+                const favoriteProducts = JSON.parse(localStorage.getItem('favorite_products') || '[]');
+                setFavoriteProducts(favoriteProducts);
+            } catch (err) {
+                console.log(err);
+            }
+        }
         getCart();
         getUser();
         getProductViewed();
+        getFavoriteProduct();
     }, []);
 
     return (
         <Router>
-            <div className="App">
+            <div className="App" style={{ position: 'relative' }}>
                 <Routes>
                     {publicRoutes.map((route, index): any => {
                         let Layout: any = DefaultLayout;

@@ -68,8 +68,11 @@
     font-size: 21px;
     min-height: 50px;
     font-weight: 700;
+    transition: all 0.3s linear;
 }
-
+.wishlist .media-body .product_name:hover {
+    color: #f15e2c;
+}
 .wishlist .media-body .price {
     color: #808080;
     font-family: NunitoSanRegular;
@@ -150,4 +153,10 @@
 }
 .wishlist .group-btn-button div:last-child {
     text-align: end;
+}
+
+.block-wish-list .product-divider {
+    background: url(../../../../public/img/bg_divider.png) repeat-x 7px;
+    height: 1px;
+    margin: 20px 0px;
 }

@@ -59,7 +59,6 @@ function ProductDetail() {
     ]);
     const info = useRecoilValue(infoValue);
     const productViewed = useRecoilValue(productViewedValue);
-
     let cartItem: CartItemType;
     const [product, setProduct] = useState<ProductType>({
         id: 0,

@@ -68,7 +68,7 @@ export const reduceQty = (id: number, setCarts: any, listCart: CartItemType[]) =
     const cartItem = listCart.find((item: CartItemType) => item.id === id);
     if (cartItem) {
         if (cartItem.qty === 1) {
-            toast.success('Sản phẩm đã đạt số lượng nhỏ nhất để có thể đặt hàng !', {
+            toast.error('Sản phẩm đã đạt số lượng nhỏ nhất để có thể đặt hàng !', {
                 position: 'top-right',
                 autoClose: 3000,
                 hideProgressBar: false,

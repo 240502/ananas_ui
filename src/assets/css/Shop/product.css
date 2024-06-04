@@ -213,15 +213,16 @@ main .left {
     right: 0;
 }
 
-.right .thumbnail:hover .button {
+.right .thumbnail:hover .btn-addtocart {
     opacity: 1;
 }
-.right .thumbnail .button {
+/* .right .thumbnail .button {
     opacity: 0;
     transition: all 0.3s linear;
-}
+} */
 .right .thumbnail .button .btn-addtocart {
     color: #fff;
+    opacity: 0;
     background-color: #f15e2c;
     border: 1px solid #f15e2c;
     font-size: 23px;
@@ -239,6 +240,9 @@ main .left {
 }
 .right .thumbnail .button .btn-addtocart a {
     color: #fff;
+}
+.right .thumbnail .button .btn-like.active i {
+    color: #f15e2c;
 }
 .right .thumbnail .button .btn-like {
     width: 35px;

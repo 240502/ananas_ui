@@ -125,7 +125,11 @@
 #size,
 .pro-detail #quantity {
     width: 50px;
+    height: 40px;
     text-align: center;
+}
+.pro-detail #quantity {
+    margin: 0 10px;
 }
 .form-quantity {
     display: flex;
@@ -135,6 +139,13 @@
     border: 1px solid #eee;
     background: #fff;
     padding: 10px 20px;
+    height: 40px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #3aa6b9;
+    font-size: 18px;
+    color: #fff;
+    line-height: 20px;
 }
 .product-info-right {
     margin-left: 10px;

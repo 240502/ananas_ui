@@ -11,7 +11,6 @@
     position: absolute;
     top: 0;
     left: 0;
-    min-height: 100%;
     bottom: 0;
     width: 80px;
     background-color: #12171e;
@@ -21,6 +20,7 @@
 .sidebar.active ~ .main-content {
     left: 250px;
     width: calc(100% - 250px);
+    min-height: 100vh;
 }
 .sidebar.active {
     width: 250px;
