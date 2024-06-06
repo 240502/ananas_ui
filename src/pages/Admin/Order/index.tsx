@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { OrderType } from '../../../types';
-import { CancelOrder, GetListOrderWaitConfirmation } from '../../../services/order.services';
+import { CancelOrder, GetListOrderWaitConfirmation, searchOrder } from '../../../services/order.services';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
@@ -8,6 +8,8 @@ import { GetAll } from '../../../services/statusorder.services';
 import { toast } from 'react-toastify';
 
 export const Order = () => {
+    const [valueSearch, setValueSearch] = useState('');
+
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [pageCount, setPageCount] = useState(0);
@@ -62,6 +64,23 @@ export const Order = () => {
                 status_id: statusId,
             });
             setOrders(res.data);
+            setPageCount(Math.ceil(res.totalItems / pageSize));
+        } catch (err) {
+            console.log(err);
+            setPageCount(0);
+            setOrders([]);
+        }
+    };
+    const handleSearchOrder = async () => {
+        try {
+            const res = await searchOrder({
+                pageIndex: page,
+                pageSize: pageSize,
+                value: valueSearch,
+                status_id: statusId,
+            });
+            console.log(res);
+            setOrders(res['data']);
             setPageCount(Math.ceil(res.totalItems / pageSize));
         } catch (err) {
             console.log(err);
@@ -157,6 +176,32 @@ export const Order = () => {
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách đơn hàng</h3>
                 </div>
                 <div className="card-body">
+                    <div className="form-group text-right" style={{ position: 'relative' }}>
+                        <input
+                            type="text"
+                            onChange={(e) => setValueSearch(e.target.value)}
+                            onKeyUp={(e) => {
+                                if (e.key.toLocaleLowerCase() === 'enter') {
+                                    handleSearchOrder();
+                                }
+                            }}
+                            className="form-control"
+                            style={{ width: '25%', paddingLeft: '40px' }}
+                        />
+                        <i
+                            onClick={() => {
+                                handleSearchOrder();
+                            }}
+                            className="fa-solid fa-magnifying-glass btn-search"
+                            style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '15px',
+                                transform: 'translateY(-50%)',
+                                cursor: 'pointer',
+                            }}
+                        ></i>
+                    </div>
                     <DataTable columns={columns} data={orders} selectableRows selectableRowsHighlight fixedHeader />
                     <section className="page" style={{ display: `${pageCount > 1 ? 'flex' : 'none'}` }}>
                         <select

@@ -26,3 +26,8 @@ export const Update = async (data: any): Promise<any> => {
     const res = await apiClient.put(`/api-admin/ProductCategory/update`, data, config);
     return res;
 };
+
+export const searchCate = async (data: any): Promise<any> => {
+    const res = await apiClient.post(`/api-customer/ProductCategory/search`, data);
+    return res?.data;
+};

@@ -42,3 +42,8 @@ export const RevenueStatistics = async (data: any): Promise<any> => {
     const res = await apiClient.post('/api-admin/Order/RevenueByMonth', data, config);
     return res;
 };
+
+export const searchOrder = async (data: any): Promise<any> => {
+    const res = await apiClient.post(`/api-admin/Order/search`, data, config);
+    return res?.data;
+};

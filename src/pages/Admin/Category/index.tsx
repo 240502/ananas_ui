@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { Link } from 'react-router-dom';
-import { Delete, getList } from '../../../services/category.services';
+import { Delete, getList, searchCate } from '../../../services/category.services';
 import '../../../assets/css/Admin/toast.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,6 +10,8 @@ import { ProductCategoryType } from '../../../types';
 import { ConfirmDelete } from './ConfirmDelete';
 
 export const Category = () => {
+    const [valueSearch, setValueSearch] = useState('');
+
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [pageCount, setPageCount] = useState(0);
@@ -32,6 +34,22 @@ export const Category = () => {
     const hideConfirmationModal = () => {
         setDisplayConfirmationModal(false);
     };
+    const handleSearchCate = async () => {
+        try {
+            const res = await searchCate({
+                pageIndex: page,
+                pageSize: pageSize,
+                value: valueSearch,
+            });
+            console.log(res);
+            setCates(res['data']);
+            setPageCount(Math.ceil(res.totalItems / pageSize));
+        } catch (err) {
+            console.log(err);
+            setPageCount(0);
+            setCates([]);
+        }
+    };
     useEffect(() => {
         async function getCategories() {
             try {
@@ -52,8 +70,8 @@ export const Category = () => {
     const handleDelete = async (id: number) => {
         try {
             const res = await Delete(id);
-           
-            if(res.status === 200){
+
+            if (res.status === 200) {
                 const newList = cates.filter((cate) => cate.id !== id);
                 setCates(newList);
                 toast.success('Xóa thành công', {
@@ -66,8 +84,7 @@ export const Category = () => {
                     progress: undefined,
                     theme: 'light',
                 });
-            }
-            else{
+            } else {
                 toast.success('Xóa thất bại', {
                     position: 'top-right',
                     autoClose: 3000,
@@ -80,7 +97,6 @@ export const Category = () => {
                 });
                 console.log(res);
             }
-         
         } catch (err) {
             toast.success('Xóa thất bại', {
                 position: 'top-right',
@@ -144,6 +160,32 @@ export const Category = () => {
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách loại sản phẩm</h3>
                 </div>
                 <div className="card-body">
+                    <div className="form-group text-right" style={{ position: 'relative' }}>
+                        <input
+                            type="text"
+                            onChange={(e) => setValueSearch(e.target.value)}
+                            onKeyUp={(e) => {
+                                if (e.key.toLocaleLowerCase() === 'enter') {
+                                    handleSearchCate();
+                                }
+                            }}
+                            className="form-control"
+                            style={{ width: '25%', paddingLeft: '40px' }}
+                        />
+                        <i
+                            onClick={() => {
+                                handleSearchCate();
+                            }}
+                            className="fa-solid fa-magnifying-glass btn-search"
+                            style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '15px',
+                                transform: 'translateY(-50%)',
+                                cursor: 'pointer',
+                            }}
+                        ></i>
+                    </div>
                     <DataTable columns={columns_table_category} data={cates} selectableRows fixedHeader />
                     <section className="page" style={{ display: `${pageCount > 1 ? 'flex' : 'none'}` }}>
                         <select
