@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../../../assets/css/Admin/modal_add.css';
 
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -6,93 +6,24 @@ import { OrderDetailsType, OrderType, PaymentType, ProductType, ShippingType } f
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { GetOrderById, UpdateOrder } from '../../../services/order.services';
 import { getProductById } from '../../../services/product.servies';
-import ReactPaginate from 'react-paginate';
 import { hostServerAdmin } from '../../../constant/api';
 import { getListPaymentType } from '../../../services/paymentType.services';
 import { getListShippingType } from '../../../services/shippingType.services';
 
 import { GetAll } from '../../../services/statusorder.services';
 import { toast } from 'react-toastify';
-import { deleteOrderDetail } from '../../../services/orderdetail.services';
-import { checkEmptyError, handleFocusInput } from '../../../utils/global';
-import { checkEmailError, checkNameError, checkPhoneError } from '../../../utils/validation_order';
 
 type DataParams = {
     id: string;
 };
 
-type InputOrder = {
-    id: number;
-    user_id: number;
-    receiving_address: string;
-    phone_number: string;
-    money_total: number;
-    order_date: string;
-    update_at: string;
-    status_id: number;
-    paymentType_id: number;
-    shippingType_id: number;
-    email: string;
-    full_name: string;
-    orderDetails: [
-        {
-            id: number;
-            product_id: number;
-            order_id: number;
-            quantity: number;
-            price: number;
-            size_id: number;
-            color_id: number;
-            style_id: number;
-        },
-    ];
-};
-
 export const OrderDetail = () => {
-    let inputEmail: any;
-    let inputPhone: any;
-    let inputName: any;
-    let listInputText: any;
-    let listInputDate: any;
     const { id } = useParams<DataParams>();
-    const [displayConfirmationModal, setDisplayConfirmationModal] = useState(false);
-    const [deleteMessage, setDeleteMessage] = useState('');
     const navigate = useNavigate();
-    const [productId, setProductId] = useState(0);
-    const [size, setSize] = useState(0);
-    const [quantity, setQuantity] = useState(0);
-    const [orderDetailId, setOrderDetailId] = useState(0);
     const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([
         { id: 0, paymentType_name: '', price: 0, thumbnail: '' },
     ]);
     const [shippingTypes, setShippingTypes] = useState<ShippingType[]>([{ id: 0, shippingType_name: '', price: 0 }]);
-
-    const [inputOrder, setInputOrder] = useState<InputOrder>({
-        id: 0,
-        user_id: 0,
-        receiving_address: '',
-        phone_number: '',
-        money_total: 0,
-        order_date: '',
-        update_at: '',
-        status_id: 0,
-        paymentType_id: 0,
-        shippingType_id: 0,
-        email: '',
-        full_name: '',
-        orderDetails: [
-            {
-                id: 0,
-                product_id: 0,
-                order_id: 0,
-                quantity: 0,
-                price: 0,
-                size_id: 0,
-                color_id: 0,
-                style_id: 0,
-            },
-        ],
-    });
 
     const [order, setOrder] = useState<OrderType>({
         id: 0,
@@ -128,21 +59,6 @@ export const OrderDetail = () => {
         try {
             const res = await GetOrderById(id);
             setOrder(res);
-            setInputOrder({
-                id: res['id'],
-                user_id: res['user_id'],
-                receiving_address: res['receiving_address'],
-                phone_number: res['phone_number'],
-                money_total: res['money_total'],
-                order_date: res['order_date'],
-                update_at: res['update_at'],
-                status_id: res['status_id'],
-                paymentType_id: res['paymentType_id'],
-                shippingType_id: res['shippingType_id'],
-                email: res['email'],
-                full_name: res['full_name'],
-                orderDetails: res['orderDetails'],
-            });
         } catch (e) {
             console.log(e);
             setOrder({
@@ -198,59 +114,15 @@ export const OrderDetail = () => {
             });
         }
     };
-    useEffect(() => {
-        listInputText = document.querySelectorAll('.form-add input[type="text"]');
-        inputEmail = document.querySelector('#email');
-        inputPhone = document.querySelector('#phone_number');
-        inputName = document.querySelector('#full_name');
-    });
-    const handleUpdateOrder = async () => {
-        const isInputTextEmpty = checkEmptyError(listInputText);
-        const isInputDateEmpty = checkEmptyError(listInputDate);
-        if (!isInputTextEmpty && !isInputDateEmpty) {
-            const isEmailError = checkEmailError(inputEmail);
-            const isPhoneError = checkPhoneError(inputPhone);
-            const isNameError = checkNameError(inputName);
-            if (!isEmailError && !isPhoneError && !isNameError) {
-                const data = inputOrder;
-                try {
-                    const res = await UpdateOrder(data);
-                    if (res.status === 200) {
-                        navigate('/admin/order');
 
-                        toast.success('Sửa thành công', {
-                            position: 'top-right',
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: 'light',
-                        });
-                    }
-                    console.log(res);
-                } catch (err) {
-                    console.log(err);
-                    toast.error('Có lỗi', {
-                        position: 'top-right',
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: 'light',
-                    });
-                }
-            }
-        }
-    };
-    const handleDelete = async (id: any) => {
+    const handleUpdateOrder = async () => {
+        const data = order;
         try {
-            const res = await deleteOrderDetail(id);
+            const res = await UpdateOrder(data);
             if (res.status === 200) {
-                toast.success('Xóa thành công', {
+                navigate('/admin/order');
+
+                toast.success('Sửa thành công', {
                     position: 'top-right',
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -260,12 +132,11 @@ export const OrderDetail = () => {
                     progress: undefined,
                     theme: 'light',
                 });
-                getOrder();
-                setDisplayConfirmationModal(false);
             }
+            console.log(res);
         } catch (err) {
             console.log(err);
-            toast.error('Xóa thất bại', {
+            toast.error('Có lỗi', {
                 position: 'top-right',
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -275,7 +146,6 @@ export const OrderDetail = () => {
                 progress: undefined,
                 theme: 'light',
             });
-            setDisplayConfirmationModal(false);
         }
     };
 
@@ -308,7 +178,6 @@ export const OrderDetail = () => {
         getPaymentTypes();
         getShippingTypes();
         getStatusOrder();
-        handleFocusInput(listInputText);
     }, [id]);
 
     useEffect(() => {
@@ -395,17 +264,14 @@ export const OrderDetail = () => {
                             <div className="row">
                                 <h3 className="title">Thông tin đơn hàng</h3>
                                 <div className="col-lg-6">
-                                    <input id="order_id" className="form-control" value={inputOrder.id} hidden></input>
+                                    <input id="order_id" className="form-control" value={order.id} hidden></input>
                                     <div className="form-group">
                                         <label htmlFor="user_id">Mã khách hàng:</label>
                                         <input
                                             name="user_id"
                                             id="user_id"
                                             className="form-control"
-                                            onChange={(e) =>
-                                                setInputOrder({ ...inputOrder, user_id: Number(e.target.value) })
-                                            }
-                                            value={inputOrder.user_id}
+                                            value={order.user_id}
                                             readOnly
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
@@ -418,10 +284,7 @@ export const OrderDetail = () => {
                                             id="full_name"
                                             className="form-control"
                                             readOnly
-                                            onChange={(e) =>
-                                                setInputOrder({ ...inputOrder, full_name: e.target.value })
-                                            }
-                                            value={inputOrder.full_name}
+                                            value={order.full_name}
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
@@ -433,10 +296,7 @@ export const OrderDetail = () => {
                                             id="phone_number"
                                             className="form-control"
                                             readOnly
-                                            onChange={(e) =>
-                                                setInputOrder({ ...inputOrder, phone_number: e.target.value })
-                                            }
-                                            value={inputOrder.phone_number}
+                                            value={order.phone_number}
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
@@ -446,7 +306,7 @@ export const OrderDetail = () => {
                                             type="text"
                                             className="form-control"
                                             id="money_total"
-                                            value={inputOrder.money_total}
+                                            value={order.money_total}
                                             readOnly
                                         />
                                         <div className="error_message" style={{ display: 'none' }}></div>
@@ -457,17 +317,11 @@ export const OrderDetail = () => {
                                             name=""
                                             id="paymentType_id"
                                             className="form-control"
-                                            value={inputOrder.paymentType_id}
+                                            value={order.paymentType_id}
                                             style={{ pointerEvents: 'none' }}
-                                            onChange={(e) => {
-                                                setInputOrder({
-                                                    ...inputOrder,
-                                                    paymentType_id: Number(e.target.value),
-                                                });
-                                            }}
                                         >
                                             {paymentTypes.map((paymentType) => {
-                                                if (paymentType.id === inputOrder.paymentType_id) {
+                                                if (paymentType.id === order.paymentType_id) {
                                                     return (
                                                         <option value={paymentType.id} selected>
                                                             {paymentType.paymentType_name}
@@ -495,13 +349,7 @@ export const OrderDetail = () => {
                                                 id="receiving_address"
                                                 className="form-control"
                                                 readOnly
-                                                onChange={(e) =>
-                                                    setInputOrder({
-                                                        ...inputOrder,
-                                                        receiving_address: e.target.value,
-                                                    })
-                                                }
-                                                value={inputOrder.receiving_address}
+                                                value={order.receiving_address}
                                             ></input>
                                             <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
@@ -513,13 +361,7 @@ export const OrderDetail = () => {
                                                 readOnly
                                                 id="email"
                                                 className="form-control"
-                                                onChange={(e) =>
-                                                    setInputOrder({
-                                                        ...inputOrder,
-                                                        email: e.target.value,
-                                                    })
-                                                }
-                                                value={inputOrder.email}
+                                                value={order.email}
                                             ></input>
                                             <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
@@ -532,13 +374,7 @@ export const OrderDetail = () => {
                                                 id="order_date"
                                                 readOnly
                                                 className="form-control"
-                                                onChange={(e) =>
-                                                    setInputOrder({
-                                                        ...inputOrder,
-                                                        order_date: e.target.value,
-                                                    })
-                                                }
-                                                value={inputOrder.order_date.slice(0, 10)}
+                                                value={order.order_date.slice(0, 10)}
                                             ></input>
                                             <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>
@@ -549,16 +385,17 @@ export const OrderDetail = () => {
                                                 id="status_id"
                                                 className="form-control"
                                                 onChange={(e) => {
-                                                    setInputOrder({
-                                                        ...inputOrder,
+                                                    setOrder({
+                                                        ...order,
                                                         status_id: Number(e.target.value),
                                                     });
                                                 }}
-                                                value={inputOrder.status_id}
+                                                style={{ pointerEvents: `${order.status_id === 5 ? 'none' : 'auto'}` }}
+                                                value={order.status_id}
                                             >
                                                 {statusOrders.length > 0 &&
                                                     statusOrders.map((statusOrder) => {
-                                                        if (statusOrder.id === inputOrder.status_id) {
+                                                        if (statusOrder.id === order.status_id) {
                                                             return (
                                                                 <option value={statusOrder.id} selected>
                                                                     {statusOrder.status_name}
@@ -580,31 +417,11 @@ export const OrderDetail = () => {
                                                 name=""
                                                 id="shippingType_id"
                                                 className="form-control"
-                                                value={inputOrder.shippingType_id}
+                                                value={order.shippingType_id}
                                                 style={{ pointerEvents: 'none' }}
-                                                onChange={(e) => {
-                                                    const prvId = Number(inputOrder.shippingType_id);
-                                                    const prvShippingType: any = shippingTypes.find(
-                                                        (shippingType) => shippingType.id === prvId,
-                                                    );
-                                                    const newShippingType: any = shippingTypes.find(
-                                                        (shippingType) => shippingType.id === Number(e.target.value),
-                                                    );
-
-                                                    const newMoneyTotal =
-                                                        inputOrder.money_total -
-                                                        prvShippingType?.price +
-                                                        newShippingType?.price;
-                                                    console.log('money=' + newMoneyTotal);
-                                                    setInputOrder({
-                                                        ...inputOrder,
-                                                        shippingType_id: Number(e.target.value),
-                                                        money_total: newMoneyTotal,
-                                                    });
-                                                }}
                                             >
                                                 {shippingTypes.map((shippingType) => {
-                                                    if (shippingType.id === inputOrder.shippingType_id) {
+                                                    if (shippingType.id === order.shippingType_id) {
                                                         return (
                                                             <option value={shippingType.id} selected>
                                                                 {shippingType.shippingType_name}
@@ -628,21 +445,21 @@ export const OrderDetail = () => {
                                     className="form-group"
                                     style={{ display: 'flex', justifyContent: 'space-between' }}
                                 >
-                                    <button
-                                        type="button"
-                                        style={{ width: '20%', padding: '10px 0px' }}
-                                        name="cmd"
-                                        className="btn btn-primary btn-add"
-                                        onClick={() => handleUpdateOrder()}
-                                    >
-                                        {id !== undefined ? 'Lưu Lại' : 'Thêm mới'}
-                                        <i className="fa-solid fa-plus" style={{ marginLeft: '10px' }}></i>
-                                    </button>
+                                    {order.status_id !== 5 && order.status_id !== 7 && (
+                                        <button
+                                            type="button"
+                                            style={{ width: '20%', padding: '10px 0px' }}
+                                            name="cmd"
+                                            className="btn btn-primary btn-add"
+                                            onClick={() => handleUpdateOrder()}
+                                        >
+                                            {id !== undefined ? 'Lưu Lại' : 'Thêm mới'}
+                                            <i className="fa-solid fa-plus" style={{ marginLeft: '10px' }}></i>
+                                        </button>
+                                    )}
+
                                     <Link
                                         to={'/admin/order'}
-                                        onClick={() => {
-                                            setProducts([]);
-                                        }}
                                         className="btn btn-secondary btn-return"
                                         style={{ width: '20%', padding: '10px 0px' }}
                                     >

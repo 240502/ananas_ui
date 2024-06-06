@@ -52,7 +52,6 @@ export const BarRevenue = ({ ...props }: any) => {
                         lables.push(i);
                     }
                 }
-                console.log(data);
                 const res = await RevenueStatistics(data);
                 if (res?.data.length > 0) {
                     setData(res?.data);
@@ -98,7 +97,7 @@ export const BarRevenue = ({ ...props }: any) => {
         labels: lables,
         datasets: [
             {
-                label: 'Price',
+                label: 'Doanh thu',
                 data: listData.length > 0 && listData.map((data: any) => data.totalPrice),
                 borderColor: 'rgb(75,192,192)',
             },

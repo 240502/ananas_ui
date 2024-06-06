@@ -3,18 +3,19 @@ import DataTable, { TableColumn } from 'react-data-table-component';
 import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { Delete, getList } from '../../../services/product.servies';
+import { Delete, getList, searchProduct } from '../../../services/product.servies';
 import { ProductType } from '../../../types';
 import { hostServerAdmin } from '../../../constant/api';
 import { DeleteFile } from '../../../services/image_product.services';
 import path from 'path';
-import { ConfimDelete } from './ConfirmDelete';
+import { ConfirmDelete } from './ConfirmDelete';
 
 export const ProductAdmin = () => {
     const [displayConfirmationModal, setDisplayConfirmationModal] = useState(false);
     const [deleteMessage, setDeleteMessage] = useState('');
     const [id, setId] = useState(null);
     const [img, setImg] = useState('');
+    const [valueSearch, setValueSearch] = useState('');
     const showDeleteModal = (id: any, img: any) => {
         setDeleteMessage('Bạn chắc chắn muốn xóa sản phẩm có mã ' + id);
         setId(id);
@@ -56,7 +57,61 @@ export const ProductAdmin = () => {
             productDetails: [{ id: 0, quantity: 0, product_id: 0, size: 0 }],
         },
     ]);
-
+    const columns: TableColumn<ProductType>[] = [
+        {
+            name: 'ID',
+            selector: (row): any => row.id,
+            sortable: true,
+        },
+        {
+            name: 'Hình Ảnh Sản Phẩm',
+            selector: (row): any => {
+                return (
+                    <img
+                        style={{ width: '50%', padding: '10px 0' }}
+                        src={
+                            row.imageGallery.img_src.includes('uploads')
+                                ? hostServerAdmin + row.imageGallery.img_src
+                                : 'http://localhost:3000/' + row.imageGallery.img_src
+                        }
+                        alt=""
+                    />
+                );
+            },
+        },
+        {
+            name: 'Tên Loại Sản Phẩm',
+            selector: (row): any => row.pro_name,
+            sortable: true,
+        },
+        {
+            name: 'Giá',
+            selector: (row): any => row.priceModel.price.toLocaleString(undefined) + ' VND',
+            sortable: true,
+        },
+        {
+            name: 'Chức năng',
+            cell: (row) => {
+                return (
+                    <>
+                        <Link
+                            to={`/admin/product/update/${row.id}`}
+                            className="btn btn-success"
+                            style={{ marginRight: '10px' }}
+                        >
+                            Sửa
+                        </Link>
+                        <button
+                            className="btn btn-danger"
+                            onClick={() => showDeleteModal(row.id, row.imageGallery.img_src)}
+                        >
+                            Xóa
+                        </button>
+                    </>
+                );
+            },
+        },
+    ];
     useEffect(() => {
         const loadData = async () => {
             try {
@@ -127,61 +182,23 @@ export const ProductAdmin = () => {
             console.log(err);
         }
     };
-    const columns: TableColumn<ProductType>[] = [
-        {
-            name: 'ID',
-            selector: (row): any => row.id,
-            sortable: true,
-        },
-        {
-            name: 'Hình Ảnh Sản Phẩm',
-            selector: (row): any => {
-                return (
-                    <img
-                        style={{ width: '50%', padding: '10px 0' }}
-                        src={
-                            row.imageGallery.img_src.includes('uploads')
-                                ? hostServerAdmin + row.imageGallery.img_src
-                                : 'http://localhost:3000/' + row.imageGallery.img_src
-                        }
-                        alt=""
-                    />
-                );
-            },
-        },
-        {
-            name: 'Tên Loại Sản Phẩm',
-            selector: (row): any => row.pro_name,
-            sortable: true,
-        },
-        {
-            name: 'Giá',
-            selector: (row): any => row.priceModel.price.toLocaleString(undefined) + ' VND',
-            sortable: true,
-        },
-        {
-            name: 'Chức năng',
-            cell: (row) => {
-                return (
-                    <>
-                        <Link
-                            to={`/admin/product/update/${row.id}`}
-                            className="btn btn-success"
-                            style={{ marginRight: '10px' }}
-                        >
-                            Sửa
-                        </Link>
-                        <button
-                            className="btn btn-danger"
-                            onClick={() => showDeleteModal(row.id, row.imageGallery.img_src)}
-                        >
-                            Xóa
-                        </button>
-                    </>
-                );
-            },
-        },
-    ];
+    const handleSearchProduct = async () => {
+        try {
+            const res = await searchProduct({
+                pageIndex: page,
+                pageSize: pageSize,
+                value: valueSearch,
+            });
+            console.log(res);
+            setProducts(res['data']);
+            setPageCount(Math.ceil(res.totalItems / pageSize));
+        } catch (err) {
+            console.log(err);
+            setPageCount(0);
+            setProducts([]);
+        }
+    };
+
     return (
         <>
             <div className="text-start container" style={{ marginLeft: '0' }}>
@@ -195,6 +212,32 @@ export const ProductAdmin = () => {
                 </div>
 
                 <div className="card-body">
+                    <div className="form-group text-right" style={{ position: 'relative' }}>
+                        <input
+                            type="text"
+                            onChange={(e) => setValueSearch(e.target.value)}
+                            onKeyUp={(e) => {
+                                if (e.key.toLocaleLowerCase() === 'enter') {
+                                    handleSearchProduct();
+                                }
+                            }}
+                            className="form-control"
+                            style={{ width: '25%', paddingLeft: '40px' }}
+                        />
+                        <i
+                            onClick={() => {
+                                handleSearchProduct();
+                            }}
+                            className="fa-solid fa-magnifying-glass btn-search"
+                            style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '15px',
+                                transform: 'translateY(-50%)',
+                                cursor: 'pointer',
+                            }}
+                        ></i>
+                    </div>
                     <DataTable columns={columns} data={products} selectableRows fixedHeader />
                     <section className="page" style={{ display: `${pageCount > 1 ? 'flex' : 'none'}` }}>
                         <select
@@ -220,7 +263,7 @@ export const ProductAdmin = () => {
                     </section>
                 </div>
             </div>
-            <ConfimDelete
+            <ConfirmDelete
                 hideConfirmationModal={hideConfirmationModal}
                 deleteMessage={deleteMessage}
                 displayConfirmationModal={displayConfirmationModal}

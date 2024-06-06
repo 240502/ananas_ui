@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../../assets/css/Admin/confirm_delete.css';
-export const ConfimDelete = ({ ...props }: any) => {
+export const ConfirmDelete = ({ ...props }: any) => {
     return (
         <div
             id="modal-confirm-delete"

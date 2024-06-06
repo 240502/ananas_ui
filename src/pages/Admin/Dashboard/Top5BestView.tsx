@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { getTop5ProductBestView } from '../../../services/product.servies';
 import { ProductStatisticsType } from '../../../types';

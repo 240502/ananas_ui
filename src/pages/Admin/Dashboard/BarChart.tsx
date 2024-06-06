@@ -27,9 +27,9 @@ export const BarChart = () => {
         setMaxTotalOrder(max);
     };
     const date = new Date();
-    let lables: any = [];
+    let labels: any = [];
     for (var i = 1; i <= date.getMonth() + 1; i++) {
-        lables.push(i);
+        labels.push(i);
     }
     const options = {
         responsive: true,
@@ -56,7 +56,7 @@ export const BarChart = () => {
         },
     };
     const data = {
-        labels: lables,
+        labels: labels,
         datasets: [
             {
                 label: 'Order',

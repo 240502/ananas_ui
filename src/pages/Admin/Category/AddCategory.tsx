@@ -8,7 +8,7 @@ import { showError, showSuccess } from '../../../utils/global';
 export const AddCategory = () => {
     const [cateName, setCateName] = useState('');
     const navigate = useNavigate();
-    let inputCateName: any;
+    let inputCateName: HTMLInputElement;
     useEffect(() => {
         const queryElement = () => {
             inputCateName = document.querySelector('#cate_name') as HTMLInputElement;

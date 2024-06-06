@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Update, getCateById } from '../../../services/category.services';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { ProductCategoryType } from '../../../types';
 
 type DataParams = {
@@ -79,10 +79,7 @@ export const UpdateCategory = () => {
                 </div>
                 <div className="card-body">
                     <form>
-                        <div className="form-group">
-                            <label htmlFor="id">ID:</label>
-                            <input name="id" id="id" readOnly className="form-control" value={category.id}></input>
-                        </div>
+                        <input name="id" id="id" hidden className="form-control" value={category.id}></input>
                         <div className="form-group">
                             <label htmlFor="cate_id">Tên loại sản phẩm:</label>
                             <input

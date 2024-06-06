@@ -63,7 +63,7 @@ export type ProductCategoryType = {
 
 export type UsersType = {
     id: number;
-    passowrd: string;
+    password: string;
     role: number;
     active: boolean;
     us_name: string;

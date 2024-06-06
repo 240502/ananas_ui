@@ -12,7 +12,7 @@ export const Sidebar = () => {
     const handleLogOut = async () => {
         setUser({
             id: 0,
-            passowrd: '',
+            password: '',
             role: 0,
             active: false,
             us_name: '',

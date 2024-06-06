@@ -4,13 +4,15 @@ import DataTable, { TableColumn } from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
-import { Delete, getListUsers } from '../../../services/user.services';
+import { Delete, getListUsers, searchCustomer } from '../../../services/user.services';
 import { ConfirmDelete } from './ConfirmDelete';
 import { useRecoilValue } from 'recoil';
 import { userValue } from '../../../store/user.atom';
 
 export const Users = () => {
     const userInfo = useRecoilValue(userValue);
+    const [valueSearch, setValueSearch] = useState('');
+
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [pageCount, setPageCount] = useState(0);
@@ -20,7 +22,7 @@ export const Users = () => {
     const [users, setUsers] = useState<UsersType[]>([
         {
             id: 0,
-            passowrd: '',
+            password: '',
             role: 1,
             active: true,
             us_name: '',
@@ -50,6 +52,22 @@ export const Users = () => {
     };
     const changeInputValue = (e: any) => {
         setPageSize(+e.target.value);
+    };
+    const handleSearchUser = async () => {
+        try {
+            const res = await searchCustomer({
+                pageIndex: page,
+                pageSize: pageSize,
+                value: valueSearch,
+            });
+            console.log(res);
+            setUsers(res['data']);
+            setPageCount(Math.ceil(res.totalItems / pageSize));
+        } catch (err) {
+            console.log(err);
+            setPageCount(0);
+            setUsers([]);
+        }
     };
     useEffect(() => {
         async function getListCustomer() {
@@ -177,6 +195,32 @@ export const Users = () => {
                     <h3 style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>Danh sách người dùng</h3>
                 </div>
                 <div className="card-body">
+                    <div className="form-group text-right" style={{ position: 'relative' }}>
+                        <input
+                            type="text"
+                            onChange={(e) => setValueSearch(e.target.value)}
+                            onKeyUp={(e) => {
+                                if (e.key.toLocaleLowerCase() === 'enter') {
+                                    handleSearchUser();
+                                }
+                            }}
+                            className="form-control"
+                            style={{ width: '25%', paddingLeft: '40px' }}
+                        />
+                        <i
+                            onClick={() => {
+                                handleSearchUser();
+                            }}
+                            className="fa-solid fa-magnifying-glass btn-search"
+                            style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '15px',
+                                transform: 'translateY(-50%)',
+                                cursor: 'pointer',
+                            }}
+                        ></i>
+                    </div>
                     <DataTable columns={columns_table_cus} data={users} selectableRows fixedHeader />
                     <section className="page" style={{ display: `${pageCount > 1 ? 'flex' : 'none'}` }}>
                         <select

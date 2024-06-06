@@ -14,21 +14,7 @@ import {
 } from '../../../utils/validation_user';
 import { useRecoilValue } from 'recoil';
 import { userValue } from '../../../store/user.atom';
-type InputUser = {
-    id: number;
-    password: string;
-    active: boolean;
-    us_name: string;
-    email: string;
-    phonenumber: string;
-    birthday: string;
-    created_at: string;
-    updated_at: string;
-    province: string;
-    district: string;
-    ward: string;
-    role_id: number;
-};
+
 type DataParams = {
     id: string;
 };
@@ -50,25 +36,9 @@ export const AddUser = () => {
     const [districts, setDistricts] = useState([{ district_id: 0, district_name: '' }]);
     const [wards, setWards] = useState([{ ward_id: 0, ward_name: '' }]);
     const userInfo = useRecoilValue(userValue);
-
-    const [inputUser, setInputUser] = useState<InputUser>({
-        id: 0,
-        password: '',
-        active: false,
-        us_name: '',
-        email: '',
-        phonenumber: '',
-        birthday: '',
-        created_at: '',
-        updated_at: '',
-        province: '',
-        district: '',
-        ward: '',
-        role_id: 0,
-    });
     const [user, setUser] = useState<UsersType>({
         id: 0,
-        passowrd: '',
+        password: '',
         role: 1,
         active: true,
         us_name: '',
@@ -137,22 +107,6 @@ export const AddUser = () => {
             if (id !== undefined) {
                 try {
                     const res = await getUserById(id);
-                    setInputUser({
-                        id: res['id'],
-                        password: res['password'],
-                        active: res['active'],
-                        us_name: res['us_name'],
-                        email: res['email'],
-                        phonenumber: res['phone_number'],
-                        birthday: res['birthday'],
-                        created_at: res['created_at'],
-                        updated_at: res['updated_at'],
-                        province: '',
-                        district: '',
-                        ward: '',
-                        role_id: res['role_id'],
-                    });
-
                     setUser(res);
                 } catch (e) {
                     console.error(e);
@@ -193,17 +147,17 @@ export const AddUser = () => {
             const isPasswordError = checkPasswordError(inputPassword);
             const isNameError = checkNameError(inputName);
             if (!isEmailError && !isPhoneError && !isPasswordError && !isBirthDayError && !isNameError) {
-                const province = provinces.find((p) => p.province_id == Number(inputUser.province));
-                const district = districts.find((d) => d.district_id == Number(inputUser.district));
-                const ward = wards.find((d) => d.ward_id == Number(inputUser.ward));
+                const province = provinces.find((p) => p.province_id == Number(user.province));
+                const district = districts.find((d) => d.district_id == Number(user.district));
+                const ward = wards.find((d) => d.ward_id == Number(user.ward));
                 let data = {};
                 if (userInfo.user.role === 1) {
                     data = {
-                        password: inputUser.password,
-                        us_name: inputUser.us_name,
-                        email: inputUser.email,
-                        phone_number: inputUser.phonenumber,
-                        birthday: inputUser.birthday,
+                        password: user.password,
+                        us_name: user.us_name,
+                        email: user.email,
+                        phone_number: user.phone_number,
+                        birthday: user.birthday,
                         province: province?.province_name,
                         district: district?.district_name,
                         ward: ward?.ward_name,
@@ -212,11 +166,11 @@ export const AddUser = () => {
                     };
                 } else {
                     data = {
-                        password: inputUser.password,
-                        us_name: inputUser.us_name,
-                        email: inputUser.email,
-                        phone_number: inputUser.phonenumber,
-                        birthday: inputUser.birthday,
+                        password: user.password,
+                        us_name: user.us_name,
+                        email: user.email,
+                        phone_number: user.phone_number,
+                        birthday: user.birthday,
                         province: province?.province_name,
                         district: district?.district_name,
                         ward: ward?.ward_name,
@@ -240,17 +194,17 @@ export const AddUser = () => {
             const isPasswordError = checkPasswordError(inputPassword);
             const isNameError = checkNameError(inputName);
             if (!isEmailError && !isPhoneError && !isPasswordError && !isBirthDayError && !isNameError) {
-                const province = provinces.find((p) => p.province_id == Number(inputUser.province));
-                const district = districts.find((d) => d.district_id == Number(inputUser.district));
-                const ward = wards.find((d) => d.ward_id == Number(inputUser.ward));
+                const province = provinces.find((p) => p.province_id == Number(user.province));
+                const district = districts.find((d) => d.district_id == Number(user.district));
+                const ward = wards.find((d) => d.ward_id == Number(user.ward));
                 const data = {
-                    id: inputUser.id,
-                    password: inputUser.password,
-                    us_name: inputUser.us_name,
-                    email: inputUser.email,
-                    phone_number: inputUser.phonenumber,
-                    birthday: inputUser.birthday,
-                    created_at: inputUser.created_at,
+                    id: user.id,
+                    password: user.password,
+                    us_name: user.us_name,
+                    email: user.email,
+                    phone_number: user.phone_number,
+                    birthday: user.birthday,
+                    created_at: user.created_at,
                     province: province?.province_name === undefined ? user.province : province?.province_name,
                     district: district?.district_name === undefined ? user.district : district?.district_name,
                     ward: ward?.ward_name == undefined ? user.ward : ward?.ward_name,
@@ -360,12 +314,7 @@ export const AddUser = () => {
                             <div className="col-lg-6">
                                 {id !== undefined && (
                                     <>
-                                        <input
-                                            id="product_id"
-                                            className="form-control"
-                                            value={inputUser.id}
-                                            hidden
-                                        ></input>
+                                        <input id="product_id" className="form-control" value={user.id} hidden></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </>
                                 )}
@@ -376,8 +325,8 @@ export const AddUser = () => {
                                         name="pro_name"
                                         id="pro_name"
                                         className="form-control"
-                                        onChange={(e) => setInputUser({ ...inputUser, us_name: e.target.value })}
-                                        value={inputUser.us_name}
+                                        onChange={(e) => setUser({ ...user, us_name: e.target.value })}
+                                        value={user.us_name}
                                     ></input>
                                     <div className="error_message" style={{ display: 'none' }}></div>
                                 </div>
@@ -389,7 +338,7 @@ export const AddUser = () => {
                                         id="province"
                                         className="form-control"
                                         onChange={(e) => {
-                                            setInputUser({ ...inputUser, province: e.target.value });
+                                            setUser({ ...user, province: e.target.value });
                                             getListDistrict(e.target.value);
                                         }}
                                     >
@@ -418,7 +367,7 @@ export const AddUser = () => {
                                         id="district"
                                         className="form-control"
                                         onChange={(e) => {
-                                            setInputUser({ ...inputUser, district: e.target.value });
+                                            setUser({ ...user, district: e.target.value });
                                             getWards(e.target.value);
                                         }}
                                     >
@@ -447,7 +396,7 @@ export const AddUser = () => {
                                         name="ward"
                                         id="ward"
                                         className="form-control"
-                                        onChange={(e) => setInputUser({ ...inputUser, ward: e.target.value })}
+                                        onChange={(e) => setUser({ ...user, ward: e.target.value })}
                                     >
                                         <option value="0">Chọn phường/xã</option>
                                         {wards.map((item: any) => {
@@ -474,8 +423,8 @@ export const AddUser = () => {
                                         id="phonenumber"
                                         type="text"
                                         className="form-control"
-                                        onChange={(e) => setInputUser({ ...inputUser, phonenumber: e.target.value })}
-                                        value={inputUser.phonenumber}
+                                        onChange={(e) => setUser({ ...user, phone_number: e.target.value })}
+                                        value={user.phone_number}
                                     ></input>
                                     <div className="error_message" style={{ display: 'none' }}></div>
                                 </div>
@@ -490,12 +439,12 @@ export const AddUser = () => {
                                             id="birthday"
                                             className="form-control"
                                             onChange={(e) =>
-                                                setInputUser({
-                                                    ...inputUser,
+                                                setUser({
+                                                    ...user,
                                                     birthday: e.target.value,
                                                 })
                                             }
-                                            value={inputUser.birthday.slice(0, 10)}
+                                            value={user.birthday.slice(0, 10)}
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
@@ -507,12 +456,12 @@ export const AddUser = () => {
                                             id="password"
                                             className="form-control"
                                             onChange={(e) =>
-                                                setInputUser({
-                                                    ...inputUser,
+                                                setUser({
+                                                    ...user,
                                                     password: e.target.value,
                                                 })
                                             }
-                                            value={inputUser.password}
+                                            value={user.password}
                                         ></input>
                                         <i
                                             style={{
@@ -540,12 +489,12 @@ export const AddUser = () => {
                                             id="email"
                                             className="form-control"
                                             onChange={(e) =>
-                                                setInputUser({
-                                                    ...inputUser,
+                                                setUser({
+                                                    ...user,
                                                     email: e.target.value,
                                                 })
                                             }
-                                            value={inputUser.email}
+                                            value={user.email}
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
@@ -561,12 +510,12 @@ export const AddUser = () => {
                                                 id="create_at"
                                                 className="form-control"
                                                 onChange={(e) => {
-                                                    setInputUser({
-                                                        ...inputUser,
+                                                    setUser({
+                                                        ...user,
                                                         created_at: e.target.value,
                                                     });
                                                 }}
-                                                value={inputUser.created_at.slice(0, 10)}
+                                                value={user.created_at.slice(0, 10)}
                                             ></input>
                                             <div className="error_message" style={{ display: 'none' }}></div>
                                         </div>

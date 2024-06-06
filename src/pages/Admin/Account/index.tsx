@@ -11,22 +11,15 @@ import {
     checkPasswordError,
     checkPhoneError,
 } from '../../../utils/validation_user';
+import {
+    config,
+    tokenGHN,
+    urlApiGetAllProvince,
+    urlApiGetDistrictByProvinceId,
+    urlApiGetWardByProvinceId,
+} from '../../../constant/api';
 import { toast } from 'react-toastify';
-type InputUser = {
-    id: number;
-    password: string;
-    active: boolean;
-    us_name: string;
-    email: string;
-    phonenumber: string;
-    birthday: string;
-    created_at: string;
-    updated_at: string;
-    province: string;
-    district: string;
-    ward: string;
-    role_id: number;
-};
+
 export const Account = () => {
     let inputEmail: any;
     let inputPhone: any;
@@ -38,7 +31,7 @@ export const Account = () => {
     let listInputPassword: any;
     const [user, setUser] = useState<UsersType>({
         id: 0,
-        passowrd: '',
+        password: '',
         role: 1,
         active: true,
         us_name: '',
@@ -52,26 +45,10 @@ export const Account = () => {
         ward: '',
         token: '',
     });
-    const [inputUser, setInputUser] = useState<InputUser>({
-        id: 0,
-        password: '',
-        active: false,
-        us_name: '',
-        email: '',
-        phonenumber: '',
-        birthday: '',
-        created_at: '',
-        updated_at: '',
-        province: '',
-        district: '',
-        ward: '',
-        role_id: 0,
-    });
 
-    const [provinces, setProvinces] = useState([{ id: 0, name: '' }]);
-
-    const [districts, setDistricts] = useState([{ id: 0, name: '' }]);
-    const [wards, setWards] = useState([{ id: 0, name: '' }]);
+    const [provinces, setProvinces] = useState([{ ProvinceID: 0, ProvinceName: '' }]);
+    const [districts, setDistricts] = useState([{ DistrictID: 0, DistrictName: '' }]);
+    const [wards, setWards] = useState([{ WardCode: '', WardName: '' }]);
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
@@ -90,10 +67,8 @@ export const Account = () => {
     useEffect(() => {
         const getProvinces = async () => {
             try {
-                const res = await axios.get(
-                    'https://vnprovinces.pythonanywhere.com/api/provinces/?basic=true&limit=100',
-                );
-                setProvinces(res.data.results);
+                const res = await axios.get(urlApiGetAllProvince, tokenGHN);
+                setProvinces(res.data.data);
             } catch (err) {
                 console.log(err);
             }
@@ -106,22 +81,26 @@ export const Account = () => {
         getProvinces();
         setEventFocusInput();
     }, []);
-    const getListDistrct = async (provinceId: any) => {
+    const getListDistrict = async (provinceId: number) => {
         try {
-            const res = await axios.get(
-                `https://vnprovinces.pythonanywhere.com/api/districts/?province_id=${provinceId}&basic=true&limit=100`,
+            const res = await axios.post(
+                urlApiGetDistrictByProvinceId,
+                { province_id: provinceId },
+                tokenGHN,
             );
-            setDistricts(res.data.results);
+            setDistricts(res.data.data);
         } catch (err) {
             console.log(err);
         }
     };
-    const getWards = async (districtId: any) => {
+    const getWards = async (districtId: number) => {
         try {
-            const res = await axios.get(
-                `https://vnprovinces.pythonanywhere.com/api/wards/?district_id=${districtId}&basic=true&limit=100`,
+            const res = await axios.post(
+                urlApiGetWardByProvinceId,
+                { district_id: districtId },
+                tokenGHN,
             );
-            setWards(res.data.results);
+            setWards(res.data.data);
         } catch (err) {
             console.log(err);
         }
@@ -133,21 +112,6 @@ export const Account = () => {
                 try {
                     const res = await getUserById(accountLocal['id']);
                     setUser(res);
-                    setInputUser({
-                        id: res['id'],
-                        password: res['password'],
-                        active: res['active'],
-                        us_name: res['us_name'],
-                        email: res['email'],
-                        phonenumber: res['phone_number'],
-                        birthday: res['birthday'],
-                        created_at: res['created_at'],
-                        updated_at: res['updated_at'],
-                        province: '',
-                        district: '',
-                        ward: '',
-                        role_id: res['role_id'],
-                    });
                 } catch (e) {
                     console.error(e);
                 }
@@ -160,10 +124,10 @@ export const Account = () => {
         const getProvinceUser = () => {
             if (user.id !== 0) {
                 let province: any = provinces.find((item) => {
-                    return item.name === user.province;
+                    return item.ProvinceName.includes(user.province);
                 });
                 if (province !== undefined) {
-                    getListDistrct(province.id);
+                    getListDistrict(province.ProvinceID);
                 }
             }
         };
@@ -173,10 +137,10 @@ export const Account = () => {
         const getDistrictUser = () => {
             if (districts.length > 0) {
                 let district: any = districts.find((item) => {
-                    return item.name === user.district;
+                    return item.DistrictName === user.district;
                 });
                 if (district !== undefined) {
-                    getWards(district.id);
+                    getWards(district.DistrictID);
                 }
             }
         };
@@ -193,20 +157,20 @@ export const Account = () => {
             const isPasswordError = checkPasswordError(inputPassword);
             const isNameError = checkNameError(inputName);
             if (!isEmailError && !isPhoneError && !isPasswordError && !isBirthDayError && !isNameError) {
-                const province = provinces.find((p) => p.id == Number(inputUser.province));
-                const district = districts.find((d) => d.id == Number(inputUser.district));
-                const ward = wards.find((d) => d.id == Number(inputUser.ward));
+                const province = provinces.find((p) => p.ProvinceID == Number(user.province));
+                const district = districts.find((d) => d.DistrictID == Number(user.district));
+                const ward = wards.find((d) => d.WardCode == user.ward);
                 const data = {
-                    id: inputUser.id,
-                    password: inputUser.password,
-                    us_name: inputUser.us_name,
-                    email: inputUser.email,
-                    phone_number: inputUser.phonenumber,
-                    birthday: inputUser.birthday,
-                    created_at: inputUser.created_at,
-                    province: province?.name === undefined ? user.province : province?.name,
-                    district: district?.name === undefined ? user.district : district?.name,
-                    ward: ward?.name == undefined ? user.ward : ward?.name,
+                    id: user.id,
+                    password: user.password,
+                    us_name: user.us_name,
+                    email: user.email,
+                    phone_number: user.phone_number,
+                    birthday: user.birthday,
+                    created_at: user.created_at,
+                    province: province?.ProvinceName === undefined ? user.province : province?.ProvinceName,
+                    district: district?.DistrictName === undefined ? user.district : district?.DistrictName,
+                    ward: ward?.WardName == undefined ? user.ward : ward?.WardName,
                     token: '',
                 };
                 Update(data);
@@ -265,7 +229,7 @@ export const Account = () => {
                         <div className="row">
                             <h3 className="title">Thông tin khách hàng</h3>
                             <div className="col-lg-6">
-                                <input id="product_id" className="form-control" value={inputUser.id} hidden></input>
+                                <input id="product_id" className="form-control" value={user.id} hidden></input>
                                 <div className="error_message" style={{ display: 'none' }}></div>
 
                                 <div className="form-group">
@@ -274,8 +238,8 @@ export const Account = () => {
                                         name="pro_name"
                                         id="pro_name"
                                         className="form-control"
-                                        onChange={(e) => setInputUser({ ...inputUser, us_name: e.target.value })}
-                                        value={inputUser.us_name}
+                                        onChange={(e) => setUser({ ...user, us_name: e.target.value })}
+                                        value={user.us_name}
                                     ></input>
                                     <div className="error_message" style={{ display: 'none' }}></div>
                                 </div>
@@ -287,22 +251,22 @@ export const Account = () => {
                                         id="province"
                                         className="form-control"
                                         onChange={(e) => {
-                                            setInputUser({ ...inputUser, province: e.target.value });
-                                            getListDistrct(e.target.value);
+                                            setUser({ ...user, province: e.target.value });
+                                            getListDistrict(Number(e.target.value));
                                         }}
                                     >
                                         <option value="0">Chọn tỉnh/thành phố</option>
                                         {provinces.map((item: any) => {
-                                            if (item.name === user.province) {
+                                            if (item.ProvinceName === user.province) {
                                                 return (
-                                                    <option value={item.id} key={item.id} selected>
-                                                        {item.name}
+                                                    <option value={item.ProvinceID} key={item.ProvinceID} selected>
+                                                        {item.ProvinceName}
                                                     </option>
                                                 );
                                             } else
                                                 return (
-                                                    <option value={item.id} key={item.id}>
-                                                        {item.name}
+                                                    <option value={item.ProvinceID} key={item.ProvinceID}>
+                                                        {item.ProvinceName}
                                                     </option>
                                                 );
                                         })}
@@ -316,22 +280,22 @@ export const Account = () => {
                                         id="district"
                                         className="form-control"
                                         onChange={(e) => {
-                                            setInputUser({ ...inputUser, district: e.target.value });
-                                            getWards(e.target.value);
+                                            setUser({ ...user, district: e.target.value });
+                                            getWards(Number(e.target.value));
                                         }}
                                     >
                                         <option value="0">Chọn quận/huyện</option>
                                         {districts.map((item: any) => {
-                                            if (item.name === user.district) {
+                                            if (item.DistrictName === user.district) {
                                                 return (
-                                                    <option value={item.id} key={item.id} selected>
-                                                        {item.name}
+                                                    <option value={item.DistrictID} key={item.DistrictID} selected>
+                                                        {item.DistrictName}
                                                     </option>
                                                 );
                                             } else
                                                 return (
-                                                    <option value={item.id} key={item.id}>
-                                                        {item.name}
+                                                    <option value={item.DistrictID} key={item.DistrictID}>
+                                                        {item.DistrictName}
                                                     </option>
                                                 );
                                         })}
@@ -345,20 +309,20 @@ export const Account = () => {
                                         name="ward"
                                         id="ward"
                                         className="form-control"
-                                        onChange={(e) => setInputUser({ ...inputUser, ward: e.target.value })}
+                                        onChange={(e) => setUser({ ...user, ward: e.target.value })}
                                     >
                                         <option value="0">Chọn phường/xã</option>
                                         {wards.map((item: any) => {
-                                            if (item.name === user.ward) {
+                                            if (item.WardName === user.ward) {
                                                 return (
-                                                    <option value={item.id} key={item.id} selected>
-                                                        {item.name}
+                                                    <option value={item.WardCode} key={item.WardCode} selected>
+                                                        {item.WardName}
                                                     </option>
                                                 );
                                             } else
                                                 return (
-                                                    <option value={item.id} key={item.id}>
-                                                        {item.name}
+                                                    <option value={item.WardCode} key={item.WardCode}>
+                                                        {item.WardName}
                                                     </option>
                                                 );
                                         })}
@@ -371,8 +335,8 @@ export const Account = () => {
                                         name="phonenumber"
                                         id="phonenumber"
                                         className="form-control"
-                                        onChange={(e) => setInputUser({ ...inputUser, phonenumber: e.target.value })}
-                                        value={inputUser.phonenumber}
+                                        onChange={(e) => setUser({ ...user, phone_number: e.target.value })}
+                                        value={user.phone_number}
                                     ></input>
                                     <div className="error_message" style={{ display: 'none' }}></div>
                                 </div>
@@ -387,12 +351,12 @@ export const Account = () => {
                                             id="birthday"
                                             className="form-control"
                                             onChange={(e) =>
-                                                setInputUser({
-                                                    ...inputUser,
+                                                setUser({
+                                                    ...user,
                                                     birthday: e.target.value,
                                                 })
                                             }
-                                            value={inputUser.birthday.slice(0, 10)}
+                                            value={user.birthday.slice(0, 10)}
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
@@ -404,12 +368,12 @@ export const Account = () => {
                                             id="password"
                                             className="form-control"
                                             onChange={(e) =>
-                                                setInputUser({
-                                                    ...inputUser,
+                                                setUser({
+                                                    ...user,
                                                     password: e.target.value,
                                                 })
                                             }
-                                            value={inputUser.password}
+                                            value={user.password}
                                         ></input>
                                         <i
                                             style={{
@@ -437,12 +401,12 @@ export const Account = () => {
                                             id="email"
                                             className="form-control"
                                             onChange={(e) =>
-                                                setInputUser({
-                                                    ...inputUser,
+                                                setUser({
+                                                    ...user,
                                                     email: e.target.value,
                                                 })
                                             }
-                                            value={inputUser.email}
+                                            value={user.email}
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
@@ -455,12 +419,12 @@ export const Account = () => {
                                             id="create_at"
                                             className="form-control"
                                             onChange={(e) => {
-                                                setInputUser({
-                                                    ...inputUser,
+                                                setUser({
+                                                    ...user,
                                                     created_at: e.target.value,
                                                 });
                                             }}
-                                            value={inputUser.created_at.slice(0, 10)}
+                                            value={user.created_at.slice(0, 10)}
                                         ></input>
                                         <div className="error_message" style={{ display: 'none' }}></div>
                                     </div>
